@@ -29,5 +29,11 @@ class Student(models.Model):
         choices=COURSE_CHOICES
     )
 
+    profile_photo = models.ImageField(
+        upload_to='student_profiles/',
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return f"{self.register_number} - {self.user.get_full_name()}"
