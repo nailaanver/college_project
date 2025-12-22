@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ACADAMIX | College Management System</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">ACADAMIX</div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>ACADAMIX</h1>
+    <p>Smart College Management Made Simple</p>
+    <a href="{% url 'login' %}" class="btn">Login</a>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <h2>System Features</h2>
+    <div class="feature-box">
+        <div>👨‍💼 Admin Control</div>
+        <div>🎓 Student Access</div>
+        <div>👨‍🏫 Teacher Dashboard</div>
+        <div>👨‍👩‍👧 Parent Monitoring</div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 ACADAMIX | College Management System</p>
+</footer>
+
+</body>
+</html>
