@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),  # home page
     path('', include('accounts.urls')),
     path('adminpanel/', include('adminpanel.urls')),
+    path('student/', include('students.urls')),
 
 ]
 

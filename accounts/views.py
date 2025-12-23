@@ -1,27 +1,24 @@
-from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from students.models import Student
 
 def student_login(request):
     if request.method == 'POST':
         reg_no = request.POST.get('register_number')
-        dob = request.POST.get('dob')
+        password = request.POST.get('password')  # DOB as YYYYMMDD
 
-        try:
-            student = Student.objects.get(register_number=reg_no)
-            user = authenticate(
-                request,
-                username=student.user.username,
-                password=dob.replace('-', '')
-            )
-            if user:
-                login(request, user)
-                return redirect('student-dashboard')
-        except Student.DoesNotExist:
-            pass
+        user = authenticate(
+            request,
+            username=reg_no,
+            password=password
+        )
+
+        if user is not None:
+            login(request, user)
+            return redirect('student-dashboard')
 
         return render(request, 'accounts/student_login.html', {
-            'error': 'Invalid details'
+            'error': 'Invalid Register Number or Password'
         })
 
     return render(request, 'accounts/student_login.html')

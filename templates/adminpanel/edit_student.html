@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student | ACADAMIX</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <style>
+        body { font-family: Arial; background: #f4f6f8; margin: 0; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; }
+        form input, form select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background: #1f2937; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #374151; }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #1f2937; text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Student</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+
+    <div class="back-link">
+        <a href="{% url 'student-list' %}">← Back to Student List</a>
+    </div>
+</div>
+
+</body>
+</html>

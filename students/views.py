@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Student
+from django.contrib.auth.decorators import login_required
 
 def upload_profile_photo(request):
     if request.session.get('role') != 'student':
@@ -15,3 +16,7 @@ def upload_profile_photo(request):
     return render(request, 'students/upload_photo.html', {
         'student': student
     })
+
+@login_required
+def student_dashboard(request):
+    return render(request,'student/dashboard.html')
