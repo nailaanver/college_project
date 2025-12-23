@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),  # home page
     path('', include('accounts.urls')),
+    path('adminpanel/', include('adminpanel.urls')),
+
 ]
 
 

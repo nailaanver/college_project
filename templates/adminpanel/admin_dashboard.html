@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard | ACADAMIX</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f8; margin:0; }
+        .header { background:#1f2937; color:white; padding:15px; }
+        .container { padding:20px; }
+        .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+        .card {
+            background:white;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            text-align:center;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .card:hover { transform:scale(1.05); }
+        a { text-decoration:none; color:black; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>ACADAMIX – Admin Dashboard</h2>
+</div>
+
+<div class="container">
+    <div class="cards">
+
+        <a href="{% url 'student-list' %}">
+            <div class="card">👨‍🎓 Students</div>
+        </a>
+
+        <a href="#">
+            <div class="card">👨‍🏫 Teachers</div>
+        </a>
+
+        <a href="#">
+            <div class="card">👨‍👩‍👧 Parents</div>
+        </a>
+
+        <a href="#">
+            <div class="card">📚 Courses</div>
+        </a>
+
+    </div>
+</div>
+
+</body>
+</html>

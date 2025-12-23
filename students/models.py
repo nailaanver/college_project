@@ -13,13 +13,15 @@ class Student(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    first_name = models.CharField(max_length=50,blank=True)   # Student first name
+    last_name = models.CharField(max_length=50,blank=True)    # Student last name
+
+    father_name = models.CharField(max_length=100,blank=True)
+    mother_name = models.CharField(max_length=100,blank=True)
+
     register_number = models.CharField(
         max_length=20,
         unique=True
-    )
-
-    parent_name = models.CharField(
-        max_length=100
     )
 
     date_of_birth = models.DateField()
@@ -36,4 +38,4 @@ class Student(models.Model):
     )
 
     def __str__(self):
-        return f"{self.register_number} - {self.user.get_full_name()}"
+        return f"{self.register_number} - {self.first_name} {self.last_name}"

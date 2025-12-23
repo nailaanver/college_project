@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'teachers',
     'parents',
     'dashboard',
+    'adminpanel',
 ]
 
 MIDDLEWARE = [
