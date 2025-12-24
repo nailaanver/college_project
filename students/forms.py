@@ -11,6 +11,11 @@ class StudentForm(forms.ModelForm):
         )
     )
 
+    parent_email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={'placeholder': 'Parent Email'})
+    )
+
     class Meta:
         model = Student
         fields = [
@@ -22,6 +27,7 @@ class StudentForm(forms.ModelForm):
             'date_of_birth',
             'course',
             'profile_photo',
+            'parent_email',   # include parent email
         ]
 
     def clean_date_of_birth(self):

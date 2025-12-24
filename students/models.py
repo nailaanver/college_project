@@ -36,6 +36,9 @@ class Student(models.Model):
         blank=True,
         null=True
     )
+    parent_email = models.EmailField(blank=True, null=True)
+    otp = models.CharField(max_length=6, blank=True, null=True)  # store OTP
+    otp_created_at = models.DateTimeField(blank=True, null=True)  # store OTP timestamp
 
     def __str__(self):
         return f"{self.register_number} - {self.first_name} {self.last_name}"

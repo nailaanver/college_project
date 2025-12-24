@@ -1,6 +1,29 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from students.models import Student
+from teachers.models import Teacher
+
+
+from datetime import timedelta
+from django.contrib.auth import authenticate, login
+from django.utils import timezone
+
+from students.models import Student
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.db.models import Q
+
+# views.py
+import random
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.db.models import Q
+
+
+
+
 
 def student_login(request):
     if request.method == 'POST':
@@ -23,7 +46,6 @@ def student_login(request):
 
     return render(request, 'accounts/student_login.html')
 
-from teachers.models import Teacher
 def teacher_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -52,7 +74,8 @@ def teacher_login(request):
     return render(request, 'accounts/teacher_login.html')
 
 
-from students.models import Student
+
+
 
 def parent_login(request):
     if request.method == 'POST':
@@ -61,13 +84,13 @@ def parent_login(request):
 
         try:
             student = Student.objects.get(
-                register_number=reg_no,
-                parent_name__iexact=parent_name
-            )
+            Q(register_number=reg_no) &
+            (Q(father_name__iexact=parent_name) | Q(mother_name__iexact=parent_name))
+        )
             user = authenticate(
                 request,
                 username=student.user.username,
-                password=reg_no
+                password=reg_no  # assuming register_number is used as password
             )
             if user:
                 login(request, user)

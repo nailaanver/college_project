@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Dashboard</title>
+</head>
+<body>
+
+<h2>Welcome Parent 👋</h2>
+
+<p><strong>Student Name:</strong> {{ student.name }}</p>
+<p><strong>Register Number:</strong> {{ student.register_number }}</p>
+<p><strong>Class:</strong> {{ student.class_name }}</p>
+
+<a href="{% url 'parent_logout' %}">Logout</a>
+
+</body>
+</html>
