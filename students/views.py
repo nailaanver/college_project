@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Student
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 def upload_profile_photo(request):
     if request.session.get('role') != 'student':
@@ -17,6 +18,11 @@ def upload_profile_photo(request):
         'student': student
     })
 
-@login_required
+@login_required(login_url='student-login')
 def student_dashboard(request):
     return render(request,'student/dashboard.html')
+
+
+def student_logout(request):
+    logout(request)
+    return redirect('role_login')

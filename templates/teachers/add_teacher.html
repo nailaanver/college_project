@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Teacher</title>
+</head>
+<body>
+
+<h2>Add Teacher</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>First Name:</label><br>
+    <input type="text" name="first_name" required><br><br>
+
+    <label>Last Name:</label><br>
+    <input type="text" name="last_name" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Date of Birth:</label><br>
+    <input type="date" name="date_of_birth" required><br><br>
+
+    <label>Subject:</label><br>
+    <select name="subject" required>
+        <option value="">Select Subject</option>
+        <option value="MATHS">Mathematics</option>
+        <option value="PHY">Physics</option>
+        <option value="CHEM">Chemistry</option>
+        <option value="CS">Computer Science</option>
+        <option value="ENG">English</option>
+    </select><br><br>
+
+    <button type="submit">Add Teacher</button>
+</form>
+
+<br>
+<a href="{% url 'teacher-list' %}">Back to Teacher List</a>
+
+</body>
+</html>

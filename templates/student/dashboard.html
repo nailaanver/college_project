@@ -2,5 +2,12 @@
 
 {% block content %}
 <h2>Student Dashboard</h2>
+
 <p>Welcome {{ request.user.get_full_name }}</p>
+
+<form method="post" action="{% url 'student-logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+
 {% endblock %}

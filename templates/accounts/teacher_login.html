@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Login</title>
+    <title>Teacher Login</title>
 </head>
 <body>
 
-<h2>Student Login</h2>
+<h2>Teacher Login</h2>
 
 {% if error %}
 <p style="color:red;">{{ error }}</p>
@@ -13,13 +13,15 @@
 
 <form method="post">
     {% csrf_token %}
-    <input type="text" name="register_number" placeholder="Email" required>
+    
+    <input type="email" name="email" placeholder="Email" required>
     <br><br>
+
     <input type="password" name="password" placeholder="DOB (YYYYMMDD)" required>
     <br><br>
+
     <button type="submit">Login</button>
 </form>
-
 
 </body>
 </html>

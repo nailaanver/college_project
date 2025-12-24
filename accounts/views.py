@@ -24,30 +24,33 @@ def student_login(request):
     return render(request, 'accounts/student_login.html')
 
 from teachers.models import Teacher
-
 def teacher_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        dob = request.POST.get('dob')
+        password = request.POST.get('password')  # DOB as YYYYMMDD
 
         try:
             teacher = Teacher.objects.get(email=email)
+
             user = authenticate(
                 request,
                 username=teacher.user.username,
-                password=dob.replace('-', '')
+                password=password
             )
+
             if user:
                 login(request, user)
                 return redirect('teacher-dashboard')
+
         except Teacher.DoesNotExist:
             pass
 
         return render(request, 'accounts/teacher_login.html', {
-            'error': 'Invalid details'
+            'error': 'Invalid email or password'
         })
 
     return render(request, 'accounts/teacher_login.html')
+
 
 from students.models import Student
 
@@ -101,3 +104,11 @@ def admin_login(request):
 
 def role_login(request):
     return render(request, 'accounts/role_login.html')
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')   # or home / admin-login
+

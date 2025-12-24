@@ -22,8 +22,15 @@
 </head>
 <body>
 
-<div class="header">
+<div class="header" style="display:flex; justify-content:space-between; align-items:center;">
     <h2>ACADAMIX – Admin Dashboard</h2>
+
+    <a href="{% url 'logout' %}" style="color:white;">
+        🚪 Logout
+    </a>
+</div>
+
+
 </div>
 
 <div class="container">
@@ -33,7 +40,7 @@
             <div class="card">👨‍🎓 Students</div>
         </a>
 
-        <a href="#">
+        <a href="{% url 'teacher-list' %}">
             <div class="card">👨‍🏫 Teachers</div>
         </a>
 

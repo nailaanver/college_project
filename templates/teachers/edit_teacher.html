@@ -1,0 +1,24 @@
+<h2>Edit Teacher</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="first_name"
+           value="{{ teacher.user.first_name }}" required><br><br>
+
+    <input type="text" name="last_name"
+           value="{{ teacher.user.last_name }}" required><br><br>
+
+    <input type="email" name="email"
+           value="{{ teacher.email }}" required><br><br>
+
+    <select name="subject">
+        <option value="MATHS" {% if teacher.subject == "MATHS" %}selected{% endif %}>Maths</option>
+        <option value="PHY" {% if teacher.subject == "PHY" %}selected{% endif %}>Physics</option>
+        <option value="CHEM" {% if teacher.subject == "CHEM" %}selected{% endif %}>Chemistry</option>
+        <option value="CS" {% if teacher.subject == "CS" %}selected{% endif %}>Computer Science</option>
+        <option value="ENG" {% if teacher.subject == "ENG" %}selected{% endif %}>English</option>
+    </select><br><br>
+
+    <button type="submit">Update</button>
+</form>
