@@ -1,58 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Admin Dashboard | ACADAMIX</title>
+
     <style>
-        body { font-family: Arial; background:#f4f6f8; margin:0; }
-        .header { background:#1f2937; color:white; padding:15px; }
-        .container { padding:20px; }
-        .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
-        .card {
-            background:white;
-            padding:20px;
-            border-radius:8px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
-            text-align:center;
-            cursor:pointer;
-            transition:0.3s;
+        /* ================= COLORS FROM YOUR PALETTE ================= */
+        :root {
+            --lightest: #E0E4E2;
+            --light: #A8AFB5;
+            --medium: #677E8A;
+            --dark: #223E47;
+            --darker: #122E34;
+            --darkest: #0E1D21;
+            --white: #ffffff;
         }
-        .card:hover { transform:scale(1.05); }
-        a { text-decoration:none; color:black; }
+
+        /* ================= GLOBAL ================= */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--darkest);
+        }
+
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background: var(--darker);
+            color: var(--white);
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background: var(--dark);
+        }
+
+        /* ================= MAIN ================= */
+        .main {
+            flex: 1;
+            padding: 25px;
+        }
+
+        /* ================= TOP BAR ================= */
+        .topbar {
+            background: var(--light);
+            padding: 16px 25px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h3 {
+            margin: 0;
+            color: var(--darkest);
+        }
+
+        .logout-btn {
+            background: var(--dark);
+            color: var(--white);
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: var(--darker);
+        }
+
+        /* ================= DASHBOARD CARDS ================= */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .card-link {
+            text-decoration: none;
+        }
+
+        .card {
+            background: var(--lightest);
+            padding: 30px 20px;
+            border-radius: 25px;
+            text-align: center;
+            color: var(--darkest);
+            transition: 0.3s;
+        }
+
+        .card span {
+            font-size: 38px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: var(--light);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media(max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .sidebar a {
+                margin-bottom: 0;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="header" style="display:flex; justify-content:space-between; align-items:center;">
-    <h2>ACADAMIX – Admin Dashboard</h2>
+<div class="dashboard">
 
-    <a href="{% url 'logout' %}" style="color:white;">
-        🚪 Logout
-    </a>
-</div>
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+        <h2>ACADAMIX</h2>
 
+        <a href="#">🏠 Dashboard</a>
+        <a href="{% url 'student-list' %}">👨‍🎓 Students</a>
+        <a href="{% url 'teacher-list' %}">👨‍🏫 Teachers</a>
+        <a href="#">👨‍👩‍👧 Parents</a>
+        <a href="#">📚 Courses</a>
+        <a href="{% url 'logout' %}">🚪 Logout</a>
+    </div>
 
-</div>
+    <!-- ================= MAIN ================= -->
+    <div class="main">
 
-<div class="container">
-    <div class="cards">
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <h3>Welcome, Admin</h3>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
 
-        <a href="{% url 'student-list' %}">
-            <div class="card">👨‍🎓 Students</div>
-        </a>
+        <!-- DASHBOARD CARDS -->
+        <div class="cards">
 
-        <a href="{% url 'teacher-list' %}">
-            <div class="card">👨‍🏫 Teachers</div>
-        </a>
+            <a href="{% url 'student-list' %}" class="card-link">
+                <div class="card">
+                    <span>👨‍🎓</span>
+                    <h4>Students</h4>
+                </div>
+            </a>
 
-        <a href="#">
-            <div class="card">👨‍👩‍👧 Parents</div>
-        </a>
+            <a href="{% url 'teacher-list' %}" class="card-link">
+                <div class="card">
+                    <span>👨‍🏫</span>
+                    <h4>Teachers</h4>
+                </div>
+            </a>
 
-        <a href="#">
-            <div class="card">📚 Courses</div>
-        </a>
+            <a href="#" class="card-link">
+                <div class="card">
+                    <span>👨‍👩‍👧</span>
+                    <h4>Parents</h4>
+                </div>
+            </a>
+
+            <a href="#" class="card-link">
+                <div class="card">
+                    <span>📚</span>
+                    <h4>Courses</h4>
+                </div>
+            </a>
+
+        </div>
 
     </div>
+
 </div>
 
 </body>
