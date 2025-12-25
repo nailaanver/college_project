@@ -13,26 +13,26 @@
     <div class="logo">ACADAMIX</div>
     <div class="nav-links">
         <a href="#">Home</a>
-        <a href="#">Features</a>
-        <a href="{% url 'role_login' %}">Login</a>
+        <a href="#features">Features</a>
+        <a href="{% url 'role_login' %}" class="login-btn">Login</a>
     </div>
 </nav>
 
+<!-- HERO SECTION -->
 <section class="hero">
-    <h1>ACADAMIX</h1>
-    <p>Smart College Management Made Simple</p>
-    <a href="{% url 'role_login' %}" class="btn">Login</a>
+    <h1>Smart College Management</h1>
+    <p>One platform for Admin, Teachers, Students & Parents</p>
+    <a href="{% url 'role_login' %}" class="primary-btn">Get Started</a>
 </section>
 
-
 <!-- FEATURES -->
-<section class="features">
+<section class="features" id="features">
     <h2>System Features</h2>
-    <div class="feature-box">
-        <div>👨‍💼 Admin Control</div>
-        <div>🎓 Student Access</div>
-        <div>👨‍🏫 Teacher Dashboard</div>
-        <div>👨‍👩‍👧 Parent Monitoring</div>
+    <div class="feature-grid">
+        <div class="feature-card">👨‍💼 Admin Control</div>
+        <div class="feature-card">🎓 Student Dashboard</div>
+        <div class="feature-card">👨‍🏫 Teacher Portal</div>
+        <div class="feature-card">👨‍👩‍👧 Parent Monitoring</div>
     </div>
 </section>
 

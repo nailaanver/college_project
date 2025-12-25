@@ -1,27 +1,186 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Teacher Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
 
-<h2>Teacher Login</h2>
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2>Teacher Login</h2>
+        <p>Enter your credentials to continue</p>
 
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
 
-<form method="post">
-    {% csrf_token %}
-    
-    <input type="email" name="email" placeholder="Email" required>
-    <br><br>
+        <form method="post">
+            {% csrf_token %}
 
-    <input type="password" name="password" placeholder="DOB (YYYYMMDD)" required>
-    <br><br>
+            <input type="email" name="email" placeholder="Email" required>
 
-    <button type="submit">Login</button>
-</form>
+            <input type="password" name="password" placeholder="Date of Birth (YYYYMMDD)" required>
+
+            <button type="submit" class="login-btn">Login</button>
+
+            <!-- Cancel Button -->
+            <a href="{% url 'role_login' %}" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+</div>
 
 </body>
+<style>
+    /* ==============================
+   Root Colors (Your Palette)
+================================ */
+:root {
+    --bg-dark: #051F20;
+    --bg-mid: #0B2B26;
+    --card-bg: #9FC3A9;
+    --input-bg: #E0F4E5;
+    --dark-green: #062D2D;
+    --white: #ffffff;
+}
+
+/* ==============================
+   Reset
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ==============================
+   Page Background
+================================ */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==============================
+   Wrapper
+================================ */
+.login-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ==============================
+   Login Card
+================================ */
+.login-card {
+    background: var(--card-bg);
+    width: 360px;
+    padding: 35px;
+    border-radius: 22px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ==============================
+   Headings
+================================ */
+.login-card h2 {
+    color: var(--bg-dark);
+    margin-bottom: 6px;
+}
+
+.login-card p {
+    font-size: 14px;
+    color: #1f3d3a;
+    margin-bottom: 22px;
+}
+
+/* ==============================
+   Error Message
+================================ */
+.error {
+    background: #ffd6d6;
+    color: #8b0000;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* ==============================
+   Inputs
+================================ */
+.login-card input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    border-radius: 30px;
+    border: none;
+    background: var(--input-bg);
+    font-size: 14px;
+    outline: none;
+}
+
+.login-card input::placeholder {
+    color: #5f7f73;
+}
+
+/* ==============================
+   Login Button
+================================ */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    background: var(--dark-green);
+    color: var(--white);
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.login-btn:hover {
+    background: #031c1c;
+}
+
+/* ==============================
+   Cancel Button
+================================ */
+.cancel-btn {
+    display: block;
+    margin-top: 12px;
+    padding: 13px;
+    text-align: center;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--dark-green);
+    border: 2px solid var(--dark-green);
+    transition: 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: var(--dark-green);
+    color: var(--white);
+}
+
+/* ==============================
+   Mobile Responsive
+================================ */
+@media (max-width: 420px) {
+    .login-card {
+        width: 90%;
+    }
+}
+
+</style>
 </html>

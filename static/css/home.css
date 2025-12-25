@@ -1,81 +1,163 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+/* ==============================
+   ACADAMIX – Home Page Styles
+   Color Palette Based on Provided Image
+   ============================== */
+
+:root {
+    --primary-dark: #051F20;   /* Very dark teal */
+    --primary: #0B2B26;        /* Dark green-teal */
+    --secondary: #163832;      /* Deep green */
+    --accent: #235347;         /* Medium teal-green */
+    --card: #8EB69B;           /* Soft green */
+    --bg: #DAF1DE;             /* Light mint */
+    --text-light: #EAF6EE;
+    --text-dark: #163832;
 }
 
-/* NAVBAR */
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* BODY */
+body {
+    background-color: var(--bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* ==============================
+   NAVBAR
+   ============================== */
 .navbar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 15px 40px;
-    background-color: #1f2937;
+    background-color: var(--primary-dark);
 }
 
 .logo {
-    color: white;
     font-size: 22px;
     font-weight: bold;
+    color: var(--text-light);
 }
 
 .nav-links a {
-    color: white;
     margin-left: 20px;
     text-decoration: none;
+    color: var(--text-light);
+    font-size: 15px;
 }
 
-/* HERO */
+.login-btn {
+    padding: 6px 18px;
+    border-radius: 20px;
+    background-color: var(--card);
+    color: var(--primary-dark) !important;
+    font-weight: 600;
+}
+
+/* ==============================
+   HERO SECTION
+   ============================== */
 .hero {
     text-align: center;
-    padding: 100px 20px;
-    background-color: #2563eb;
-    color: white;
+    padding: 90px 20px;
+    background: linear-gradient(
+        180deg,
+        var(--primary),
+        var(--secondary)
+    );
 }
 
 .hero h1 {
-    font-size: 48px;
-    margin-bottom: 10px;
+    font-size: 38px;
+    color: var(--text-light);
+    margin-bottom: 12px;
 }
 
 .hero p {
     font-size: 18px;
+    color: var(--text-light);
+    opacity: 0.9;
 }
 
-.btn {
+.primary-btn {
     display: inline-block;
-    margin-top: 20px;
-    padding: 12px 25px;
-    background-color: white;
-    color: #2563eb;
+    margin-top: 25px;
+    padding: 14px 36px;
+    background-color: var(--card);
+    color: var(--primary-dark);
+    border-radius: 30px;
     text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-/* FEATURES */
+.primary-btn:hover {
+    background-color: #7AA98C;
+}
+
+/* ==============================
+   FEATURES SECTION
+   ============================== */
 .features {
-    padding: 50px;
+    padding: 70px 20px;
+    background-color: var(--bg);
     text-align: center;
 }
 
-.feature-box {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 20px;
+.features h2 {
+    font-size: 28px;
+    margin-bottom: 35px;
+    color: var(--primary-dark);
 }
 
-.feature-box div {
-    background: white;
-    padding: 20px;
-    width: 180px;
-    border-radius: 8px;
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: auto;
 }
 
-/* FOOTER */
+.feature-card {
+    background-color: var(--card);
+    padding: 30px;
+    border-radius: 18px;
+    color: var(--primary-dark);
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================
+   FOOTER
+   ============================== */
 footer {
-    background-color: #1f2937;
-    color: white;
+    background-color: var(--primary-dark);
+    color: var(--text-light);
     text-align: center;
-    padding: 15px;
+    padding: 18px;
+    font-size: 14px;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
 }
