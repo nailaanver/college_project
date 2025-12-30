@@ -12,7 +12,10 @@ urlpatterns = [
     path('list/', views.teacher_list, name='teacher-list'),
     path('add/', views.add_teacher, name='add-teacher'),
     path('edit/<int:id>/', views.edit_teacher, name='edit-teacher'), 
-    path('teachers/delete/<int:id>/', views.delete_teacher, name='delete-teacher')
+    path('teachers/delete/<int:id>/', views.delete_teacher, name='delete-teacher'),
+    
+    path('parents/', views.parent_list, name='parent-list'),
+
 
 
 

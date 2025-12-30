@@ -80,22 +80,24 @@ def teacher_login(request):
 def parent_login(request):
     if request.method == 'POST':
         reg_no = request.POST.get('register_number')
-        parent_name = request.POST.get('parent_name')
 
         try:
-            student = Student.objects.get(
-            Q(register_number=reg_no) &
-            (Q(father_name__iexact=parent_name) | Q(mother_name__iexact=parent_name))
-        )
+            parent_user = User.objects.get(
+                username=reg_no + "_parent",
+                role='parent'
+            )
+
             user = authenticate(
                 request,
-                username=student.user.username,
-                password=reg_no  # assuming register_number is used as password
+                username=parent_user.username,
+                password=reg_no
             )
+
             if user:
                 login(request, user)
                 return redirect('parent-dashboard')
-        except Student.DoesNotExist:
+
+        except User.DoesNotExist:
             pass
 
         return render(request, 'accounts/parent_login.html', {

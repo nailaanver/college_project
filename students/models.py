@@ -10,8 +10,14 @@ class Student(models.Model):
         ('BCOM', 'BCom'),
         ('BA', 'BA'),
     )
+    parent = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='parent_student',
+        null=True,
+        blank=True
+    )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     first_name = models.CharField(max_length=50,blank=True)   # Student first name
     last_name = models.CharField(max_length=50,blank=True)    # Student last name

@@ -108,3 +108,15 @@ def parent_verify_otp(request):
         return redirect('parent_dashboard')  # ✅ fixed name
 
     return render(request, 'accounts/parent_verify_otp.html')
+
+# @login_required
+# def admin_parent_list(request):
+#     if not request.user.is_superuser:
+#         return redirect('login')
+
+#     parents = Parent.objects.select_related('student', 'user')
+
+#     return render(request, 'admin/parent_list.html', {
+#         'parents': parents
+#     })
+

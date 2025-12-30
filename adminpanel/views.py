@@ -5,16 +5,32 @@ from teachers.models import Teacher
 from students.forms import StudentForm
 from teachers.forms import TeacherForm
 from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 
 def is_admin(user):
     return user.is_superuser
 
+from django.utils import timezone
+from datetime import timedelta
+
 @login_required
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    return render(request, 'adminpanel/admin_dashboard.html')
+    recent_time = timezone.now() - timedelta(days=1)  # last 24 hours
+
+    parents = User.objects.filter(
+    role='parent',
+    parent_student__isnull=False
+)
+
+
+    return render(request, 'adminpanel/admin_dashboard.html', {
+        'parents': parents
+    })
+
 
 
 @login_required
@@ -25,6 +41,9 @@ def student_list(request):
     students = Student.objects.all()
     return render (request,'adminpanel/student_list.html',{'students':students})
                   
+# adminpanel/views.py
+
+
 @login_required
 def add_student(request):
     if not request.user.is_superuser:
@@ -35,25 +54,39 @@ def add_student(request):
         if form.is_valid():
             email = request.POST.get('email')
             dob = form.cleaned_data['date_of_birth']
-            password = dob.strftime('%Y%m%d')
+            reg_no = form.cleaned_data['register_number']
 
-            user = User.objects.create_user(
+            # STUDENT USER
+            student_user = User.objects.create_user(
                 username=email,
                 email=email,
-                password=password,
+                password=dob.strftime('%Y%m%d'),
                 role='student'
             )
 
             student = form.save(commit=False)
-            student.user = user
+            student.user = student_user
             student.save()
 
+            # create parent user
+            parent_user = User.objects.create_user(
+                username=f"{reg_no}_parent",
+                password=reg_no,
+                role='parent'
+            )
+
+            # link parent to student
+            student.parent = parent_user
+            student.save()
+
+
             return redirect('student-list')
+
     else:
         form = StudentForm()
 
-    # ✅ ALWAYS return response
     return render(request, 'adminpanel/add_student.html', {'form': form})
+
 
 @login_required
 def edit_student(request,pk):
@@ -150,4 +183,15 @@ def delete_teacher(request, id):
     teacher.delete()
 
     return redirect('teacher-list')
+
+@login_required
+def parent_list(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    parents = User.objects.filter(role='parent')
+    return render(request, 'adminpanel/parent_list.html', {
+        'parents': parents
+    })
+
 

@@ -159,7 +159,7 @@
         <a href="#">🏠 Dashboard</a>
         <a href="{% url 'student-list' %}">👨‍🎓 Students</a>
         <a href="{% url 'teacher-list' %}">👨‍🏫 Teachers</a>
-        <a href="#">👨‍👩‍👧 Parents</a>
+        <a href="{% url 'parent-list' %}">👨‍👩‍👧 Parents</a>
         <a href="#">📚 Courses</a>
         <a href="{% url 'logout' %}">🚪 Logout</a>
     </div>
@@ -190,12 +190,13 @@
                 </div>
             </a>
 
-            <a href="#" class="card-link">
+            <a href="{% url 'parent-list' %}" class="card-link">
                 <div class="card">
                     <span>👨‍👩‍👧</span>
                     <h4>Parents</h4>
                 </div>
             </a>
+
 
             <a href="#" class="card-link">
                 <div class="card">
