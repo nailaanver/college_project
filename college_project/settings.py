@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'parents',
     'dashboard',
     'adminpanel',
+    'library',
+    'attendance',
 ]
 
 MIDDLEWARE = [

@@ -6,6 +6,7 @@ from students.forms import StudentForm
 from teachers.forms import TeacherForm
 from accounts.models import User
 from django.contrib.auth import get_user_model
+from teachers.models import Subject
 User = get_user_model()
 
 
@@ -207,6 +208,48 @@ def delete_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     student.delete()
     return redirect('student-list')
+
+def add_subject(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        # code = request.POST['code']
+        course = request.POST['course']
+        semester = request.POST['semester']
+        
+        Subject.objects.create(
+            name = name,
+            # code = code,
+            course = course,
+            semester = semester
+        )
+        return redirect('add-subject')
+    
+    context = {
+        'courses':Student.COURSE_CHOICES,
+        'semesters':Student.SEMESTER_CHOICES,
+            
+    }
+    return render(request,'adminpanel/add_subject.html',context)
+
+def subject_list(request):
+    course = request.GET.get('course', None)
+    semester = request.GET.get('semester', None)
+
+    subjects = Subject.objects.all()
+
+    if course:
+        subjects = subjects.filter(course=course)
+    if semester:
+        subjects = subjects.filter(semester=semester)
+
+    context = {
+        'subjects': subjects,
+        'courses': Student.COURSE_CHOICES,
+        'semesters': Student.SEMESTER_CHOICES,
+        'selected_course': course,
+        'selected_semester': semester,
+    }
+    return render(request, 'adminpanel/subject_list.html', context)
 
 
 

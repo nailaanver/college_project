@@ -10,6 +10,18 @@ class Student(models.Model):
         ('BCOM', 'BCom'),
         ('BA', 'BA'),
     )
+    SEMESTER_CHOICES = [
+    (1, '1st Semester'),
+    (2, '2nd Semester'),
+    (3, '3rd Semester'),
+    (4, '4th Semester'),
+    (5, '5th Semester'),
+    (6, '6th Semester'),
+    ]
+    semester = models.PositiveIntegerField(
+        choices=SEMESTER_CHOICES,
+        default=1
+    )
     parent = models.OneToOneField(
         User,
         on_delete=models.CASCADE,

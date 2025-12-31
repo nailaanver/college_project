@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subjects | ACADAMIX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f6fa;
+            padding: 30px;
+        }
+        h2 {
+            color: #142850;
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 10px 12px;
+            border-radius: 20px;
+            border: 1.5px solid #ddd;
+            margin-right: 15px;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            background: #142850;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0b1c39;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: #142850;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        tr:hover {
+            background: #f8d85a4d;
+        }
+        a {
+            text-decoration: none;
+            color: #142850;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Subjects</h2>
+
+    <form method="get">
+        <label>Course:</label>
+        <select name="course">
+            <option value="">All Courses</option>
+            {% for value, display in courses %}
+            <option value="{{ value }}" {% if selected_course == value %}selected{% endif %}>{{ display }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Semester:</label>
+        <select name="semester">
+            <option value="">All Semesters</option>
+            {% for value, display in semesters %}
+            <option value="{{ value }}" {% if selected_semester == value %}selected{% endif %}>{{ display }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Subject Name</th>
+                <th>Course</th>
+                <th>Semester</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.name }}</td>
+                <td>{{ subject.course }}</td>
+                <td>{{ subject.semester }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No subjects found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'admin-dashboard' %}">⬅ Back to Dashboard</a>
+
+</body>
+</html>

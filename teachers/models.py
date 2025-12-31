@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from students.models import Student
 
 User = get_user_model()
 
@@ -31,3 +32,12 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.user.get_full_name() or self.email
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=20, unique=True)
+    course = models.CharField(max_length=20, choices=Student.COURSE_CHOICES)
+    semester = models.PositiveIntegerField(choices=Student.SEMESTER_CHOICES)
+
+    def __str__(self):
+        return f"{self.name} ({self.course} Sem {self.semester})"

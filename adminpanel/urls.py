@@ -15,6 +15,9 @@ urlpatterns = [
     path('teachers/delete/<int:id>/', views.delete_teacher, name='delete-teacher'),
     
     path('parents/', views.parent_list, name='parent-list'),
+    
+    path('add-subject/', views.add_subject, name='add-subject'),
+    path('subjects/', views.subject_list, name='subject-list'),
 
 
 
