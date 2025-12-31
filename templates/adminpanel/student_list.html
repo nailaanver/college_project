@@ -1,75 +1,201 @@
-<h2>Manage Students</h2>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Students | ACADAMIX</title>
 
-<a href="{% url 'add-student' %}" style="display:inline-block;margin-bottom:15px;">
-    ➕ Add Student
-</a>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<table border="1" cellpadding="10" cellspacing="0" width="100%">
-    <tr>
-        <th>Register No</th>
-        <th>Name</th>
-        <th>Date of Birth</th>
-        <th>Course</th>
-        <th>Father Name</th>
-        <th>Mother Name</th>
-        <th>Parent Email</th>
-        <th>Parent Account</th>
-        <th>Actions</th>
-        <th>Profile</th>
-    </tr>
+    <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --gold-soft: #f8d85a;
+            --white: #ffffff;
+            --text-dark: #1c1c1c;
+        }
 
-    {% for student in students %}
-    <tr>
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-        <!-- Register Number -->
-        <td>{{ student.register_number }}</td>
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 30px;
+        }
 
-        <!-- Full Name -->
-        <td>{{ student.first_name }} {{ student.last_name }}</td>
+        .admin-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            animation: fadeUp 0.8s ease;
+        }
 
-        <!-- DOB -->
-        <td>{{ student.date_of_birth }}</td>
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        <!-- Course -->
-        <td>{{ student.get_course_display }}</td>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
 
-        <!-- Parents -->
-        <td>{{ student.father_name }}</td>
-        <td>{{ student.mother_name }}</td>
+        h2 {
+            color: var(--navy-dark);
+            font-size: 28px;
+            font-weight: 700;
+        }
 
-        <!-- Parent Email -->
-        <td>{{ student.parent_email|default:"—" }}</td>
+        .btn {
+            padding: 12px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
 
-        <!-- Parent User Account -->
-        <td>
-            {% if student.parent %}
-                ✔ Linked
-            {% else %}
-                ❌ Not Linked
-            {% endif %}
-        </td>
-<!-- Profile Photo -->
-        <td align="center">
-            {% if student.profile_photo %}
-                <img src="{{ student.profile_photo.url }}" width="60" height="60" style="border-radius:50%;">
-            {% else %}
-                No Photo
-            {% endif %}
-        </td>
-        <!-- Actions -->
-        <td>
-            <a href="{% url 'edit-student' student.id %}">✏ Edit</a>
-            |
-            <a href="{% url 'delete-student' student.id %}"
-               onclick="return confirm('Are you sure you want to delete this student?');">
-               🗑 Delete
-            </a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="10" align="center">No students found</td>
-    </tr>
-    {% endfor %}
-</table>
+        .btn-back {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-add {
+            background: var(--gold);
+            color: var(--navy-dark);
+            margin-left: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: var(--navy);
+            color: var(--white);
+            padding: 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        tr:hover {
+            background: #f8f9fb;
+        }
+
+        .status-yes {
+            color: green;
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: red;
+            font-weight: 600;
+        }
+
+        .actions a {
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .actions .edit {
+            color: var(--navy);
+        }
+
+        .actions .delete {
+            color: #c82333;
+        }
+
+        img {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-card">
+
+    <div class="header">
+        <h2>Manage Students</h2>
+
+        <div>
+            <a href="{% url 'admin-dashboard' %}" class="btn btn-back">⬅ Dashboard</a>
+            <a href="{% url 'add-student' %}" class="btn btn-add">➕ Add Student</a>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Register No</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Course</th>
+            <th>Parent</th>
+            <th>Status</th>
+            <th>Profile</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for student in students %}
+        <tr>
+            <td>{{ student.register_number }}</td>
+            <td>{{ student.first_name }} {{ student.last_name }}</td>
+            <td>{{ student.date_of_birth }}</td>
+            <td>{{ student.get_course_display }}</td>
+            <td>{{ student.parent_email|default:"—" }}</td>
+
+            <td>
+                {% if student.parent %}
+                    <span class="status-yes">✔ Linked</span>
+                {% else %}
+                    <span class="status-no">❌ Not Linked</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if student.profile_photo %}
+                    <img src="{{ student.profile_photo.url }}" width="45" height="45">
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+            <td class="actions">
+                <a href="{% url 'edit-student' student.id %}" class="edit">✏ Edit</a>
+                <a href="{% url 'delete-student' student.id %}" class="delete"
+                   onclick="return confirm('Are you sure?');">🗑</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

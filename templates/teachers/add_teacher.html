@@ -1,42 +1,174 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Teacher</title>
+    <meta charset="UTF-8">
+    <title>Add Teacher | ACADAMIX</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --white: #ffffff;
+            --text-dark: #1c1c1c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 35px;
+            border-radius: 28px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            animation: fadeUp 0.9s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--navy-dark);
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 30px;
+            border: 1.5px solid #ddd;
+            font-size: 14px;
+            margin-bottom: 18px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--navy);
+        }
+
+        button {
+            width: 100%;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            padding: 14px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: var(--navy-dark);
+            border: 2px solid var(--navy-dark);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 30px 22px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Add Teacher</h2>
+<div class="form-card">
 
-<form method="post">
-    {% csrf_token %}
+    <h2>Add Teacher</h2>
 
-    <label>First Name:</label><br>
-    <input type="text" name="first_name" required><br><br>
+    <form method="post">
+        {% csrf_token %}
 
-    <label>Last Name:</label><br>
-    <input type="text" name="last_name" required><br><br>
+        <label>First Name</label>
+        <input type="text" name="first_name" required>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+        <label>Last Name</label>
+        <input type="text" name="last_name" required>
 
-    <label>Date of Birth:</label><br>
-    <input type="date" name="date_of_birth" required><br><br>
+        <label>Email</label>
+        <input type="email" name="email" required>
 
-    <label>Subject:</label><br>
-    <select name="subject" required>
-        <option value="">Select Subject</option>
-        <option value="MATHS">Mathematics</option>
-        <option value="PHY">Physics</option>
-        <option value="CHEM">Chemistry</option>
-        <option value="CS">Computer Science</option>
-        <option value="ENG">English</option>
-    </select><br><br>
+        <label>Date of Birth</label>
+        <input type="date" name="date_of_birth" required>
 
-    <button type="submit">Add Teacher</button>
-</form>
+        <label>Subject</label>
+        <select name="subject" required>
+            <option value="">Select Subject</option>
+            <option value="MATHS">Mathematics</option>
+            <option value="PHY">Physics</option>
+            <option value="CHEM">Chemistry</option>
+            <option value="CS">Computer Science</option>
+            <option value="ENG">English</option>
+        </select>
 
-<br>
-<a href="{% url 'teacher-list' %}">Back to Teacher List</a>
+        <button type="submit">➕ Add Teacher</button>
+    </form>
+
+    <a href="{% url 'teacher-list' %}" class="back-link">⬅ Back to Teacher List</a>
+
+</div>
 
 </body>
 </html>

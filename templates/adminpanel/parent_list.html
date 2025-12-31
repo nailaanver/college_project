@@ -1,75 +1,148 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Parents | Admin</title>
+    <meta charset="UTF-8">
+    <title>Parents | Admin | ACADAMIX</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --white: #ffffff;
+            --text-dark: #1c1c1c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: Arial;
-            background: #0E1D21;
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
             padding: 30px;
-            color: white;
+        }
+
+        .admin-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 26px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            animation: fadeUp 0.8s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: var(--navy-dark);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            padding: 12px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: var(--navy);
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
 
         table {
             width: 100%;
-            background: #E0E4E2;
             border-collapse: collapse;
-            border-radius: 20px;
-            overflow: hidden;
-            color: #0E1D21;
-        }
-
-        th, td {
-            padding: 14px;
-            text-align: center;
+            margin-top: 20px;
         }
 
         th {
-            background: #677E8A;
-            color: white;
+            background: var(--navy);
+            color: var(--white);
+            padding: 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: var(--text-dark);
         }
 
         tr:hover {
-            background: #A8AFB5;
+            background: #f8f9fb;
         }
 
-        a {
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 20px;
+        .empty {
+            text-align: center;
+            font-weight: 600;
+            color: #777;
         }
     </style>
 </head>
+
 <body>
 
-<a href="{% url 'admin-dashboard' %}">⬅ Back to Dashboard</a>
+<div class="admin-card">
 
-<h2>Parents List</h2>
+    <div class="header">
+        <h2>Parents List</h2>
+        <a href="{% url 'admin-dashboard' %}" class="btn-back">⬅ Dashboard</a>
+    </div>
 
-<table>
-    <tr>
-        <th>Parent Username</th>
-        <th>Student Register No</th>
-        <th>Father Name</th>
-        <th>Mother Name</th>
-    </tr>
+    <table>
+        <thead>
+            <tr>
+                <th>Parent Username</th>
+                <th>Student Register No</th>
+                <th>Father Name</th>
+                <th>Mother Name</th>
+            </tr>
+        </thead>
 
-    {% for parent in parents %}
-    <tr>
-        <td>{{ parent.username }}</td>
-        <td>{{ parent.parent_student.register_number }}</td>
-        <td>{{ parent.parent_student.father_name }}</td>
-        <td>{{ parent.parent_student.mother_name }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5">No parents found</td>
-    </tr>
-    {% endfor %}
-</table>
+        <tbody>
+            {% for parent in parents %}
+            <tr>
+                <td>{{ parent.username }}</td>
+                <td>{{ parent.parent_student.register_number }}</td>
+                <td>{{ parent.parent_student.father_name }}</td>
+                <td>{{ parent.parent_student.mother_name }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="empty">No parents found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-
+</div>
 
 </body>
 </html>
