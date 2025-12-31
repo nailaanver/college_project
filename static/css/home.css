@@ -1,163 +1,237 @@
-/* ==============================
-   ACADAMIX – Home Page Styles
-   Color Palette Based on Provided Image
-   ============================== */
-
-:root {
-    --primary-dark: #051F20;   /* Very dark teal */
-    --primary: #0B2B26;        /* Dark green-teal */
-    --secondary: #163832;      /* Deep green */
-    --accent: #235347;         /* Medium teal-green */
-    --card: #8EB69B;           /* Soft green */
-    --bg: #DAF1DE;             /* Light mint */
-    --text-light: #EAF6EE;
-    --text-dark: #163832;
-}
-
-/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* BODY */
 body {
-    background-color: var(--bg);
-    color: var(--text-dark);
-    min-height: 100vh;
+    background: #ffffff;
+    color: #1c1c1c;
 }
 
-/* ==============================
-   NAVBAR
-   ============================== */
+/* NAVBAR */
 .navbar {
+    background: #0b1c39;
+    padding: 18px 0;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background-color: var(--primary-dark);
 }
 
 .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: var(--text-light);
+    color: #f3c623;
+    font-size: 26px;
+    font-weight: 700;
 }
 
-.nav-links a {
-    margin-left: 20px;
+nav a {
+    color: white;
+    margin-left: 25px;
     text-decoration: none;
-    color: var(--text-light);
     font-size: 15px;
 }
 
-.login-btn {
-    padding: 6px 18px;
+nav .btn {
+    background: #f3c623;
+    padding: 8px 18px;
     border-radius: 20px;
-    background-color: var(--card);
-    color: var(--primary-dark) !important;
+    color: #0b1c39;
     font-weight: 600;
 }
 
-/* ==============================
-   HERO SECTION
-   ============================== */
+/* HERO */
 .hero {
+    height: 90vh;
+    background:
+        linear-gradient(
+            rgba(11, 28, 57, 0.75),
+            rgba(11, 28, 57, 0.75)
+        ),
+        url("/static/images/campus.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 90px 20px;
-    background: linear-gradient(
-        180deg,
-        var(--primary),
-        var(--secondary)
-    );
 }
 
+
 .hero h1 {
-    font-size: 38px;
-    color: var(--text-light);
-    margin-bottom: 12px;
+    color: white;
+    font-size: 48px;
+    margin-bottom: 15px;
 }
 
 .hero p {
+    color: #ddd;
     font-size: 18px;
-    color: var(--text-light);
-    opacity: 0.9;
+    margin-bottom: 25px;
 }
 
-.primary-btn {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 14px 36px;
-    background-color: var(--card);
-    color: var(--primary-dark);
-    border-radius: 30px;
+.hero-btn {
+    background: #f3c623;
+    padding: 12px 30px;
+    color: #0b1c39;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: 600;
 }
 
-.primary-btn:hover {
-    background-color: #7AA98C;
+/* ===== ABOUT SECTION ===== */
+.about-section {
+    background: #1e2d4f;
+    color: #ffffff;
+    padding: 90px 0 0;
+    overflow: hidden;
 }
 
-/* ==============================
-   FEATURES SECTION
-   ============================== */
+.about-container {
+    width: 85%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+    align-items: center;
+}
+
+/* LEFT */
+.about-left h2 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.about-badge {
+    color: #3ccf91;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* RIGHT */
+.about-right p {
+    margin-bottom: 18px;
+    line-height: 1.7;
+}
+
+.highlight-text {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.about-text {
+    color: #d1d5db;
+}
+
+.about-btn {
+    display: inline-block;
+    margin-top: 10px;
+    color: #3ccf91;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.about-btn:hover {
+    color: #ffffff;
+}
+
+/* IMAGE */
+.about-image {
+    margin-top: 60px;
+    animation: slideUp 1.2s ease forwards;
+    max-width: 100%;
+    /* height: 20%; */
+}
+
+.about-image img {
+    width: 100%;
+    height: 500px;
+    display: block;
+}
+@keyframes slideUp {
+    from {
+        transform: translateY(60px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .about-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+
+/* FEATURES */
 .features {
-    padding: 70px 20px;
-    background-color: var(--bg);
-    text-align: center;
+    background: #f4f6f9;
+    padding: 80px 10%;
 }
 
 .features h2 {
-    font-size: 28px;
-    margin-bottom: 35px;
-    color: var(--primary-dark);
+    text-align: center;
+    margin-bottom: 40px;
+    color: #0b1c39;
 }
 
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 25px;
-    max-width: 900px;
-    margin: auto;
 }
 
-.feature-card {
-    background-color: var(--card);
+.card {
+    background: white;
     padding: 30px;
-    border-radius: 18px;
-    color: var(--primary-dark);
-    font-size: 16px;
-    font-weight: 500;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-}
-
-/* ==============================
-   FOOTER
-   ============================== */
-footer {
-    background-color: var(--primary-dark);
-    color: var(--text-light);
+    border-radius: 15px;
     text-align: center;
-    padding: 18px;
-    font-size: 14px;
+    transition: 0.3s;
 }
 
-/* ==============================
-   RESPONSIVE
-   ============================== */
-@media (max-width: 768px) {
-    .navbar {
-        padding: 15px 20px;
-    }
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
 
-    .hero h1 {
-        font-size: 30px;
-    }
+/* FOOTER */
+footer {
+    background: #0b1c39;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
 
-    .hero p {
-        font-size: 16px;
-    }
+/* ANIMATIONS */
+.fade-in {
+    animation: fadeIn 1.5s ease;
+}
+
+.slide-up {
+    animation: slideUp 1s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
 }

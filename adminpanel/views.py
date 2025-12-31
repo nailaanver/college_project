@@ -19,17 +19,24 @@ from datetime import timedelta
 @login_required
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    recent_time = timezone.now() - timedelta(days=1)  # last 24 hours
+    total_students = Student.objects.count()
+    total_teachers = Teacher.objects.count()
 
-    parents = User.objects.filter(
-    role='parent',
-    parent_student__isnull=False
-)
+    total_parents = User.objects.filter(
+        role='parent',
+        parent_student__isnull=False
+    ).distinct().count()
+    # total_cources = Course.objects.count()
 
+    context = {
+        'total_students': total_students,
+        'total_teachers': total_teachers,
+        'total_parents': total_parents,
+        # 'total_cources' : total_cources,
+    }
 
-    return render(request, 'adminpanel/admin_dashboard.html', {
-        'parents': parents
-    })
+    return render(request, 'adminpanel/admin_dashboard.html', context)
+
 
 
 

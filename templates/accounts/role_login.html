@@ -4,114 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <title>Login | ACADAMIX</title>
-    <link rel="stylesheet" href="{% static 'css/role_login.css' %}">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --gold-soft: #f8d85a;
+            --white: #ffffff;
+            --text-dark: #1c1c1c;
+            --text-light: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--white);
+            max-width: 450px;
+            margin: auto;
+            padding: 50px 40px;
+            border-radius: 28px;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            animation: fadeUp 0.9s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card h2 {
+            font-size: 32px;
+            color: var(--navy-dark);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .login-btn {
+            display: block;
+            text-decoration: none;
+            background: var(--navy);
+            color: var(--text-light);
+            padding: 16px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--navy-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+
+        .login-btn.admin {
+            background: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        .login-btn.admin:hover {
+            background: var(--gold-soft);
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 28px;
+            text-decoration: none;
+            color: var(--navy);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back-home:hover {
+            color: var(--navy-dark);
+            transform: translateX(-6px);
+        }
+    </style>
 </head>
+
 <body>
 
 <section class="login-wrapper">
     <div class="login-card">
 
-        <h2>Login As</h2>
-        <p class="subtitle">Select your role to continue</p>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Choose your role to continue</p>
 
         <a href="{% url 'student-login' %}" class="login-btn">🎓 Student Login</a>
         <a href="{% url 'teacher-login' %}" class="login-btn">👨‍🏫 Teacher Login</a>
         <a href="{% url 'parent_send_otp' %}" class="login-btn">👨‍👩‍👧 Parent Login</a>
         <a href="{% url 'admin-login' %}" class="login-btn admin">👨‍💼 Admin Login</a>
 
+        <a href="{% url 'home' %}" class="back-home">← Back to Home</a>
+
     </div>
 </section>
 
 </body>
-<style>
-    :root {
-    --primary-dark: #051F20;
-    --primary: #0B2B26;
-    --secondary: #163832;
-    --accent: #235347;
-    --card: #8EB69B;
-    --bg: #DAF1DE;
-    --text-light: #EAF6EE;
-    --text-dark: #163832;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-/* PAGE BACKGROUND */
-body {
-    min-height: 100vh;
-    background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* CARD */
-.login-wrapper {
-    width: 100%;
-    padding: 20px;
-}
-
-.login-card {
-    background: var(--card);
-    max-width: 420px;
-    margin: auto;
-    padding: 40px 30px;
-    border-radius: 28px;
-    text-align: center;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-}
-
-/* HEADINGS */
-.login-card h2 {
-    font-size: 28px;
-    color: var(--primary-dark);
-    margin-bottom: 8px;
-}
-
-.subtitle {
-    font-size: 15px;
-    color: var(--primary);
-    margin-bottom: 30px;
-}
-
-/* BUTTONS */
-.login-btn {
-    display: block;
-    text-decoration: none;
-    background: var(--primary);
-    color: var(--text-light);
-    padding: 14px;
-    border-radius: 22px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.25s ease;
-}
-
-.login-btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-}
-
-/* ADMIN BUTTON (SLIGHT EMPHASIS) */
-.login-btn.admin {
-    background: var(--primary-dark);
-}
-
-.login-btn.admin:hover {
-    background: #031517;
-}
-
-</style>
 </html>

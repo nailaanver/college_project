@@ -4,35 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <title>ACADAMIX | College Management System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar">
-    <div class="logo">ACADAMIX</div>
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#features">Features</a>
-        <a href="{% url 'role_login' %}" class="login-btn">Login</a>
+<header class="navbar">
+    <div class="container">
+        <div class="logo">ACADAMIX</div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="{% url 'role_login' %}" class="btn">Login</a>
+        </nav>
     </div>
-</nav>
+</header>
 
-<!-- HERO SECTION -->
+<!-- HERO SLIDER -->
 <section class="hero">
-    <h1>Smart College Management</h1>
-    <p>One platform for Admin, Teachers, Students & Parents</p>
-    <a href="{% url 'role_login' %}" class="primary-btn">Get Started</a>
+    <div class="hero-content fade-in">
+        <h1>Best Education For Your Future</h1>
+        <p>Manage Students, Teachers & Parents in one smart system</p>
+        <a href="{% url 'role_login' %}" class="hero-btn">Get Started</a>
+    </div>
 </section>
+
+<!-- ABOUT SECTION -->
+<section class="about-section">
+    <div class="about-container">
+
+        <div class="about-left">
+            <span class="about-badge">ACADAMIX</span>
+            <h2>About Our Institution</h2>
+        </div>
+
+        <div class="about-right">
+            <p class="highlight-text">
+                We are building a smart, digital-first college management system
+                that connects Admins, Teachers, Students, and Parents in one platform.
+            </p>
+
+            <p class="about-text">
+                ACADAMIX is designed to simplify academic operations, improve communication,
+                and provide real-time access to academic data. Our goal is to make education
+                management efficient, transparent, and future-ready.
+            </p>
+
+            <a href="#" class="about-btn">Read More →</a>
+        </div>
+
+    </div>
+
+    <!-- IMAGE STRIP -->
+    <div class="about-image">
+        <img src="{% static 'images/about.jpg' %}" alt="Campus Image">
+    </div>
+</section>
+
 
 <!-- FEATURES -->
 <section class="features" id="features">
-    <h2>System Features</h2>
+    <h2>Our Features</h2>
     <div class="feature-grid">
-        <div class="feature-card">👨‍💼 Admin Control</div>
-        <div class="feature-card">🎓 Student Dashboard</div>
-        <div class="feature-card">👨‍🏫 Teacher Portal</div>
-        <div class="feature-card">👨‍👩‍👧 Parent Monitoring</div>
+        <div class="card slide-up">
+            <h3>Admin Control</h3>
+            <p>Manage everything from one dashboard</p>
+        </div>
+        <div class="card slide-up">
+            <h3>Student Portal</h3>
+            <p>Attendance, profile and results</p>
+        </div>
+        <div class="card slide-up">
+            <h3>Teacher Panel</h3>
+            <p>Classes, students & performance</p>
+        </div>
+        <div class="card slide-up">
+            <h3>Parent Access</h3>
+            <p>Monitor student progress easily</p>
+        </div>
     </div>
 </section>
 
@@ -40,6 +95,20 @@
 <footer>
     <p>© 2025 ACADAMIX | College Management System</p>
 </footer>
+
+<script src="{% static 'js/home.js' %}"></script>
+
+<script>
+document.addEventListener("scroll", () => {
+    const about = document.querySelector(".about-section");
+    const position = about.getBoundingClientRect().top;
+    const screenHeight = window.innerHeight;
+
+    if (position < screenHeight - 100) {
+        about.classList.add("show");
+    }
+});
+</script>
 
 </body>
 </html>
