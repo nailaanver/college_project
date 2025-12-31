@@ -200,5 +200,13 @@ def parent_list(request):
     return render(request, 'adminpanel/parent_list.html', {
         'parents': parents
     })
+    
+@login_required
+@user_passes_test(is_admin)
+def delete_student(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+    student.delete()
+    return redirect('student-list')
+
 
 
