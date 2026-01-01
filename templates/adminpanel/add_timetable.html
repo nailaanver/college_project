@@ -182,6 +182,20 @@
                 <option value="{{ subject.id }}">{{ subject.name }}</option>
             {% endfor %}
         </select>
+        <label>Teacher</label>
+        <select name="teacher" required>
+            <option value="">Select Teacher</option>
+
+            {% for teacher in teachers %}
+                <option value="{{ teacher.id }}">
+                    {{ teacher.user.first_name }} {{ teacher.user.last_name }}
+                </option>
+            {% empty %}
+                <option disabled>No teachers available for this period</option>
+            {% endfor %}
+        </select>
+
+
 
         <button type="submit">Save Timetable</button>
     </form>

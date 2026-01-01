@@ -12,11 +12,12 @@ def home(request):
 
 def add_timetable(request):
     subjects = Subject.objects.all()
-    teachers = Teacher.objects.all()
 
     courses = Student.COURSE_CHOICES
     semesters = Student.SEMESTER_CHOICES
     days = TimeTable.DAYS_OF_WEEK
+
+    teachers = Teacher.objects.all()
 
     if request.method == 'POST':
         course = request.POST.get('course')
@@ -26,7 +27,7 @@ def add_timetable(request):
         subject_id = request.POST.get('subject')
         teacher_id = request.POST.get('teacher')
 
-        # ✅ CHECK DUPLICATE
+        # ✅ 1. CHECK PERIOD DUPLICATE (already correct)
         exists = TimeTable.objects.filter(
             course=course,
             semester=semester,
@@ -40,24 +41,46 @@ def add_timetable(request):
                 "This period is already assigned for the selected course, semester and day."
             )
         else:
-            TimeTable.objects.create(
-                course=course,
-                semester=semester,
+            # ✅ 2. CHECK TEACHER CLASH
+            teacher_busy = TimeTable.objects.filter(
+                teacher_id=teacher_id,
                 day=day,
-                period_number=period_number,
-                subject_id=subject_id,
-                teacher_id=teacher_id
-            )
-            messages.success(request, "Timetable added successfully!")
-            return redirect('add-timetable')  # stay on same page
+                period_number=period_number
+            ).exists()
+
+            if teacher_busy:
+                messages.error(
+                    request,
+                    "This teacher is already assigned for this period."
+                )
+            else:
+                TimeTable.objects.create(
+                    course=course,
+                    semester=semester,
+                    day=day,
+                    period_number=period_number,
+                    subject_id=subject_id,
+                    teacher_id=teacher_id
+                )
+                messages.success(request, "Timetable added successfully!")
+                return redirect('add-timetable')
+
+        # ✅ FILTER AVAILABLE TEACHERS AGAIN (IMPORTANT)
+        busy_teacher_ids = TimeTable.objects.filter(
+            day=day,
+            period_number=period_number
+        ).values_list('teacher_id', flat=True)
+
+        teachers = Teacher.objects.exclude(id__in=busy_teacher_ids)
 
     return render(request, 'adminpanel/add_timetable.html', {
         'subjects': subjects,
-        'teachers': teachers,
+        'teachers': teachers,   # 👈 ONLY AVAILABLE TEACHERS
         'courses': courses,
         'semesters': semesters,
         'days': days,
     })
+
 
 def timetable_filter(request):
     return render(request, 'adminpanel/timetable_filter.html', {

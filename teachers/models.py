@@ -12,6 +12,9 @@ class Teacher(models.Model):
         ('CHEM', 'Chemistry'),
         ('CS', 'Computer Science'),
         ('ENG', 'English'),
+        ('ML','Malayalam'),
+        ('CM','Commerse'),
+        ('FN','Financial')
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
