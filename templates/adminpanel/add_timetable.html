@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Timetable | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== BODY ===== */
+        body {
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== BACKGROUND FIX (IMPORTANT) ===== */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(11,28,57,0.95), rgba(11,28,57,0.95)),
+                url("{% static 'images/campus.jpg' %}") center / cover no-repeat;
+            z-index: -1;
+
+            /* 🔥 THIS LINE FIXES THE PROBLEM */
+            pointer-events: none;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+            color: var(--navy-dark);
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* ===== INPUT & SELECT (NATIVE SAFE) ===== */
+        input,
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 8px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #0b1c39;
+            font-size: 14px;
+
+            appearance: auto;
+            -webkit-appearance: menulist;
+            -moz-appearance: menulist;
+        }
+
+        /* ===== BUTTON ===== */
+        button {
+            width: 100%;
+            margin-top: 30px;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            background: var(--navy);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        /* ===== BACK LINK ===== */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #b30000;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="{% url 'admin-dashboard' %}" class="back-link">⬅ Back to Dashboard</a>
+
+<div class="container">
+    <h2>Add Timetable</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Course</label>
+        <select name="course" required>
+            <option value="">Select Course</option>
+            {% for value, label in courses %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Semester</label>
+        <select name="semester" required>
+            <option value="">Select Semester</option>
+            {% for value, label in semesters %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Day</label>
+        <select name="day" required>
+            <option value="">Select Day</option>
+            {% for value, label in days %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Period Number</label>
+        <select name="period_number" required>
+            <option value="">Select Period</option>
+            {% for i in "1234567" %}
+                <option value="{{ forloop.counter }}">Period {{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Subject</label>
+        <select name="subject" required>
+            <option value="">Select Subject</option>
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Save Timetable</button>
+    </form>
+</div>
+
+</body>
+</html>

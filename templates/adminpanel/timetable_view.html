@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timetable</title>
+    <style>
+        body {
+            background: #0b1c39;
+            font-family: Poppins, sans-serif;
+            color: white;
+            padding: 40px;
+        }
+        table {
+            width: 100%;
+            background: white;
+            color: #0b1c39;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background: #142850;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>{{ course }} – Semester {{ semester }} Timetable</h2>
+
+<table>
+    <tr>
+        <th>Day</th>
+        <th>Period</th>
+        <th>Subject</th>
+        <th>Teacher</th>
+    </tr>
+
+    {% for t in timetables %}
+    <tr>
+        <td>{{ t.day }}</td>
+        <td>Period {{ t.period_number }}</td>
+        <td>{{ t.subject.name }}</td>
+        <td>{{ t.teacher.name }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No timetable found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

@@ -7,15 +7,30 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --gold-soft: #f8d85a;
+            --white: #ffffff;
+            --light: #f5f6fa;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f6fa;
+            /* Gradient overlay + dashboard background image */
+            background: 
+                linear-gradient(rgba(11, 28, 57, 0.85), rgba(11, 28, 57, 0.85)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
             padding: 30px;
+            color: var(--white);  /* text color over dark background */
         }
+
         h2 {
-            color: #142850;
+            color: var(--gold);
             margin-bottom: 20px;
         }
+
         select {
             padding: 10px 12px;
             border-radius: 20px;
@@ -23,47 +38,85 @@
             margin-right: 15px;
             outline: none;
         }
+
         button {
             padding: 10px 20px;
-            background: #142850;
-            color: #fff;
+            background: var(--navy);
+            color: var(--white);
             border: none;
             border-radius: 20px;
             cursor: pointer;
         }
+
         button:hover {
-            background: #0b1c39;
+            background: var(--navy-dark);
         }
+
+        .add-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: var(--gold);
+            color: var(--navy-dark);
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .add-btn:hover {
+            background: var(--gold-soft);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: var(--navy-dark); /* Dark background for table */
         }
-        th, td {
+
+        th {
             padding: 12px 15px;
-            border: 1px solid #ddd;
+            background: var(--navy);
+            color: var(--white);
             text-align: center;
         }
-        th {
-            background: #142850;
-            color: white;
+
+        td {
+            padding: 12px 15px;
+            text-align: center;
+            color: var(--navy); /* White text by default */
+            transition: all 0.3s ease;
+            background: var(--white);
         }
-        tr:nth-child(even) {
-            background: #f2f2f2;
+
+        /* Optional: alternating rows darker */
+        /* tr:nth-child(even) td {
+            background: #0d264d;
+        } */
+
+        /* Hover effect: reveal background change */
+        tr:hover td {
+            background: var(--gold-soft); /* highlight row */
+            color: var(--navy-dark);      /* text color on hover */
         }
-        tr:hover {
-            background: #f8d85a4d;
-        }
+
+
         a {
             text-decoration: none;
-            color: #142850;
+            color: var(--navy);
             font-weight: 500;
         }
+
     </style>
 </head>
 <body>
 
     <h2>Subjects</h2>
+
+    <a href="{% url 'add-subject' %}" class="add-btn">+ Add Subject</a>
 
     <form method="get">
         <label>Course:</label>

@@ -35,7 +35,6 @@ class Teacher(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
     course = models.CharField(max_length=20, choices=Student.COURSE_CHOICES)
     semester = models.PositiveIntegerField(choices=Student.SEMESTER_CHOICES)
 
