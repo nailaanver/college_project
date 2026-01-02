@@ -96,10 +96,17 @@ def timetable_view(request):
     timetables = TimeTable.objects.filter(
         course=course,
         semester=semester
-    ).select_related('subject', 'teacher').order_by('day', 'period_number')
+    ).select_related(
+        'subject', 'teacher'
+    )
+
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    periods = range(1, 8)  # ✅ 7 periods only
 
     return render(request, 'adminpanel/timetable_view.html', {
         'timetables': timetables,
         'course': course,
-        'semester': semester
+        'semester': semester,
+        'days': days,
+        'periods': periods,
     })

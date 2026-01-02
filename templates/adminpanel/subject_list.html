@@ -110,9 +110,35 @@
             font-weight: 500;
         }
 
+.back-btn {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    padding: 10px 22px;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.back-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
+
     </style>
 </head>
 <body>
+    <a href="{% url 'admin-dashboard' %}" class="back-btn">
+    ← Back to Dashboard
+</a>
+
 
     <h2>Subjects</h2>
 
@@ -162,7 +188,7 @@
     </table>
 
     <br>
-    <a href="{% url 'admin-dashboard' %}">⬅ Back to Dashboard</a>
+    <!-- <a href="{% url 'admin-dashboard' %}">⬅ Back to Dashboard</a> -->
 
 </body>
 </html>

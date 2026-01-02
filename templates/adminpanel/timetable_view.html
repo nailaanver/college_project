@@ -95,26 +95,35 @@
 <h2>{{ course }} – Semester {{ semester }} Timetable</h2>
 
 <table>
-    <tr>
-        <th>Day</th>
-        <th>Period</th>
-        <th>Subject</th>
-        <th>Teacher</th>
-    </tr>
+    <thead>
+        <tr>
+            <th>Period</th>
+            {% for day in days %}
+                <th>{{ day }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
 
-    {% for t in timetables %}
-    <tr>
-        <td>{{ t.day }}</td>
-        <td>Period {{ t.period_number }}</td>
-        <td>{{ t.subject.name }}</td>
-        <td>{{ t.teacher }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4">No timetable found</td>
-    </tr>
-    {% endfor %}
+    <tbody>
+        {% for period in periods %}
+        <tr>
+            <th>Period {{ period }}</th>
+
+            {% for day in days %}
+            <td>
+                {% for t in timetables %}
+                    {% if t.day == day and t.period_number == period %}
+                        <strong>{{ t.subject.name }}</strong><br>
+                        <small>{{ t.teacher }}</small>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
+
 
 </body>
 </html>

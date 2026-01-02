@@ -1,11 +1,157 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Teacher Dashboard</h2>
+<style>
+    :root {
+        --navy-dark: #0b1c39;
+        --navy: #142850;
+        --gold: #f3c623;
+        --gold-soft: #f8d85a;
+        --white: #ffffff;
+        --light: #f5f6fa;
+    }
 
-<p>Welcome {{ request.user.get_full_name }}</p>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: 
+            linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+            url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+        margin: 0;
+        padding: 20px;
+        color: var(--white);
+    }
 
-<p>Subject: {{ request.user.teacher.get_subject_display }}</p>
+    .dashboard-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 25px;
+        background: var(--navy-dark); /* SOLID */
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
 
-<a href="{% url 'logout' %}">Logout</a>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .welcome-text {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--gold);
+    }
+
+    .notification {
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--gold);
+    }
+
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--gold);
+        margin-left: 10px;
+        background: var(--white);
+    }
+
+    .dashboard-description {
+        font-size: 14px;
+        color: #ddd;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .dashboard-card {
+        background: var(--white); /* SOLID */
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.3s;
+        color: var(--navy-dark);
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .dashboard-card:hover {
+        background: var(--gold);
+        color: var(--navy-dark);
+        transform: translateY(-3px);
+    }
+
+    .dashboard-card i {
+        font-size: 28px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .dashboard-card p {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    @media(max-width: 400px) {
+        .cards-container {
+            grid-template-columns: 1fr;
+        }
+        .dashboard-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .welcome-text {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div class="dashboard-wrapper">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="welcome-text">
+            Welcome, {{ request.user.get_full_name }} 👋
+        </div>
+        <div style="display:flex; align-items:center;">
+            <div class="notification">🔔</div>
+            <img src="{% if request.user.teacher.profile_picture %}
+                        {{ request.user.teacher.profile_picture.url }}
+                     {% else %}
+                        {% static 'images/default_profile.png' %}
+                     {% endif %}"
+                 class="profile-pic">
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="dashboard-description">
+        Manage your courses, attendance, assignments, and student performance easily.
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="cards-container">
+        <a href="{% url 'teacher_profile' %}" class="dashboard-card">
+            <i>👤</i>
+            <p>Profile</p>
+        </a>
+        <a href="{% url 'teacher_timetable' %}" class="dashboard-card">
+    <i>📅</i>
+    <p>My Timetable</p>
+</a>
+
+    </div>
+
+</div>
 {% endblock %}

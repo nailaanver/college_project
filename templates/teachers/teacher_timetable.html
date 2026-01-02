@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+    font-family: 'Inter', sans-serif;
+}
+
+    table {
+        width: 100%;
+        background: white;
+        color: #0b1c39;
+        border-collapse: collapse;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    }
+
+    th, td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    th {
+        background: #142850;
+        color: #f3c623;
+    }
+
+    tr:nth-child(even) {
+        background: #f5f7fa;
+    }
+</style>
+
+<h2 style="color:#f3c623; text-align:center;">My Timetable</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Period</th>
+            {% for day in days %}
+                <th>{{ day }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for period in periods %}
+        <tr>
+            <th>Period {{ period }}</th>
+
+            {% for day in days %}
+            <td>
+                {% for t in timetables %}
+                    {% if t.day == day and t.period_number == period %}
+                        <strong>{{ t.subject.name }}</strong><br>
+                        <small>{{ t.course }} | Sem {{ t.semester }}</small>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
