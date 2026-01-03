@@ -109,18 +109,22 @@ body {
 <div class="dashboard-wrapper">
 
     <!-- Header -->
-    <div class="dashboard-header">
-        <div class="welcome-text">
-            Welcome, {{ request.user.get_full_name }}
-        </div>
-
-        <img src="{% if request.user.teacher.profile_picture %}
-                    {{ request.user.teacher.profile_picture.url }}
-                 {% else %}
-                    {% static 'images/default_profile.png' %}
-                 {% endif %}"
-             class="profile-pic">
+   <!-- Header -->
+<div class="dashboard-header">
+    <div class="welcome-text">
+        Welcome, {{ request.user.get_full_name }}
     </div>
+
+    <!-- Make profile picture clickable -->
+    <img src="{% if request.user.teacher.profile_photo %}
+            {{ request.user.teacher.profile_photo.url }}
+         {% else %}
+            {% static 'images/default_profile.png' %}
+         {% endif %}"
+     class="profile-pic" title="View Profile">
+
+</div>
+
 
     <!-- Description -->
     <div class="dashboard-description">
@@ -130,11 +134,11 @@ body {
     <!-- Cards -->
     <div class="cards-container">
 
-        <a href="{% url 'teacher_profile' %}" class="dashboard-card">
+        <!-- <a href="{% url 'teacher_profile' %}" class="dashboard-card">
             <i class="fas fa-user"></i>
             <h3>Profile</h3>
             <p>View and update details</p>
-        </a>
+        </a> -->
 
         <a href="{% url 'teacher_timetable' %}" class="dashboard-card">
             <i class="fas fa-calendar-alt"></i>

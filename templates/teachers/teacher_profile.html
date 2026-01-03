@@ -1,28 +1,24 @@
-<!-- teachers/templates/teachers/teacher_profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
 <h2>Teacher Profile</h2>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <label>Full Name:</label>
-    <input type="text" value="{{ teacher.user.get_full_name }}" disabled><br><br>
     
-    <label>Email:</label>
-    <input type="email" value="{{ teacher.user.email }}" disabled><br><br>
-    
-    <label>Department:</label>
-    <input type="text" name="department" value="{{ teacher.department }}"><br><br>
-    
-    <label>Contact Number:</label>
-    <input type="text" name="contact_number" value="{{ teacher.contact_number }}"><br><br>
-    
-    <label>Profile Picture:</label>
-    <input type="file" name="profile_picture"><br><br>
-    
+    <h3>User Info</h3>
+    {{ user_form.as_p }}
+
+    <h3>Teacher Info</h3>
+    {{ teacher_form.as_p }}
+
     <button type="submit">Update Profile</button>
 </form>
 
 {% if messages %}
-  {% for message in messages %}
-    <p style="color:green">{{ message }}</p>
-  {% endfor %}
+    {% for message in messages %}
+        <p style="color:green">{{ message }}</p>
+    {% endfor %}
 {% endif %}
+{% endblock %}
