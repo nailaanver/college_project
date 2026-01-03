@@ -1,0 +1,18 @@
+<h2>📅 Today's Classes</h2>
+
+{% for t in timetables %}
+  <div class="card">
+    <p>
+      <strong>Period {{ t.period_number }}</strong> |
+      {{ t.course }} |
+      Sem {{ t.semester }} |
+      {{ t.subject.name }}
+    </p>
+
+    <a href="{% url 'mark_attendance' t.id %}">
+        Mark Attendance
+    </a>
+  </div>
+{% empty %}
+  <p>No classes today</p>
+{% endfor %}

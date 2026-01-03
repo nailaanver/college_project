@@ -31,7 +31,33 @@
     tr:nth-child(even) {
         background: #f5f7fa;
     }
+    .top-bar {
+    margin-bottom: 15px;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #f3c623;     /* YELLOW */
+    color: #0b1c39;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #e6b800;
+}
+
 </style>
+<div class="top-bar">
+    <a href="{% url 'teacher-dashboard' %}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+</div>
+
 
 <h2 style="color:#f3c623; text-align:center;">My Timetable</h2>
 

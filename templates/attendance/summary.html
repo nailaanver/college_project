@@ -1,0 +1,9 @@
+<h2>📊 Attendance Summary</h2>
+
+<ul>
+{% for s in summary %}
+  <li>{{ s.status }} : {{ s.count }}</li>
+{% endfor %}
+</ul>
+
+<a href="/teacher/dashboard/">Back to Dashboard</a>
