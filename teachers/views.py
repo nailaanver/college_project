@@ -35,7 +35,7 @@ def teacher_timetable(request):
         teacher=teacher
     ).select_related('subject', 'teacher')
 
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', ]
     periods = sorted(
         timetables.values_list('period_number', flat=True).distinct()
     )
@@ -46,19 +46,5 @@ def teacher_timetable(request):
         'periods': periods,
     })
 
-    
-from datetime import datetime
 
-@login_required
-def teacher_today_timetable(request):
-    today = datetime.today().strftime('%A')
-
-    timetable = TimeTable.objects.filter(
-        teacher=request.user.teacher,
-        day=today
-    ).order_by('period_number')
-
-    return render(request, 'teachers/teacher_today.html', {
-        'timetable': timetable
-    })
 

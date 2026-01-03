@@ -4,6 +4,7 @@ from teachers.models import Subject
 
 from django.utils import timezone
 
+
 ATTENDANCE_STATUS = [
     ('P', 'Present'),
     ('A', 'Absent'),
