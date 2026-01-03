@@ -1,6 +1,6 @@
 {% load static %}
 
-<h2 class="title">📝 Mark Attendance</h2>
+<h2 class="title">📝 Edit Attendance</h2>
 
 <p class="info">
   Period {{ timetable.period_number }} |
@@ -26,35 +26,38 @@
     <!-- Name -->
     <h4>{{ s.first_name }} {{ s.last_name }}</h4>
 
-   <div class="status-buttons">
+    <!-- Status Buttons -->
+    <div class="status-buttons">
 
-  <label class="status present">
-    <input type="radio" name="status_{{ s.id }}" value="P">
-    <span>P</span>
-  </label>
+      <label class="status present">
+        <input type="radio" name="status_{{ s.id }}" value="P"
+          {% if attendance_map.s.id == 'P' %}checked{% endif %}>
+        <span>P</span>
+      </label>
 
-  <label class="status absent">
-    <input type="radio" name="status_{{ s.id }}" value="A" checked>
-    <span>A</span>
-  </label>
+      <label class="status absent">
+        <input type="radio" name="status_{{ s.id }}" value="A" checked>
+        <span>A</span>
+      </label>
 
-  <label class="status late">
-    <input type="radio" name="status_{{ s.id }}" value="L">
-    <span>L</span>
-  </label>
+      <label class="status late">
+        <input type="radio" name="status_{{ s.id }}" value="L"
+          {% if attendance_map.s.id == 'L' %}checked{% endif %}>
+        <span>L</span>
+      </label>
 
-</div>
-
+    </div>
 
   </div>
 {% endfor %}
 
 </div>
 
-<button class="submit-btn" type="submit">Submit Attendance</button>
+<button class="submit-btn" type="submit">Update Attendance</button>
 </form>
+
 <style>
-  .title {
+.title {
   margin-bottom: 8px;
 }
 
@@ -91,61 +94,20 @@
   margin-bottom: 12px;
 }
 
+/* STATUS BUTTONS */
 .status-buttons {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.status {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 13px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-}
-
-.status input {
-  display: none;
-}
-
-/* Colors */
-.present { background: #e6f8f0; color: #1faa6f; }
-.absent  { background: #fdeaea; color: #e43b3b; }
-.late    { background: #fff2d9; color: #f59e0b; }
-
-/* Selected state */
-.status input:checked + span,
-.status input:checked {
-  box-shadow: inset 0 0 0 2px currentColor;
-}
-
-.submit-btn {
-  background: #0b1c39;
-  color: #fff;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 30px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
 .status {
   width: 34px;
   height: 34px;
   border-radius: 50%;
   font-size: 13px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  position: relative;
   user-select: none;
 }
 
@@ -162,9 +124,24 @@
   justify-content: center;
 }
 
-/* Selected state */
+/* COLORS */
+.present span { background: #e6f8f0; color: #1faa6f; }
+.absent span  { background: #fdeaea; color: #e43b3b; }
+.late span    { background: #fff2d9; color: #f59e0b; }
+
+/* SELECTED STATE */
 .status input:checked + span {
   box-shadow: inset 0 0 0 2px currentColor;
 }
 
+.submit-btn {
+  background: #0b1c39;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
 </style>

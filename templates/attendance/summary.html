@@ -1,5 +1,9 @@
 <h2>📊 Attendance Summary</h2>
 
+<a href="{% url 'edit_attendance' timetable.id %}" class="btn-edit">
+  ✏️ Edit Attendance
+</a>
+
 <p>
   {{ timetable.subject.name }} |
   Period {{ timetable.period_number }} |

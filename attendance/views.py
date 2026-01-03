@@ -63,10 +63,11 @@ def mark_attendance(request, timetable_id):
             Attendance.objects.create(
                 student=student,
                 subject=timetable.subject,
-                date=today,
+                date=date.today(),
                 period=timetable.period_number,
                 status=status
             )
+
 
         return redirect('attendance_summary', timetable.id)
 
@@ -100,4 +101,41 @@ def attendance_summary(request, timetable_id):
         'present_count': present_count,
         'late_count': late_count,
         'absent_count': absent_count,
+    })
+
+@login_required
+def edit_attendance(request, timetable_id):
+    timetable = TimeTable.objects.get(id=timetable_id)
+
+    students = Student.objects.filter(
+        course=timetable.course,
+        semester=timetable.semester
+    )
+
+    attendance_qs = Attendance.objects.filter(
+        subject=timetable.subject,
+        date=date.today(),
+        period=timetable.period_number
+    )
+
+    attendance_map = {a.student_id: a for a in attendance_qs}
+
+    if request.method == 'POST':
+        for student in students:
+            status = request.POST.get(f'status_{student.id}')
+
+            Attendance.objects.update_or_create(
+                student=student,
+                subject=timetable.subject,
+                date=date.today(),
+                period=timetable.period_number,
+                defaults={'status': status}
+            )
+
+        return redirect('attendance_summary', timetable.id)
+
+    return render(request, 'attendance/edit.html', {
+        'timetable': timetable,
+        'students': students,
+        'attendance_map': attendance_map
     })
