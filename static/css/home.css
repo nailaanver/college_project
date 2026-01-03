@@ -177,6 +177,136 @@ nav .btn {
     }
 }
 
+/* ===== OPPORTUNITY SECTION ===== */
+
+.opportunity-wrapper {
+    padding: 80px 5%;
+    background: #ffffff;
+}
+
+.opportunity-card {
+    max-width: 1200px;
+    margin: auto;
+    background: #1e2d4f; /* SAME AS ABOUT SECTION */
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    overflow: hidden; /* 🔥 THIS IS IMPORTANT */
+}
+
+/* IMAGE CONTAINER */
+.opportunity-image {
+    height: auto;
+    min-height: 420px;
+    overflow: hidden;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+}
+
+
+
+/* IMAGE */
+.opportunity-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+
+/* CONTENT */
+.opportunity-content {
+    padding: 45px 40px;
+    color: #ffffff;
+}
+
+.opportunity-content h3 {
+    font-size: 26px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.opportunity-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d1d5db;
+    margin-bottom: 18px;
+}
+
+/* READ MORE */
+.read-more {
+    color: #3ccf91;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.read-more:hover {
+    color: #ffffff;
+}
+
+/* DIVIDER */
+.divider {
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+    margin: 25px 0;
+}
+
+/* MENU LIST */
+.opportunity-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.opportunity-menu li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.opportunity-menu li:last-child {
+    border-bottom: none;
+}
+
+.opportunity-menu li span:last-child {
+    font-size: 18px;
+    font-weight: 600;
+    color: #3ccf91;
+}
+
+.opportunity-menu li:hover {
+    color: #f3c623;
+}
+.opportunity-card {
+    min-height: 420px; /* REQUIRED */
+}
+.opportunity-image {
+    height: 100%;
+}
+.opportunity-image img {
+    object-position: center;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .opportunity-card {
+        grid-template-columns: 1fr;
+    }
+
+    .opportunity-image {
+        height: 300px;
+    }
+}
+
+
 
 /* FEATURES */
 .features {

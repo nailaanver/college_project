@@ -4,11 +4,9 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 class StudentForm(forms.ModelForm):
-    # Add calendar picker and future date validation
+
     date_of_birth = forms.DateField(
-        widget=forms.DateInput(
-            attrs={'type': 'date'}
-        )
+        widget=forms.DateInput(attrs={'type': 'date'})
     )
 
     parent_email = forms.EmailField(
@@ -26,12 +24,7 @@ class StudentForm(forms.ModelForm):
             'register_number',
             'date_of_birth',
             'course',
+            'semester',        # ✅ ADD THIS
             'profile_photo',
-            'parent_email',   # include parent email
+            'parent_email',
         ]
-
-    def clean_date_of_birth(self):
-        dob = self.cleaned_data['date_of_birth']
-        if dob > date.today():
-            raise ValidationError("Date of birth cannot be in the future")
-        return dob

@@ -3,7 +3,8 @@
 <p>
   Period {{ timetable.period_number }} |
   {{ timetable.course }} |
-  Sem {{ timetable.semester }}
+  Sem {{ timetable.semester }} |
+  {{ timetable.subject.name }}
 </p>
 
 <form method="post">
@@ -11,16 +12,27 @@
 
 <table>
 <tr>
-  <th>Name</th>
-  <th>Present</th>
-  <th>Late</th>
+  <th>Student</th>
+  <th>Status</th>
 </tr>
 
 {% for s in students %}
 <tr>
-  <td>{{ s.name }}</td>
-  <td><input type="checkbox" name="present" value="{{ s.id }}"></td>
-  <td><input type="checkbox" name="late" value="{{ s.id }}"></td>
+  <td>{{ s.first_name }} {{ s.last_name }}</td>
+  <td>
+    <label>
+      <input type="radio" name="status_{{ s.id }}" value="P">
+      Present
+    </label>
+    <label>
+      <input type="radio" name="status_{{ s.id }}" value="L">
+      Late
+    </label>
+    <label>
+      <input type="radio" name="status_{{ s.id }}" value="A" checked>
+      Absent
+    </label>
+  </td>
 </tr>
 {% endfor %}
 </table>

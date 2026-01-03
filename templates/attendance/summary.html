@@ -1,9 +1,33 @@
 <h2>📊 Attendance Summary</h2>
 
-<ul>
-{% for s in summary %}
-  <li>{{ s.status }} : {{ s.count }}</li>
-{% endfor %}
-</ul>
+<p>
+  {{ timetable.subject.name }} |
+  Period {{ timetable.period_number }} |
+  {{ timetable.course }} |
+  Sem {{ timetable.semester }}
+</p>
 
-<a href="/teacher/dashboard/">Back to Dashboard</a>
+<p>
+  ✅ Present: {{ present_count }} |
+  ⏰ Late: {{ late_count }} |
+  ❌ Absent: {{ absent_count }} |
+  👥 Total: {{ total_students }}
+</p>
+
+<table>
+<tr>
+  <th>Student</th>
+  <th>Status</th>
+</tr>
+
+{% for a in attendance %}
+<tr>
+  <td>{{ a.student.first_name }} {{ a.student.last_name }}</td>
+  <td>
+    {% if a.status == 'P' %}Present{% endif %}
+    {% if a.status == 'L' %}Late{% endif %}
+    {% if a.status == 'A' %}Absent{% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
