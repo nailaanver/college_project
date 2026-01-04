@@ -1,12 +1,21 @@
-from django.shortcuts import render,redirect
-from teachers.models import Teacher
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils import timezone
 from dashboard.models import TimeTable
+from students.models import Student
+from attendance.models import Attendance
 
-@login_required
 def teacher_dashboard(request):
-    return render(request, 'teachers/dashboard.html')
+    teacher = request.user.teacher
+    today_name = timezone.now().strftime('%A')
 
+    todays_timetable = TimeTable.objects.filter(
+        teacher=teacher,
+        day=today_name
+    )
+
+    return render(request, 'teachers/dashboard.html', {
+        'todays_timetable': todays_timetable
+    })
 
 # teachers/views.py
 from .models import Teacher

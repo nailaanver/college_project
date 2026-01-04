@@ -21,7 +21,7 @@ from django.utils import timezone
     
 @login_required
 def attendance_home(request):
-    yesterday = (date.today() - timedelta(days=1)).strftime('%A')
+    yesterday = (date.today() - timedelta(days=2)).strftime('%A')
 
     timetables = TimeTable.objects.filter(
         teacher=request.user.teacher,
