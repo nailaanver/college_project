@@ -1,37 +1,197 @@
-<h2>📊 Attendance Summary</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-<a href="{% url 'edit_attendance' timetable.id %}" class="btn-edit">
-  ✏️ Edit Attendance
-</a>
+{% block content %}
 
-<p>
-  {{ timetable.subject.name }} |
-  Period {{ timetable.period_number }} |
-  {{ timetable.course }} |
-  Sem {{ timetable.semester }}
-</p>
+<div class="dashboard-wrapper">
 
-<p>
-  ✅ Present: {{ present_count }} |
-  ⏰ Late: {{ late_count }} |
-  ❌ Absent: {{ absent_count }} |
-  👥 Total: {{ total_students }}
-</p>
+  <h2 class="page-title">
+    <i class="fas fa-chart-bar"></i> Attendance Summary
+  </h2>
 
-<table>
-<tr>
-  <th>Student</th>
-  <th>Status</th>
-</tr>
+  <a href="{% url 'edit_attendance' timetable.id %}" class="btn-edit">
+    <i class="fas fa-edit"></i> Edit Attendance
+  </a>
 
-{% for a in attendance %}
-<tr>
-  <td>{{ a.student.first_name }} {{ a.student.last_name }}</td>
-  <td>
-    {% if a.status == 'P' %}Present{% endif %}
-    {% if a.status == 'L' %}Late{% endif %}
-    {% if a.status == 'A' %}Absent{% endif %}
-  </td>
-</tr>
-{% endfor %}
-</table>
+  <!-- CLASS INFO -->
+  <div class="widget info-widget">
+    <p>
+      <i class="fas fa-book"></i> {{ timetable.subject.name }} |
+      <i class="fas fa-clock"></i> Period {{ timetable.period_number }} |
+      <i class="fas fa-graduation-cap"></i> {{ timetable.course }} |
+      <i class="fas fa-layer-group"></i> Sem {{ timetable.semester }}
+    </p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <h2>{{ present_count }}</h2>
+      <p><i class="fas fa-check-circle"></i> Present</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>{{ late_count }}</h2>
+      <p><i class="fas fa-clock"></i> Late</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>{{ absent_count }}</h2>
+      <p><i class="fas fa-times-circle"></i> Absent</p>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="widget">
+    <h3><i class="fas fa-users"></i> Student Attendance</h3>
+
+    <table class="attendance-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in attendance %}
+        <tr>
+          <td>{{ a.student.first_name }} {{ a.student.last_name }}</td>
+          <td>
+            {% if a.status == 'P' %}
+              <span class="badge present">
+                <i class="fas fa-check"></i> Present
+              </span>
+            {% elif a.status == 'L' %}
+              <span class="badge late">
+                <i class="fas fa-clock"></i> Late
+              </span>
+            {% else %}
+              <span class="badge absent">
+                <i class="fas fa-times"></i> Absent
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<style>
+:root {
+  --navy-dark: #0b1c39;
+  --navy: #142850;
+  --gold: #f3c623;
+  --white: #ffffff;
+}
+
+/* Page title */
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 15px;
+}
+
+/* Edit button */
+.btn-edit {
+  display: inline-block;
+  background: var(--navy);
+  color: var(--white);
+  padding: 10px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.btn-edit:hover {
+  background: var(--gold);
+  color: var(--navy-dark);
+}
+
+/* Widget */
+.widget {
+  background: rgba(255,255,255,0.95);
+  color: var(--navy-dark);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+/* Stats */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  color: var(--white);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.stat-card i {
+  color: var(--gold);
+}
+
+.stat-card h2 {
+  font-size: 30px;
+  margin: 0;
+}
+
+.stat-card p {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* Table */
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th {
+  text-align: left;
+  padding: 12px;
+  background: var(--navy);
+  color: var(--white);
+}
+
+.attendance-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Badges */
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.badge.present {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge.late {
+  background: #ffedd5;
+  color: #92400e;
+}
+
+.badge.absent {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+</style>
+
+{% endblock %}

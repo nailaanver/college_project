@@ -1,24 +1,214 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-<h2>Teacher Profile</h2>
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --muted: #cfcfcf;
+}
+
+/* Background */
+body {
+    font-family: 'Poppins', sans-serif;
+    background:
+        linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    padding: 30px;
+    color: var(--white);
+}
+
+/* Card */
+.profile-wrapper {
+    max-width: 420px;
+    margin: auto;
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+}
+
+/* Header */
+.profile-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* Profile Image */
+.profile-photo-box {
+    position: relative;
+    width: 110px;
+    margin: auto;
+}
+
+.profile-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    object-fit: cover;
+}
+
+.camera-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 32px;
+    height: 32px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* Form rows */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.form-row label {
+    font-size: 13px;
+    color: var(--navy);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-row label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Inputs */
+.form-row input,
+.form-row select {
+    width: 100%;
+    padding: 6px 4px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    font-size: 14px;
+    color: var(--navy-dark);
+    background: transparent;
+    outline: none;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    border-bottom: 1px solid var(--gold);
+}
+
+/* File input */
+.form-row input[type="file"] {
+    font-size: 12px;
+}
+
+
+/* Submit */
+.submit-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 12px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: var(--navy-dark);
+}
+
+/* Messages */
+.success-msg {
+    margin-top: 15px;
+    text-align: center;
+    color: #7CFF7C;
+    font-size: 14px;
+}
+</style>
+
+<div class="profile-wrapper">
+
+    <div class="profile-title">Edit Profile</div>
+
+    <!-- Profile Photo -->
+    <div class="profile-photo-box">
+        <img src="{% if request.user.teacher.profile_photo %}
+                    {{ request.user.teacher.profile_photo.url }}
+                 {% else %}
+                    {% static 'images/default_profile.png' %}
+                 {% endif %}"
+             class="profile-photo">
+        <label for="id_profile_photo" class="camera-btn">
+    <i class="fas fa-camera"></i>
+</label>
+
+    </div>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    
-    <h3>User Info</h3>
-    {{ user_form.as_p }}
 
-    <h3>Teacher Info</h3>
-    {{ teacher_form.as_p }}
+    <!-- USER FORM -->
+    {% for field in user_form %}
+        <div class="form-row">
+            <label>{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endfor %}
 
-    <button type="submit">Update Profile</button>
+    <!-- TEACHER FORM (EXCEPT profile_photo) -->
+    {% for field in teacher_form %}
+        {% if field.name != 'profile_photo' %}
+            <div class="form-row">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- HIDDEN FILE INPUT -->
+<div style="display:none;">
+    {{ teacher_form.profile_photo }}
+</div>
+
+    <button type="submit" class="submit-btn">Save Changes</button>
 </form>
 
-{% if messages %}
-    {% for message in messages %}
-        <p style="color:green">{{ message }}</p>
-    {% endfor %}
-{% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="success-msg">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+<script>
+document.getElementById("id_profile_photo").addEventListener("change", function(event) {
+    const [file] = event.target.files;
+    if (file) {
+        document.querySelector(".profile-photo").src = URL.createObjectURL(file);
+    }
+});
+</script>
+
 {% endblock %}

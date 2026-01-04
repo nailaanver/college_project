@@ -10,7 +10,7 @@
     --white: #ffffff;
 }
 
-/* KEEP BACKGROUND IMAGE */
+/* Background */
 body {
     font-family: 'Poppins', sans-serif;
     background:
@@ -21,15 +21,17 @@ body {
     color: var(--white);
 }
 
+/* Wrapper */
 .dashboard-wrapper {
     max-width: 760px;
     margin: auto;
     padding: 30px;
-    background: rgba(11, 28, 57, 0.92); /* readable overlay */
+    background: rgba(11, 28, 57, 0.92);
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.35);
 }
 
+/* Header */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -38,18 +40,47 @@ body {
 
 .welcome-text {
     font-size: 22px;
-    font-weight: 600;
-    color: var(--gold);
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--gold), #ffdd57, var(--white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+/* Profile */
 .profile-pic {
     width: 46px;
     height: 46px;
     border-radius: 50%;
     border: 2px solid var(--gold);
     object-fit: cover;
+    cursor: pointer;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Logout */
+.logout-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.logout-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
+/* Description */
 .dashboard-description {
     margin: 20px 0 35px;
     text-align: center;
@@ -57,48 +88,7 @@ body {
     color: #ddd;
 }
 
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.dashboard-card {
-    background: var(--white);
-    color: var(--navy-dark);
-    border-radius: 16px;
-    padding: 30px 22px;
-    text-align: center;
-    text-decoration: none;
-    transition: 0.35s ease;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
-}
-
-.dashboard-card i {
-    font-size: 32px;
-    margin-bottom: 12px;
-    color: var(--navy);
-}
-
-.dashboard-card h3 {
-    font-size: 16px;
-    margin: 8px 0;
-}
-
-.dashboard-card p {
-    font-size: 13px;
-    color: #555;
-}
-
-.dashboard-card:hover {
-    background: var(--gold);
-    transform: translateY(-6px);
-}
-
-.dashboard-card:hover i {
-    color: var(--navy-dark);
-}
-
+/* Grid */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -111,35 +101,11 @@ body {
     gap: 20px;
 }
 
-/* Stats */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.stat-card {
-    background: var(--gold);
-    color: var(--navy-dark);
-    padding: 20px;
-    border-radius: 16px;
-    text-align: center;
-}
-
-.stat-card h2 {
-    font-size: 28px;
-    margin: 0;
-}
-
-.stat-card p {
-    font-size: 13px;
-    margin-top: 6px;
-}
-
 /* Widgets */
 .widget {
-    background: rgba(255,255,255,0.95);
-    color: var(--navy-dark);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
     padding: 20px;
     border-radius: 16px;
 }
@@ -168,7 +134,6 @@ body {
     text-decoration: none;
     transition: 0.3s;
 }
-
 .quick-btn:hover {
     background: var(--gold);
     color: var(--navy-dark);
@@ -176,125 +141,83 @@ body {
 
 /* Mobile */
 @media (max-width: 768px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-@media (max-width: 480px) {
-    .cards-container {
-        grid-template-columns: 1fr;
-    }
+    .dashboard-grid { grid-template-columns: 1fr; }
 }
 </style>
 
 <div class="dashboard-wrapper">
 
     <!-- Header -->
-   <!-- Header -->
-<div class="dashboard-header">
-    <div class="welcome-text">
-        Welcome, {{ request.user.get_full_name }}
+    <div class="dashboard-header">
+        <div class="welcome-text">
+            Welcome, {{ request.user.get_full_name }}
+        </div>
+
+        <div class="header-actions">
+
+            <!-- PROFILE CLICK -->
+            <a href="{% url 'teacher_profile' %}">
+                <img src="{% if request.user.teacher.profile_photo %}
+                            {{ request.user.teacher.profile_photo.url }}
+                         {% else %}
+                            {% static 'images/default_profile.png' %}
+                         {% endif %}"
+                     class="profile-pic"
+                     title="View Profile">
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+
+        </div>
     </div>
 
-    <!-- Make profile picture clickable -->
-    <img src="{% if request.user.teacher.profile_photo %}
-            {{ request.user.teacher.profile_photo.url }}
-         {% else %}
-            {% static 'images/default_profile.png' %}
-         {% endif %}"
-     class="profile-pic" title="View Profile">
-
-</div>
-
-
-    <!-- Description -->
+    <!-- Dashboard Content -->
     <div class="dashboard-description">
         <div class="dashboard-grid">
 
-    <!-- LEFT SIDE -->
-    <div class="left-panel">
+            <!-- LEFT -->
+            <div class="left-panel">
+                <div class="widget">
+                    <h3><i class="fas fa-calendar-day"></i> Today’s Schedule</h3>
+                    <div class="widget-content">
+                        {% for period in todays_timetable %}
+                        <div class="schedule-item">
+                            <span>{{ period.start_time }} – {{ period.end_time }}</span>
+                            <strong>{{ period.subject.name }}</strong>
+                        </div>
+                        {% empty %}
+                        <p>No classes today</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 
-        <!-- Stats -->
+            <!-- RIGHT -->
+            <div class="right-panel">
+                <div class="widget">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="widget-content">
+                        <a href="{% url 'attendance_home' %}" class="quick-btn">Mark Attendance</a>
+                        <a href="{% url 'teacher_timetable' %}" class="quick-btn">View Timetable</a>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Today Schedule -->
-        <div class="widget">
-            <h3><i class="fas fa-calendar-day"></i> Today’s Schedule</h3>
-
-
-            {% for period in todays_timetable %}
-            <div class="schedule-item">
-    <span>
-        <i class="fas fa-clock"></i>
-        {{ period.start_time }} – {{ period.end_time }}
-    </span>
-    <strong>
-        <i class="fas fa-book"></i>
-        {{ period.subject.name }}
-    </strong>
-</div>
-
-            {% empty %}
-            <p>No classes today</p>
-            {% endfor %}
         </div>
-
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="right-panel">
-
-        <!-- Quick Actions -->
-        <div class="widget">
-            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
-
-            <a href="{% url 'attendance_home' %}" class="quick-btn">
-                Mark Attendance
-            </a>
-
-            <a href="{% url 'teacher_timetable' %}" class="quick-btn">
-                View Timetable
-            </a>
-        </div>
-
-        <!-- Announcements -->
-        <div class="widget">
-            <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
-            <ul class="announce-list">
-                <li>Submit attendance before 5 PM</li>
-                <li>Staff meeting at 3 PM</li>
-            </ul>
-        </div>
-
     </div>
 
 </div>
 
-    </div>
+<script>
+/* Logout confirmation */
+document.querySelector('.logout-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (confirm("Are you sure you want to log out?")) {
+        window.location.href = this.href;
+    }
+});
+</script>
 
-    <!-- Cards -->
-    <div class="cards-container">
-
-        <!-- <a href="{% url 'teacher_profile' %}" class="dashboard-card">
-            <i class="fas fa-user"></i>
-            <h3>Profile</h3>
-            <p>View and update details</p>
-        </a> -->
-
-        <a href="{% url 'teacher_timetable' %}" class="dashboard-card">
-            <i class="fas fa-calendar-alt"></i>
-            <h3>My Timetable</h3>
-            <p>Weekly class schedule</p>
-        </a>
-
-        <a href="{% url 'attendance_home' %}" class="dashboard-card">
-            <i class="fas fa-clipboard-check"></i>
-            <h3>Attendance</h3>
-            <p>Mark today’s attendance</p>
-        </a>
-
-    </div>
-
-</div>
 {% endblock %}
