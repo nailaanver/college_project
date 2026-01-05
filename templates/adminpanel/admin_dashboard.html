@@ -175,7 +175,8 @@
         <a href="{% url 'teacher-list' %}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
         <a href="{% url 'parent-list' %}"><i class="fa-solid fa-people-roof"></i> Parents</a>
         <a href="{% url 'add-subject' %}"><i class="fa-solid fa-book-medical"></i> Add Subject</a>
-        <a href="#"><i class="fa-solid fa-book"></i> Courses</a>
+        <a href="{% url 'course-list' %}" ><i class="fa-solid fa-book-open"></i> Course</a>
+
         <a href="{% url 'timetable-filter' %}">
             <i class="fa-solid fa-calendar-days"></i> Timetable
         </a>
@@ -225,12 +226,12 @@
             </a>
 
 
-            <a href="#" class="card">
+            <!-- <a href="{% url 'course-list' %}" class="card">
                 <span><i class="fa-solid fa-book-open"></i></span>
                 <h4>Courses</h4>
                 <p>{{ total_courses }}</p>
 
-            </a>
+            </a> -->
         </div>
 
     </div>

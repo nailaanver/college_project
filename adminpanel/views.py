@@ -289,3 +289,20 @@ def admin_attendance_history(request):
         'adminpanel/attendance_history.html',
         context
     )
+    
+from students.models import Student
+
+def course_list(request):
+    courses = Student.COURSE_CHOICES
+    return render(request, 'courses/course_list.html', {
+        'courses': courses
+    })
+
+def course_detail(request, course):
+    students = Student.objects.filter(course=course).order_by('semester')
+
+    return render(request, 'courses/course_detail.html', {
+        'students': students,
+        'course_code': course,
+        'course_name': dict(Student.COURSE_CHOICES).get(course)
+    })

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy);
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.back-btn i {
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: var(--navy-dark);
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.page-header h2 {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 26px;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    background: var(--white);
+    border-radius: 30px;
+    padding: 25px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+}
+
+/* Table */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Head */
+.styled-table thead th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* Body */
+.styled-table tbody td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Hover */
+.styled-table tbody tr:hover {
+    background: #f8f9fc;
+}
+
+/* Semester Badge */
+.semester-badge {
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Empty State */
+.empty-row td {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .styled-table thead {
+        display: none;
+    }
+
+    .styled-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #eee;
+    }
+
+    .styled-table td {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .styled-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--navy);
+    }
+}
+</style>
+
+<!-- Header -->
+ <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:30px;">
+    <h2 class="page-title">
+        <i class="fa-solid fa-book-open"></i> Courses
+    </h2>
+
+    <a href="{% url 'admin-dashboard' %}" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="page-header">
+    <h2>
+        <i class="fa-solid fa-graduation-cap"></i>
+        {{ course_name }}
+    </h2>
+</div>
+
+<!-- Table -->
+<div class="table-wrapper">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Register No</th>
+                <th>Name</th>
+                <th>Semester</th>
+                <th>Parent Email</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td data-label="Register No">
+                    {{ student.register_number }}
+                </td>
+                <td data-label="Name">
+                    {{ student.first_name }} {{ student.last_name }}
+                </td>
+                <td data-label="Semester">
+                    <span class="semester-badge">
+                        {{ student.get_semester_display }}
+                    </span>
+                </td>
+                <td data-label="Parent Email">
+                    {{ student.parent_email|default:"—" }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr class="empty-row">
+                <td colspan="4">No students found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
