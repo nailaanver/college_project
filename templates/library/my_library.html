@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>📚 My Library</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Book</th>
+      <th>Issue Date</th>
+      <th>Due Date</th>
+      <th>Return Date</th>
+      <th>Status</th>
+      <th>Fine</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for issue in issues %}
+      <tr>
+        <td>{{ issue.book.title }}</td>
+        <td>{{ issue.issue_date }}</td>
+        <td>{{ issue.due_date }}</td>
+        <td>{% if issue.return_date %}{{ issue.return_date }}{% else %}—{% endif %}</td>
+        <td>{{ issue.status }}</td>
+        <td>{% if issue.fine %}₹{{ issue.fine }}{% else %}—{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="6">No books issued.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>📊 Library Reports</h2>
+
+<h3>Total Fines Collected: ₹{{ total_fines }}</h3>
+
+<h4>Currently Issued Books</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Book</th>
+      <th>User</th>
+      <th>Issue Date</th>
+      <th>Due Date</th>
+      <th>Status</th>
+      <th>Fine</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for issue in issued_books %}
+      <tr>
+        <td>{{ issue.book.title }}</td>
+        <td>{{ issue.user.username }}</td>
+        <td>{{ issue.issue_date }}</td>
+        <td>{{ issue.due_date }}</td>
+        <td>{{ issue.status }}</td>
+        <td>{% if issue.fine %}₹{{ issue.fine }}{% else %}—{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="6">No issued books</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h4>Overdue Books</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Book</th>
+      <th>User</th>
+      <th>Issue Date</th>
+      <th>Due Date</th>
+      <th>Fine So Far</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for issue in overdue_books %}
+      <tr>
+        <td>{{ issue.book.title }}</td>
+        <td>{{ issue.user.username }}</td>
+        <td>{{ issue.issue_date }}</td>
+        <td>{{ issue.due_date }}</td>
+        <td>{% if issue.fine %}₹{{ issue.fine }}{% else %}—{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5">No overdue books</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

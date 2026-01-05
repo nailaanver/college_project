@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 25px;
+}
+
+.table-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px;
+    text-align: left;
+}
+
+.table td {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.badge-available {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-unavailable {
+    background: #dc3545;
+    color: #fff;
+}
+
+.action-btn {
+    text-decoration: none;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.edit {
+    color: #0d6efd;
+}
+
+.delete {
+    color: #dc3545;
+}
+
+.add-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+</style>
+
+<h2 class="page-title">
+    <i class="fa-solid fa-book"></i> Manage Books
+</h2>
+
+<a href="{% url 'book-add' %}" class="add-btn">
+    ➕ Add Book
+</a>
+
+<div class="table-container">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Category</th>
+            <th>Total</th>
+            <th>Available</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.total_copies }}</td>
+            <td>{{ book.available_copies }}</td>
+            <td>
+                {% if book.available_copies > 0 %}
+                    <span class="badge badge-available">Available</span>
+                {% else %}
+                    <span class="badge badge-unavailable">Out</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'book-edit' book.id %}" class="action-btn edit">✏ Edit</a>
+                <a href="{% url 'book-delete' book.id %}" class="action-btn delete">🗑 Delete</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="8">No books available</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}
