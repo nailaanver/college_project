@@ -18,7 +18,7 @@ urlpatterns = [
     
     path('add-subject/', views.add_subject, name='add-subject'),
     path('subjects/', views.subject_list, name='subject-list'),
-    
+    path('attendance_history/',views.admin_attendance_history,name='attendance-history')
 
 
 

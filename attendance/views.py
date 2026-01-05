@@ -6,32 +6,32 @@ from dashboard.models import TimeTable
 from django.utils import timezone
 
 
-# @login_required
-# def attendance_home(request):
-#     today = date.today().strftime('%A')
-    
-#     timetables = TimeTable.objects.filter(
-#         teacher = request.user.teacher,
-#         day= today
-#     ).order_by('period_number')
-    
-#     return render(request,'attendance/today_timetable.html',{
-#         'timetables' : timetables
-#     })
-    
 @login_required
 def attendance_home(request):
-    yesterday = (date.today() - timedelta(days=2)).strftime('%A')
-
+    today = date.today().strftime('%A')
+    
     timetables = TimeTable.objects.filter(
-        teacher=request.user.teacher,
-        day=yesterday
+        teacher = request.user.teacher,
+        day= today
     ).order_by('period_number')
-
-    return render(request, 'attendance/today_timetable.html', {
-        'timetables': timetables,
-        'day': yesterday
+    
+    return render(request,'attendance/today_timetable.html',{
+        'timetables' : timetables
     })
+    
+# @login_required
+# def attendance_home(request):
+#     yesterday = (date.today() - timedelta(days=2)).strftime('%A')
+
+#     timetables = TimeTable.objects.filter(
+#         teacher=request.user.teacher,
+#         day=yesterday
+#     ).order_by('period_number')
+
+#     return render(request, 'attendance/today_timetable.html', {
+#         'timetables': timetables,
+#         'day': yesterday
+#     })
 from students.models import Student
 from .models import Attendance
 

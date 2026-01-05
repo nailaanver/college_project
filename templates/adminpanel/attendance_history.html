@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Wrapper */
+.attendance-wrapper {
+    max-width: 1000px;
+    margin: auto;
+    background: rgba(11, 28, 57, 0.92);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    color: var(--white);
+}
+
+/* Title */
+.page-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    background: linear-gradient(90deg, var(--gold), #ffdd57, var(--white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Filter Card */
+.filter-card {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(12px);
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.filter-group label {
+    font-size: 13px;
+    color: #ddd;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Button */
+.search-btn {
+    margin-top: 22px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.search-btn:hover {
+    background: #ffdd57;
+}
+
+/* Table */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.attendance-table th {
+    background: var(--navy);
+    font-size: 14px;
+}
+
+.attendance-table tr:nth-child(even) {
+    background: rgba(255,255,255,0.08);
+}
+
+/* Status */
+.status-p { color: #4caf50; font-weight: 600; }
+.status-a { color: #f44336; font-weight: 600; }
+.status-l { color: #ff9800; font-weight: 600; }
+
+/* Empty */
+.empty-text {
+    text-align: center;
+    color: #ccc;
+    margin-top: 20px;
+}
+
+
+/* back to dashboard buttun */
+
+.page-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy);
+    color: var(--white);
+    padding: 10px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.back-btn i {
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
+</style>
+
+<div class="attendance-wrapper">
+
+    <div class="page-title">
+        <i class="fas fa-chart-bar"></i> Attendance History
+    </div>
+
+    <div class="page-actions">
+    <a href="{% url 'admin-dashboard' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+
+    <!-- Filter -->
+    <form method="get" class="filter-card">
+        <div class="filter-grid">
+
+            <div class="filter-group">
+                <label><i class="fas fa-graduation-cap"></i> Course</label>
+                <select name="course">
+                    <option value="">Select Course</option>
+                    <option value="BCA">BCA</option>
+                    <option value="BSC_CS">BSc CS</option>
+                    <option value="BSC_IT">BSc IT</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fas fa-layer-group"></i> Semester</label>
+                <select name="semester">
+                    <option value="">Select Semester</option>
+                    {% for i in "123456" %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fas fa-clock"></i> Period</label>
+                <select name="period">
+                    <option value="">Select Period</option>
+                    {% for i in "1234567" %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fas fa-calendar-alt"></i> Date</label>
+                <input type="date" name="date">
+            </div>
+
+        </div>
+
+        <button type="submit" class="search-btn">
+            <i class="fas fa-search"></i> Search Attendance
+        </button>
+    </form>
+
+    <!-- Table -->
+    {% if attendance %}
+    <div class="table-wrapper">
+        <table class="attendance-table">
+            <tr>
+                <th><i class="fas fa-user"></i> Student</th>
+                <th><i class="fas fa-id-card"></i> Roll No</th>
+                <th><i class="fas fa-book"></i> Subject</th>
+                <th><i class="fas fa-calendar"></i> Date</th>
+                <th><i class="fas fa-clock"></i> Period</th>
+                <th><i class="fas fa-check-circle"></i> Status</th>
+            </tr>
+
+            {% for a in attendance %}
+            <tr>
+                <td>{{ a.student.first_name }} {{ a.student.last_name }}</td>
+                <td>{{ a.student.register_number }}</td>
+
+                <td>{{ a.subject.name }}</td>
+                <td>{{ a.date }}</td>
+                <td>{{ a.period }}</td>
+                <td>
+                    {% if a.status == 'P' %}
+                        <span class="status-p">Present</span>
+                    {% elif a.status == 'A' %}
+                        <span class="status-a">Absent</span>
+                    {% else %}
+                        <span class="status-l">Late</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+        <p class="empty-text">
+            <i class="fas fa-info-circle"></i>
+            Select course, semester and period to view attendance
+        </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -251,5 +251,41 @@ def subject_list(request):
     }
     return render(request, 'adminpanel/subject_list.html', context)
 
+from django.contrib.admin.views.decorators import staff_member_required
+from attendance.models import Attendance
 
+@staff_member_required
+def admin_attendance_history(request):
 
+    course = request.GET.get('course')
+    semester = request.GET.get('semester')
+    period = request.GET.get('period')
+    date = request.GET.get('date')
+
+    attendance = Attendance.objects.all()
+
+    if course:
+        attendance = attendance.filter(student__course=course)
+
+    if semester:
+        attendance = attendance.filter(student__semester=semester)
+
+    if period:
+        attendance = attendance.filter(period=period)
+
+    if date:
+        attendance = attendance.filter(date=date)
+
+    context = {
+        'attendance': attendance,
+        'course': course,
+        'semester': semester,
+        'period': period,
+        'date': date,
+    }
+
+    return render(
+        request,
+        'adminpanel/attendance_history.html',
+        context
+    )

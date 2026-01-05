@@ -26,7 +26,7 @@ body {
     max-width: 760px;
     margin: auto;
     padding: 30px;
-    background: rgba(11, 28, 57, 0.92);
+    background: white;
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.35);
 }
@@ -103,7 +103,7 @@ body {
 
 /* Widgets */
 .widget {
-    background: rgba(255,255,255,0.15);
+    background: var(--navy);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.25);
     padding: 20px;
@@ -184,7 +184,8 @@ body {
                     <div class="widget-content">
                         {% for period in todays_timetable %}
                         <div class="schedule-item">
-                            <span>{{ period.start_time }} – {{ period.end_time }}</span>
+                                <span>Semester {{ period.semester }}</span>
+
                             <strong>{{ period.subject.name }}</strong>
                         </div>
                         {% empty %}
