@@ -2,7 +2,6 @@ from django.db import models
 from accounts.models import User
 
 class Student(models.Model):
-
     COURSE_CHOICES = (
         ('BCA', 'BCA'),
         ('BSC_CS', 'BSc Computer Science'),
@@ -10,6 +9,10 @@ class Student(models.Model):
         ('BCOM', 'BCom'),
         ('BA', 'BA'),
     )
+
+    course = models.CharField(max_length=20, choices=COURSE_CHOICES)
+    # other fields...
+
     SEMESTER_CHOICES = [
     (1, '1st Semester'),
     (2, '2nd Semester'),
@@ -44,11 +47,6 @@ class Student(models.Model):
 
     date_of_birth = models.DateField()
 
-    course = models.CharField(
-        max_length=20,
-        choices=COURSE_CHOICES
-    )
-
     profile_photo = models.ImageField(
         upload_to='student_profiles/',
         blank=True,
@@ -60,3 +58,5 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.register_number} - {self.first_name} {self.last_name}"
+
+
