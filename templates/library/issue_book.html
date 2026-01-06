@@ -2,16 +2,108 @@
 {% load static %}
 {% block content %}
 
-<h2>📚 Issue Book</h2>
+<style>
+    .issue-container {
+        max-width: 550px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Issue Book</button>
-</form>
+    .issue-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #142850;
+        font-weight: 600;
+    }
 
-{% for message in messages %}
-  <p>{{ message }}</p>
-{% endfor %}
+    .issue-container form p {
+        margin-bottom: 15px;
+    }
+
+    .issue-container label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .issue-container input,
+    .issue-container select {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .btn-issue {
+        background: #142850;
+        color: #fff;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-issue:hover {
+        background: #0b1c39;
+    }
+
+    .btn-back {
+        background: #f3c623;
+        color: #142850;
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #f8d85a;
+    }
+
+    .messages {
+        margin-top: 20px;
+        text-align: center;
+        color: green;
+        font-weight: 500;
+    }
+</style>
+
+<div class="issue-container">
+    <h2>📚 Issue Book</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="btn-group">
+            <a href="{% url 'library-menu' %}" class="btn-back">
+                ← Back to Library
+            </a>
+
+            <button type="submit" class="btn-issue">
+                Issue Book
+            </button>
+        </div>
+    </form>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
 {% endblock %}

@@ -12,5 +12,11 @@ urlpatterns = [
     path('books/add/', views.book_add, name='book-add'),
     path('books/edit/<int:book_id>/', views.book_edit, name='book-edit'),
     path('books/delete/<int:book_id>/', views.book_delete, name='book-delete'),
+    
+    path('my-library/', views.my_library, name='my-library'),
+    path('library/search/', views.user_book_search, name='user-book-search'),
+    path('menu/', views.library_menu, name='library-menu'),
+
+  
 
 ]

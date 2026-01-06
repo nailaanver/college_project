@@ -1,35 +1,131 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>📚 Return Book</h2>
+<style>
+    .return-list-container {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        margin: 30px auto;
+        max-width: 1000px;
+    }
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Book</th>
-      <th>User</th>
-      <th>Issue Date</th>
-      <th>Due Date</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for issue in issues %}
-      <tr>
-        <td>{{ issue.book.title }}</td>
-        <td>{{ issue.user.username }}</td>
-        <td>{{ issue.issue_date }}</td>
-        <td>{{ issue.due_date }}</td>
-        <td>
-          <a href="{% url 'return-book' issue.id %}">Return</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="5">No books to return</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    .return-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .return-list-header h2 {
+        color: #142850;
+        font-weight: 600;
+    }
+
+    .btn-back {
+        background: #f3c623;
+        color: #142850;
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #f8d85a;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #142850;
+        color: #ffffff;
+    }
+
+    th, td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #eee;
+        transition: 0.3s;
+    }
+
+    tbody tr:hover {
+        background: #f5f6fa;
+    }
+
+    .btn-return {
+        background: #142850;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .btn-return:hover {
+        background: #0b1c39;
+    }
+
+    .empty-row {
+        text-align: center;
+        padding: 20px;
+        font-weight: 500;
+        color: #666;
+    }
+</style>
+
+<div class="return-list-container">
+
+    <div class="return-list-header">
+        <h2>📚 Return Books</h2>
+        <a href="{% url 'library-menu' %}" class="btn-back">
+            ← Back to Library
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>User</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for issue in issues %}
+                <tr>
+                    <td>{{ issue.book.title }}</td>
+                    <td>{{ issue.user.username }}</td>
+                    <td>{{ issue.issue_date }}</td>
+                    <td>{{ issue.due_date }}</td>
+                    <td>
+                        <a href="{% url 'return-book' issue.id %}" class="btn-return">
+                            Return
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-row">
+                        No books to return 📭
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 
 {% endblock %}

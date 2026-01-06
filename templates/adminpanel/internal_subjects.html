@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+/* Page title */
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 25px;
+}
+
+/* Card container */
+.card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px;
+    text-align: left;
+}
+
+.table tbody td {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+/* Review button */
+.review-btn {
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.review-btn:hover {
+    background: var(--navy);
+    color: var(--white);
+}
+
+/* Empty state */
+.empty-text {
+    text-align: center;
+    font-weight: 500;
+    color: #777;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;
+    }
+}
+</style>
+
+<h2 class="page-title">
+    Internal Marks Approval
+</h2>
+
+<div class="card">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Semester</th>
+            <th>Subject</th>
+            <th>Total Students</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for s in subjects %}
+        <tr>
+            <td>{{ s.subject__course }}</td>
+            <td>Semester {{ s.subject__semester }}</td>
+            <td>{{ s.subject__name }}</td>
+            <td>{{ s.total_students }}</td>
+            <td>
+                <a href="{% url 'admin-review-marks' s.subject__course s.subject__semester s.subject__id %}"
+                   class="review-btn">
+                    Review
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5" class="empty-text">
+                No pending approvals
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+<a href="{% url 'admin-dashboard' %}" class="back-btn">
+    ← Back to Dashboard
+</a>
+
+{% endblock %}

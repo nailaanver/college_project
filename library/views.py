@@ -181,3 +181,49 @@ def book_list(request):
     })
 
 
+
+
+from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def my_library(request):
+    issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
+    today = now().date()
+
+    for issue in issues:
+        if issue.status == 'ISSUED' and issue.due_date < today:
+            issue.overdue_days = (today - issue.due_date).days
+            issue.live_fine = issue.overdue_days * 5
+        else:
+            issue.overdue_days = 0
+            issue.live_fine = issue.fine or 0
+
+    return render(request, 'library/my_library.html', {
+        'issues': issues
+    })
+
+
+
+@login_required
+def user_book_search(request):
+    query = request.GET.get('q', '')
+    books = Book.objects.all()
+    if query:
+        books = books.filter(title__icontains=query)
+
+    return render(request, 'library/user_book_search.html', {
+        'books': books,
+        'query': query
+    })
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render
+
+def is_staff(user):
+    return user.is_staff
+
+@login_required
+@user_passes_test(is_staff)
+def library_menu(request):
+    return render(request, 'library/library_menu.html')

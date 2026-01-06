@@ -330,3 +330,5 @@ def course_detail(request, course):
         'course_code': course,
         'course_name': dict(Student.COURSE_CHOICES).get(course)
     })
+
+

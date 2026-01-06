@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'library/css/library.css' %}">
+
+<div class="library-container">
+
+    <!-- Header + Back Button -->
+    <div class="library-header">
+        <h2>📚 Book Search</h2>
+
+        {% if user.teacher %}
+            <a href="{% url 'teacher-dashboard' %}" class="back-btn teacher">← Back to Teacher Dashboard</a>
+        {% else %}
+            <a href="{% url 'student-dashboard' %}" class="back-btn student">← Back to Student Dashboard</a>
+        {% endif %}
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <form method="GET" action="{% url 'user-book-search' %}" style="width: 100%;">
+            <input type="text" name="q" placeholder="Search by title, author or category..." value="{{ query }}">
+            <button type="submit">🔍 Search</button>
+        </form>
+    </div>
+
+    <!-- Books Table -->
+    <div class="table-container">
+        <table class="library-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Total Copies</th>
+                    <th>Available Copies</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.category }}</td>
+                    <td>{{ book.total_copies }}</td>
+                    <td>
+                        {% if book.available_copies > 0 %}
+                            <span class="badge available">{{ book.available_copies }}</span>
+                        {% else %}
+                            <span class="badge out-of-stock">Out of stock</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="no-books">❌ No books found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<style>
+    /* ===== General Page ===== */
+.library-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.library-header h2 {
+    color: #142850;
+    font-weight: 700;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+    color: #fff;
+}
+
+.back-btn.teacher {
+    background-color: #142850;
+}
+
+.back-btn.student {
+    background-color: #28a745;
+}
+
+.back-btn:hover {
+    opacity: 0.9;
+}
+
+/* ===== Search Box ===== */
+.search-box {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-box input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.search-box button {
+    padding: 10px 20px;
+    background-color: #f3c623;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-box button:hover {
+    opacity: 0.9;
+}
+
+/* ===== Table ===== */
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.library-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.library-table th {
+    background-color: #142850;
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+}
+
+.library-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.library-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #fff;
+}
+
+.badge.available {
+    background-color: #28a745;
+}
+
+.badge.out-of-stock {
+    background-color: #dc3545;
+}
+
+.no-books {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+</style>
+{% endblock %}

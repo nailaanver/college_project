@@ -26,7 +26,7 @@ body {
     max-width: 760px;
     margin: auto;
     padding: 30px;
-    background: white;
+    background: var(--navy);
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.35);
 }
@@ -103,11 +103,12 @@ body {
 
 /* Widgets */
 .widget {
-    background: var(--navy);
+    background: var(--white);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.25);
     padding: 20px;
     border-radius: 16px;
+    color: var(--navy-dark);
 }
 
 .widget h3 {
@@ -133,6 +134,8 @@ body {
     margin-bottom: 10px;
     text-decoration: none;
     transition: 0.3s;
+    background-color: var(--gold);
+
 }
 .quick-btn:hover {
     background: var(--gold);
@@ -185,8 +188,9 @@ body {
                         {% for period in todays_timetable %}
                         <div class="schedule-item">
                                 <span>Semester {{ period.semester }}</span>
+                                <span>Period {{ period.period_number}} </span>
 
-                            <strong>{{ period.subject.name }}</strong>
+                            <span>{{ period.subject.name }}</span>
                         </div>
                         {% empty %}
                         <p>No classes today</p>
@@ -202,7 +206,9 @@ body {
                     <div class="widget-content">
                         <a href="{% url 'attendance_home' %}" class="quick-btn">Mark Attendance</a>
                         <a href="{% url 'teacher_timetable' %}" class="quick-btn">View Timetable</a>
-                        <a href="{% url 'teacher-internal-subjects' %}">📘 Internal Marks</a>
+                        <a href="{% url 'teacher-internal-subjects' %}" class="quick-btn">📘 Internal Marks</a>
+                        <a href="{% url 'my-library' %}" class="quick-btn">📚 My Library</a>
+                        <a href="{% url 'user-book-search' %}" class="quick-btn">🔍 Search Books</a>
 
                     </div>
                 </div>

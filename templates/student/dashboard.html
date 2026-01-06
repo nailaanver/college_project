@@ -4,6 +4,9 @@
 <h2>Student Dashboard</h2>
 
 <p>Welcome {{ request.user.get_full_name }}</p>
+<a href="{% url 'my-library' %}" class="quick-btn">📚 My Library</a>
+<a href="{% url 'user-book-search' %}" class="quick-btn">🔍 Search Books</a>
+
 
 <form method="post" action="{% url 'student-logout' %}">
     {% csrf_token %}

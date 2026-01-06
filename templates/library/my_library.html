@@ -1,35 +1,157 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>📚 My Library</h2>
+<style>
+    .library-container {
+        max-width: 1100px;
+        margin: 30px auto;
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 25px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Book</th>
-      <th>Issue Date</th>
-      <th>Due Date</th>
-      <th>Return Date</th>
-      <th>Status</th>
-      <th>Fine</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for issue in issues %}
-      <tr>
-        <td>{{ issue.book.title }}</td>
-        <td>{{ issue.issue_date }}</td>
-        <td>{{ issue.due_date }}</td>
-        <td>{% if issue.return_date %}{{ issue.return_date }}{% else %}—{% endif %}</td>
-        <td>{{ issue.status }}</td>
-        <td>{% if issue.fine %}₹{{ issue.fine }}{% else %}—{% endif %}</td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="6">No books issued.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    .library-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .library-header h2 {
+        color: #142850;
+        font-weight: 600;
+    }
+
+    .btn-back {
+        background: #f3c623;
+        color: #0b1c39;
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #f8d85a;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #142850;
+        color: white;
+    }
+
+    th, td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #eee;
+        transition: 0.3s;
+    }
+
+    tbody tr:hover {
+        background: #f5f6fa;
+    }
+
+    .badge-danger {
+        background: #c0392b;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    .status-issued {
+        color: #0a8a42;
+        font-weight: 600;
+    }
+
+    .status-returned {
+        color: #7f8c8d;
+        font-weight: 600;
+    }
+
+    .fine {
+        color: #c0392b;
+        font-weight: 600;
+    }
+
+    .empty-row {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+        font-weight: 500;
+    }
+</style>
+
+<div class="library-container">
+
+    <!-- Header -->
+    <div class="library-header">
+    <h2>📚 My Library</h2>
+
+    {% if user.teacher %}
+        <a href="{% url 'teacher-dashboard' %}" class="btn-back">
+            ← Back to Teacher Dashboard
+        </a>
+    {% else %}
+        <a href="{% url 'student-dashboard' %}" class="btn-back">
+            ← Back to Student Dashboard
+        </a>
+    {% endif %}
+</div>
+
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Fine</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for issue in issues %}
+                <tr>
+                    <td>{{ issue.book.title }}</td>
+                    <td>{{ issue.issue_date }}</td>
+                    <td>
+                        {{ issue.due_date }}
+                        {% if issue.overdue_days > 0 %}
+                            <span class="badge-danger">
+                                {{ issue.overdue_days }} days late
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="{% if issue.status == 'ISSUED' %}status-issued{% else %}status-returned{% endif %}">
+                        {{ issue.status }}
+                    </td>
+                    <td class="fine">
+                        ₹{{ issue.live_fine }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-row">
+                        No books issued 📭
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 
 {% endblock %}

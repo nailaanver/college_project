@@ -34,11 +34,28 @@
     text-decoration: none;
     font-weight: 600;
 }
+
+.dashboard-btn {
+    background: #142850;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.dashboard-btn:hover {
+    background: #0b1c39;
+    color: #ffffff;
+}
 </style>
 
 <h2 class="page-title">
     📊 Internal Marks
 </h2>
+
 
 <div class="subject-card">
 <table class="table">
@@ -71,6 +88,11 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'teacher-dashboard' %}" class="dashboard-btn">
+        ⬅ Back to  Dashboard
+    </a>
 </div>
 
 {% endblock %}

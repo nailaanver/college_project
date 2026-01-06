@@ -1,16 +1,119 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Return Book: {{ issue.book.title }} → {{ issue.user.username }}</h2>
+<style>
+    .return-container {
+        max-width: 550px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Return Book</button>
-</form>
+    .return-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #142850;
+        font-weight: 600;
+    }
 
-{% for message in messages %}
-  <p>{{ message }}</p>
-{% endfor %}
+    .book-info {
+        text-align: center;
+        background: #f5f6fa;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .return-container form p {
+        margin-bottom: 15px;
+    }
+
+    .return-container input {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .btn-return {
+        background: #142850;
+        color: #ffffff;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-return:hover {
+        background: #0b1c39;
+    }
+
+    .btn-back {
+        background: #f3c623;
+        color: #142850;
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #f8d85a;
+    }
+
+    .messages {
+        margin-top: 20px;
+        text-align: center;
+        color: green;
+        font-weight: 500;
+    }
+</style>
+
+<div class="return-container">
+
+    <h2>📦 Return Book</h2>
+
+    <div class="book-info">
+        <strong>{{ issue.book.title }}</strong> <br>
+        Issued to <strong>{{ issue.user.username }}</strong>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="btn-group">
+            <a href="{% url 'library-menu' %}" class="btn-back">
+                ← Back to Library
+            </a>
+
+            <button type="submit" class="btn-return">
+                Return Book
+            </button>
+        </div>
+    </form>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
 
 {% endblock %}

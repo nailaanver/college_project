@@ -185,3 +185,59 @@ def teacher_enter_marks(request, course, semester, subject_id):
         'internal_marks/teacher_enter_marks.html',
         context
     )
+    
+    
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Count
+from .models import InternalMark
+from teachers.models import Subject
+
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def admin_internal_subjects(request):
+    subjects = (
+        InternalMark.objects
+        .filter(status='Submitted')
+        .values(
+            'subject__id',
+            'subject__name',
+            'subject__course',
+            'subject__semester'
+        )
+        .annotate(total_students=Count('id'))
+        .distinct()
+    )
+
+    return render(request, 'adminpanel/internal_subjects.html', {
+        'subjects': subjects
+    })
+
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def admin_review_marks(request, course, semester, subject_id):
+    subject = get_object_or_404(Subject, id=subject_id)
+
+    internal_marks = InternalMark.objects.filter(
+        subject=subject,
+        student__course=course,
+        student__semester=semester,
+        status='Submitted'
+    ).select_related('student')
+
+    if request.method == 'POST':
+        if 'approve' in request.POST:
+            internal_marks.update(status='Approved')
+        elif 'reject' in request.POST:
+            internal_marks.update(status='Draft')
+
+        return redirect('admin-internal-subjects')
+
+    return render(request, 'adminpanel/review_marks.html', {
+        'subject': subject,
+        'course': course,
+        'semester': semester,
+        'internal_marks': internal_marks
+    })
+
