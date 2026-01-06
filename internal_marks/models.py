@@ -36,6 +36,11 @@ class InternalMark(models.Model):
         unique_together = ('student', 'subject')
 
     def save(self, *args, **kwargs):
+        self.test1 = int(self.test1 or 0)
+        self.test2 = int(self.test2 or 0)
+        self.assignment = int(self.assignment or 0)
+        self.attendance_mark = int(self.attendance_mark or 0)
+
         self.total_internal = (
             self.test1 +
             self.test2 +
@@ -44,5 +49,3 @@ class InternalMark(models.Model):
         )
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"{self.student} - {self.subject}"

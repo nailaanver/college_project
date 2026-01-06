@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.table th {
+    background: #142850;
+    color: white;
+    padding: 12px;
+}
+
+.table td {
+    padding: 12px;
+}
+
+input[type="number"] {
+    width: 70px;
+}
+
+.save-btn {
+    background: #0d6efd;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+}
+
+.submit-btn {
+    background: #f3c623;
+    color: #0b1c39;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+}
+
+.dashboard-btn {
+    background: #142850;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.dashboard-btn:hover {
+    background: #0b1c39;
+    color: #ffffff;
+}
+
+</style>
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'teacher-dashboard' %}" class="dashboard-btn">
+        ⬅ Back to  Dashboard
+    </a>
+</div>
+
+
+<h2 class="page-title">
+    {{ subject.name }} | {{ course }} | Semester {{ semester }}
+</h2>
+
+<form method="post">
+{% csrf_token %}
+
+<div class="card">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Reg No</th>
+            <th>Name</th>
+            <th>Test 1</th>
+            <th>Test 2</th>
+            <th>Assignment</th>
+            <th>Attendance</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for mark in internal_marks %}
+        <tr>
+            <td>{{ mark.student.register_number }}</td>
+            <td>{{ mark.student.first_name }} {{ mark.student.last_name }}</td>
+
+            <td>
+                <input type="number" name="test1_{{ mark.id }}"
+                       value="{{ mark.test1 }}"
+                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
+            </td>
+
+            <td>
+                <input type="number" name="test2_{{ mark.id }}"
+                       value="{{ mark.test2 }}"
+                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
+            </td>
+
+            <td>
+                <input type="number" name="assignment_{{ mark.id }}"
+                       value="{{ mark.assignment }}"
+                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
+            </td>
+
+            <td>{{ mark.attendance_mark }}</td>
+            <td>{{ mark.total_internal }}</td>
+            <td>{{ mark.status }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<br>
+
+<button type="submit" class="save-btn">💾 Save</button>
+<button type="submit" name="submit" class="submit-btn">📤 Submit</button>
+
+</form>
+
+{% endblock %}
