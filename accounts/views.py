@@ -46,30 +46,31 @@ def student_login(request):
 
     return render(request, 'accounts/student_login.html')
 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from teachers.models import Teacher
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 def teacher_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        password = request.POST.get('password')  # DOB as YYYYMMDD
+        password = request.POST.get('password')
 
-        try:
-            teacher = Teacher.objects.get(email=email)
-
-            user = authenticate(
-                request,
-                username=teacher.user.username,
-                password=password
-            )
-
-            if user:
+        # Use authenticate
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            # Check if user has a Teacher profile
+            try:
+                teacher = Teacher.objects.get(user=user)
                 login(request, user)
                 return redirect('teacher-dashboard')
-
-        except Teacher.DoesNotExist:
-            pass
-
-        return render(request, 'accounts/teacher_login.html', {
-            'error': 'Invalid email or password'
-        })
+            except Teacher.DoesNotExist:
+                messages.error(request, "You are not registered as a teacher.")
+        else:
+            messages.error(request, "Invalid email or password.")
 
     return render(request, 'accounts/teacher_login.html')
 

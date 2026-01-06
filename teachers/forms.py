@@ -6,6 +6,7 @@ User = get_user_model()
 
 # Form to edit User fields
 class UserForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']

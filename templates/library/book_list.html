@@ -9,7 +9,9 @@
     --gold: #f3c623;
     --white: #ffffff;
 }
-
+body {
+    font-family: 'Popins',sans-serif;
+}
 .page-title {
     font-size: 26px;
     font-weight: 600;
@@ -88,6 +90,9 @@
     <i class="fa-solid fa-book"></i> Manage Books
 </h2>
 
+<a href="{% url 'admin-dashboard' %}" class="add-btn">
+    Back to Dashboard
+</a>
 <a href="{% url 'book-add' %}" class="add-btn">
     ➕ Add Book
 </a>

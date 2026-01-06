@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from students.models import Student
 from teachers.models import Teacher
 from students.forms import StudentForm
-from teachers.forms import TeacherForm
+from teachers.forms import TeacherForm,UserForm
 from accounts.models import User
 from django.contrib.auth import get_user_model
 from teachers.models import Subject
@@ -121,33 +121,57 @@ def delete_student(request,pk):
 
 # teacher 
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from teachers.forms import UserForm, TeacherForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 @login_required
 def add_teacher(request):
     if request.method == 'POST':
-        form = TeacherForm(request.POST, request.FILES)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            dob = form.cleaned_data['date_of_birth']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
+        user_form = UserForm(request.POST)
+        teacher_form = TeacherForm(request.POST, request.FILES)
 
-            user = User.objects.create_user(
-                username=email,
-                email=email,
-                password=dob.strftime('%Y%m%d'),
-                first_name=first_name,
-                last_name=last_name
-            )
+        if user_form.is_valid() and teacher_form.is_valid():
+            email = user_form.cleaned_data['email']
+            first_name = user_form.cleaned_data['first_name']
+            last_name = user_form.cleaned_data['last_name']
+            dob = teacher_form.cleaned_data['date_of_birth']
 
-            teacher = form.save(commit=False)
-            teacher.user = user
-            teacher.save()
+            # Check if user already exists
+            if User.objects.filter(username=email).exists():
+                messages.error(request, "A user with this email already exists.")
+            else:
+                # Create User
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=dob.strftime('%Y%m%d'),
+                    first_name=first_name,
+                    last_name=last_name
+                )
 
-            return redirect('teacher-list')
+                # Create Teacher
+                teacher = teacher_form.save(commit=False)
+                teacher.user = user
+                teacher.save()
+
+                messages.success(request, "Teacher added successfully!")
+                return redirect('teacher-list')
+
     else:
-        form = TeacherForm()
+        user_form = UserForm()
+        teacher_form = TeacherForm()
 
-    return render(request, 'teachers/add_teacher.html', {'form': form})
+    return render(request, 'teachers/add_teacher.html', {
+        'user_form': user_form,
+        'teacher_form': teacher_form
+    })
+
+
 
 @login_required
 def edit_teacher(request, id):

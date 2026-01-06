@@ -149,20 +149,19 @@
 
         <tbody>
             {% for teacher in teachers %}
-            <tr>
-                <td>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.get_subject_display }}</td>
+           <tr>
+    <td>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</td>
+    <td>{{ teacher.user.email }}</td>  <!-- fixed -->
+    <td>{{ teacher.get_subject_display }}</td>
+    <td class="actions">
+        <a href="{% url 'edit-teacher' teacher.id %}" class="edit">✏ Edit</a>
+        <a href="{% url 'delete-teacher' teacher.id %}" class="delete"
+           onclick="return confirm('Are you sure you want to delete this teacher?');">
+           🗑 Delete
+        </a>
+    </td>
+</tr>
 
-                <td class="actions">
-                    <a href="{% url 'edit-teacher' teacher.id %}" class="edit">✏ Edit</a>
-                    <a href="{% url 'delete-teacher' teacher.id %}"
-                       class="delete"
-                       onclick="return confirm('Are you sure you want to delete this teacher?');">
-                       🗑 Delete
-                    </a>
-                </td>
-            </tr>
             {% empty %}
             <tr>
                 <td colspan="4" align="center">No teachers found</td>

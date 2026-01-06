@@ -29,6 +29,9 @@ urlpatterns = [
     path('parent/', include('parents.urls')),
     path('attendance/',include('attendance.urls')),
     path('library/', include('library.urls')),
+    
+    path('', include('internal_marks.urls')),
+
 
 
 

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'adminpanel',
     'library',
     'attendance',
+    'internal_marks',
 ]
 
 MIDDLEWARE = [

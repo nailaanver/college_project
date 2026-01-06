@@ -138,36 +138,33 @@
 
     <h2>Add Teacher</h2>
 
-    <form method="post">
-        {% csrf_token %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-        <label>First Name</label>
-        <input type="text" name="first_name" required>
+    <!-- User Form -->
+    <label>First Name</label>
+    {{ user_form.first_name }}
 
-        <label>Last Name</label>
-        <input type="text" name="last_name" required>
+    <label>Last Name</label>
+    {{ user_form.last_name }}
 
-        <label>Email</label>
-        <input type="email" name="email" required>
+<label>Email</label>
+{{ user_form.email }}
 
-        <label>Date of Birth</label>
-        <input type="date" name="date_of_birth" required>
+    <!-- Teacher Form -->
+    <label>Date of Birth</label>
+    {{ teacher_form.date_of_birth }}
 
-        <label>Subject</label>
-        <select name="subject" required>
-            <option value="">Select Subject</option>
-            <option value="MATHS">Mathematics</option>
-            <option value="PHY">Physics</option>
-            <option value="CHEM">Chemistry</option>
-            <option value="CS">Computer Science</option>
-            <option value="ENG">English</option>
-            <option value="MAL">Malayalam</option>
-            <option value="CM">Commerse</option>
-            <option value="FN">Finance</option>
-        </select>
+    <label>Subject</label>
+    {{ teacher_form.subject }}
 
-        <button type="submit">➕ Add Teacher</button>
-    </form>
+    <label>Profile Photo</label>
+    {{ teacher_form.profile_photo }}
+
+    <button type="submit">➕ Add Teacher</button>
+</form>
+
+
 
     <a href="{% url 'teacher-list' %}" class="back-link">⬅ Back to Teacher List</a>
 
