@@ -1,16 +1,228 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --light-bg: #f4f6fa;
+}
 
-{% block content %}
-<h2>Student Dashboard</h2>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-<p>Welcome {{ request.user.get_full_name }}</p>
-<a href="{% url 'my-library' %}" class="quick-btn">📚 My Library</a>
-<a href="{% url 'user-book-search' %}" class="quick-btn">🔍 Search Books</a>
+body {
+    background: var(--light-bg);
+}
 
+/* ===== Layout ===== */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
 
-<form method="post" action="{% url 'student-logout' %}">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 260px;
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 25px 20px;
+}
 
-{% endblock %}
+.sidebar h2 {
+    color: var(--gold);
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+    background: var(--navy);
+}
+
+/* ===== Main ===== */
+.main {
+    flex: 1;
+    padding: 25px 30px;
+}
+
+/* ===== Top Header ===== */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.topbar h3 {
+    color: var(--navy-dark);
+}
+
+/* ===== Stat Cards (TOP ROW) ===== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.stat-card h4 {
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--navy-dark);
+}
+
+/* ===== Dashboard Middle Section ===== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1.3fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.box {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.box h4 {
+    color: var(--navy);
+    margin-bottom: 15px;
+}
+
+/* ===== Attendance Circle ===== */
+.circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 10px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--navy-dark);
+}
+
+/* ===== Quick Actions ===== */
+.quick-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.quick-actions a {
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 14px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Student</h2>
+        <a href="{% url 'student-dashboard' %}">🏠 Dashboard</a>
+        <a href="{% url 'student-profile' %}">👤 Profile</a>
+        <a href="{% url 'student-attendance' %}">📊 Attendance</a>
+        <a href="{% url 'student-marks' %}">📝 Internal Marks</a>
+        <a href="{% url 'student-timetable' %}">📅 Timetable</a>
+        <a href="{% url 'student-logout' %}">🚪 Logout</a>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <h3>Welcome {{ student.first_name }} 👋</h3>
+            <p>{{ student.course }} | Semester {{ student.semester }}</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <h4>Attendance</h4>
+                <p>{{ attendance_percentage }}%</p>
+            </div>
+            <div class="stat-card">
+                <h4>Internal Subjects</h4>
+                <p>{{ internals_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Library Books</h4>
+                <p>{{ issued_books }}</p>
+            </div>
+        </div>
+
+        <!-- Middle Section -->
+        <div class="dashboard-grid">
+
+            <!-- Overview -->
+            <div class="box">
+                <h4>Overview</h4>
+                <p>Academic performance summary of the semester.</p>
+            </div>
+
+            <!-- Attendance Circle -->
+            <div class="box" style="text-align:center;">
+                <h4>Total Attendance</h4>
+                <div class="circle">{{ attendance_percentage }}%</div>
+            </div>
+
+            <!-- Activity -->
+            <div class="box">
+                <h4>Quick Actions</h4>
+                <div class="quick-actions">
+                    <a href="{% url 'my-library' %}">📚 My Library</a>
+                    <a href="{% url 'user-book-search' %}">🔍 Search Books</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

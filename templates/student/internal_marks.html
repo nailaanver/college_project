@@ -1,0 +1,23 @@
+<h2>Internal Marks</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Subject</th>
+        <th>Test 1</th>
+        <th>Test 2</th>
+        <th>Assignment</th>
+        <th>Attendance</th>
+        <th>Total</th>
+    </tr>
+
+    {% for m in marks %}
+    <tr>
+        <td>{{ m.subject.name }}</td>
+        <td>{{ m.test1 }}</td>
+        <td>{{ m.test2 }}</td>
+        <td>{{ m.assignment }}</td>
+        <td>{{ m.attendance_mark }}</td>
+        <td><b>{{ m.total_internal }}</b></td>
+    </tr>
+    {% endfor %}
+</table>

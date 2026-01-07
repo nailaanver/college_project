@@ -1,0 +1,19 @@
+<h2>Attendance</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Subject</th>
+        <th>Total Classes</th>
+        <th>Present</th>
+        <th>Percentage</th>
+    </tr>
+
+    {% for s in subject_wise %}
+    <tr>
+        <td>{{ s.subject__name }}</td>
+        <td>{{ s.total }}</td>
+        <td>{{ s.present }}</td>
+        <td>{{ s.percentage }}%</td>
+    </tr>
+    {% endfor %}
+</table>

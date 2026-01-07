@@ -13,9 +13,4 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
-    student = models.ForeignKey(
-        'students.Student',   # adjust app name if needed
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
+    

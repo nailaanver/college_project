@@ -15,36 +15,37 @@ from django.contrib.auth import authenticate, login
 from django.db.models import Q
 
 # views.py
-import random
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.utils import timezone
-from django.db.models import Q
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from students.models import Student
 
-
-
-
+User = get_user_model()
 
 def student_login(request):
     if request.method == 'POST':
-        reg_no = request.POST.get('register_number')
-        password = request.POST.get('password')  # DOB as YYYYMMDD
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-        user = authenticate(
-            request,
-            username=reg_no,
-            password=password
-        )
+        print("EMAIL:", email)
+        print("PASSWORD:", password)
 
-        if user is not None:
+        user = authenticate(request, username=email, password=password)
+
+        print("AUTH USER:", user)
+
+        if user:
+            print("ROLE:", user.role)
+            print("HAS STUDENT:", hasattr(user, 'student'))
+
             login(request, user)
             return redirect('student-dashboard')
 
-        return render(request, 'accounts/student_login.html', {
-            'error': 'Invalid Register Number or Password'
-        })
+        print("AUTH FAILED")
 
     return render(request, 'accounts/student_login.html')
+
+
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect

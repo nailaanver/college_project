@@ -9,6 +9,13 @@ class Student(models.Model):
         ('BCOM', 'BCom'),
         ('BA', 'BA'),
     )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='student_profile',blank=True,null=True
+    )
+
+
 
     course = models.CharField(max_length=20, choices=COURSE_CHOICES)
     # other fields...
@@ -42,7 +49,7 @@ class Student(models.Model):
 
     register_number = models.CharField(
         max_length=20,
-        unique=True
+        unique=True,blank=True
     )
 
     date_of_birth = models.DateField()
