@@ -1,23 +1,127 @@
-<h2>Internal Marks</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internal Marks</title>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Subject</th>
-        <th>Test 1</th>
-        <th>Test 2</th>
-        <th>Assignment</th>
-        <th>Attendance</th>
-        <th>Total</th>
-    </tr>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-    {% for m in marks %}
-    <tr>
-        <td>{{ m.subject.name }}</td>
-        <td>{{ m.test1 }}</td>
-        <td>{{ m.test2 }}</td>
-        <td>{{ m.assignment }}</td>
-        <td>{{ m.attendance_mark }}</td>
-        <td><b>{{ m.total_internal }}</b></td>
-    </tr>
-    {% endfor %}
-</table>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 40px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 22px;
+            background: #142850;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #0b1c39;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #142850;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: #142850;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fc;
+        }
+
+        tr:hover {
+            background: #eef2ff;
+        }
+
+        .total {
+            font-weight: 600;
+            color: #0b1c39;
+        }
+
+        /* Empty message */
+        .empty {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="{% url 'student-dashboard' %}" class="back-btn">← Back to Dashboard</a>
+
+<div class="card">
+    <h2>Internal Marks</h2>
+
+    {% if marks %}
+        <table>
+            <tr>
+                <th>Subject</th>
+                <th>Test 1</th>
+                <th>Test 2</th>
+                <th>Assignment</th>
+                <th>Attendance</th>
+                <th>Total</th>
+            </tr>
+
+            {% for m in marks %}
+            <tr>
+                <td>{{ m.subject.name }}</td>
+                <td>{{ m.test1 }}</td>
+                <td>{{ m.test2 }}</td>
+                <td>{{ m.assignment }}</td>
+                <td>{{ m.attendance_mark }}</td>
+                <td class="total">{{ m.total_internal }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="empty">No internal marks available.</div>
+    {% endif %}
+</div>
+
+</body>
+</html>

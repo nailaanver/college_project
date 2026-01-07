@@ -1,11 +1,178 @@
-<h2>My Profile</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
 
-<img src="{{ student.profile_photo.url }}" width="150">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-<p><b>Name:</b> {{ student.first_name }} {{ student.last_name }}</p>
-<p><b>Register No:</b> {{ student.register_number }}</p>
-<p><b>Course:</b> {{ student.course }}</p>
-<p><b>Semester:</b> {{ student.semester }}</p>
-<p><b>DOB:</b> {{ student.date_of_birth }}</p>
-<p><b>Father:</b> {{ student.father_name }}</p>
-<p><b>Mother:</b> {{ student.mother_name }}</p>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'images/campus.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 28, 57, 0.75);
+            z-index: -1;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 10px 22px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: white;
+            color: #0b1c39;
+        }
+
+        /* Card */
+        .profile-card {
+            background: white;
+            width: 420px;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .profile-img {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: auto;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #142850;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 15px 0 25px;
+            color: #0b1c39;
+        }
+
+        /* Form fields */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #142850;
+        }
+
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: #142850;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #0b1c39;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 15px;
+        }
+        .messages li {
+            list-style: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="{% url 'student-dashboard' %}" class="back-btn">← Student Dashboard</a>
+
+<div class="profile-card">
+
+    <div class="profile-img">
+        {% if student.profile_photo %}
+            <img src="{{ student.profile_photo.url }}">
+        {% else %}
+            <img src="{% static 'images/default_profile.png' %}">
+        {% endif %}
+    </div>
+
+    <h2>My Profile</h2>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="save-btn">Save Changes</button>
+    </form>
+
+</div>
+
+</body>
+</html>

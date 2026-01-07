@@ -69,17 +69,43 @@ def student_logout(request):
     return redirect('role_login')
 
 
+from django.contrib import messages
+from .models import Student
+from .forms import StudentForm
+
 @login_required(login_url='student-login')
 def student_profile(request):
-    student = request.user.student
-    return render(request, 'student/profile.html', {'student': student})
+    try:
+        student = Student.objects.get(user=request.user)
+    except Student.DoesNotExist:
+        messages.error(request, "Student profile not found.")
+        return redirect('student-dashboard')
 
+    if request.method == "POST":
+        form = StudentForm(request.POST, request.FILES, instance=student)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('student-profile')
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = StudentForm(instance=student)
 
+    return render(request, 'student/profile.html', {
+        'student': student,
+        'form': form
+    })
 from django.db.models import Count, Q
 
 @login_required(login_url='student-login')
 def student_attendance(request):
-    student = request.user.student
+
+    # Safety check (optional but recommended)
+    if request.user.role != 'student':
+        return redirect('student-login')
+
+    student = get_object_or_404(Student, user=request.user)
 
     attendance = Attendance.objects.filter(student=student)
 
@@ -98,11 +124,11 @@ def student_attendance(request):
     return render(request, 'student/attendance.html', {
         'subject_wise': subject_wise
     })
-
+from django.shortcuts import get_object_or_404
 
 @login_required(login_url='student-login')
 def student_internal_marks(request):
-    student = request.user.student
+    student = get_object_or_404(Student, user=request.user)
 
     marks = InternalMark.objects.filter(
         student=student,
