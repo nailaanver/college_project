@@ -1,0 +1,21 @@
+<h2>Attendance Report</h2>
+
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Subject</th>
+    <th>Total Classes</th>
+    <th>Present</th>
+    <th>%</th>
+  </tr>
+
+  {% for r in report %}
+  <tr>
+    <td>{{ r.subject__name }}</td>
+    <td>{{ r.total }}</td>
+    <td>{{ r.present }}</td>
+    <!-- <td style="color:{% if r.percentage < 75 %}red{% else %}green{% endif %}">
+      {{ r.percentage|floatformat:2 }}%
+    </td> -->
+  </tr>
+  {% endfor %}
+</table>

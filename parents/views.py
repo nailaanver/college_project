@@ -2,6 +2,13 @@
 from django.shortcuts import render, redirect
 from students.models import Student
 from django.contrib.auth.decorators import login_required
+from internal_marks.models import InternalMark
+
+
+from datetime import date
+from django.shortcuts import render, redirect
+from attendance.models import Attendance
+from students.models import Student
 
 def parent_dashboard(request):
     if not request.session.get('parent_verified'):
@@ -10,30 +17,54 @@ def parent_dashboard(request):
     student_id = request.session.get('parent_student_id')
     student = Student.objects.get(id=student_id)
 
+    parent_user = student.parent   # User object (parent)
+
+    today = date.today()
+
+    today_attendance = Attendance.objects.filter(
+        student=student,
+        date=today
+    ).order_by('period')
+
+    total_classes = Attendance.objects.filter(student=student).count()
+    present_classes = Attendance.objects.filter(
+        student=student,
+        status='P'
+    ).count()
+
+    attendance_percentage = (
+        (present_classes / total_classes) * 100
+        if total_classes > 0 else 0
+    )
+
     return render(request, 'parents/parent_dashboard.html', {
-        'student': student
+        'student': student,
+        'parent_user': parent_user,
+        'today_attendance': today_attendance,
+        'attendance_percentage': attendance_percentage,
+        'today': today,
     })
+
+
+
+# def parent_dashboard(request):
+#     if not request.session.get('parent_verified'):
+#         return redirect('parent_send_otp')
+
+#     student_id = request.session.get('parent_student_id')
+#     student = Student.objects.get(id=student_id)
+
+#     return render(request, 'parents/parent_dashboard.html', {
+#         'student': student
+#     })
     
 def parent_logout(request):
     request.session.flush()
     return redirect('parent_send_otp')
 
 
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from students.models import Student
-from teachers.models import Teacher
-
-
 from datetime import timedelta
-from django.contrib.auth import authenticate, login
-from django.utils import timezone
 
-from students.models import Student
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.db.models import Q
 
 # views.py
 import random
@@ -120,3 +151,68 @@ def parent_verify_otp(request):
 #         'parents': parents
 #     })
 
+
+
+from datetime import date
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from attendance.models import Attendance
+
+@login_required
+def parent_today_attendance(request):
+    # get student linked to logged-in parent
+    student = request.user.parent_student
+
+    today = date.today()
+
+    attendance_list = Attendance.objects.filter(
+        student=student,
+        date=today
+    ).order_by('period')
+
+    return render(request, "parents/today_attendance.html", {
+        "student": student,
+        "attendance_list": attendance_list,
+        "today": today,
+    })
+
+
+from django.db.models import Count, Q
+
+@login_required
+def parent_attendance_report(request):
+    student = request.user.parent_student
+
+    attendance = Attendance.objects.filter(student=student)
+
+    report = attendance.values('subject__name').annotate(
+        total=Count('id'),
+        present=Count('id', filter=Q(status='P'))
+    )
+
+    for r in report:
+        r['percentage'] = (r['present'] / r['total']) * 100 if r['total'] else 0
+
+    return render(request, "parent/attendance_report.html", {
+        "student": student,
+        "report": report,
+    })
+
+
+
+def parent_internal_marks(request):
+    # OTP verification check
+    if not request.session.get('parent_verified'):
+        return redirect('parent_send_otp')
+
+    # Get student from session
+    student_id = request.session.get('parent_student_id')
+    student = Student.objects.get(id=student_id)
+
+    # Get internal marks
+    internal_marks = InternalMark.objects.filter(student=student)
+
+    return render(request, 'parents/parent_internal_marks.html', {
+        'student': student,
+        'internal_marks': internal_marks
+    })

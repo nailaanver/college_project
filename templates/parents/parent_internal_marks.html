@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Internal Marks</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ecf0f1;
+        }
+
+        .good { color: green; font-weight: bold; }
+        .bad { color: red; font-weight: bold; }
+
+        .back {
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #3498db;
+            padding: 8px 14px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📘 Internal Marks</h2>
+
+    <p>
+        <strong>Student:</strong> {{ student.first_name }} {{ student.last_name }}<br>
+        <strong>Register No:</strong> {{ student.register_number }}
+    </p>
+
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Test 1</th>
+            <th>Test 2</th>
+            <th>Assignment</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+
+        {% for mark in internal_marks %}
+        <tr>
+            <td>{{ mark.subject.name }}</td>
+            <td>{{ mark.test1 }}</td>
+            <td>{{ mark.test2 }}</td>
+            <td>{{ mark.assignment }}</td>
+            <td>{{ mark.total }}</td>
+            <td>
+                {% if mark.total < 40 %}
+                    <span class="bad">Needs Improvement</span>
+                {% else %}
+                    <span class="good">Good</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Internal marks not published yet</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{% url 'parent_dashboard' %}" class="back">⬅ Back to Dashboard</a>
+</div>
+
+</body>
+</html>

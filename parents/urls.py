@@ -7,5 +7,13 @@ urlpatterns = [
     path('dashboard/', views.parent_dashboard, name='parent_dashboard'),  # ✅
     path('logout/', views.parent_logout, name='parent_logout'),
 
+    path("today-attendance/", views.parent_today_attendance, name="parent_today_attendance"),
+    path("parent/attendance/", views.parent_attendance_report, name="parent_attendance_report"),
+    
+    path('internal-marks/', views.parent_internal_marks, name='parent_internal_marks'),
+
 
 ]
+
+
+

@@ -2,16 +2,192 @@
 <html>
 <head>
     <title>Parent Dashboard</title>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-light);
+    margin: 0;
+    padding: 0;
+}
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --bg-light: #f4f6f8;
+}
+
+
+/* Header */
+.header {
+    background-color: var(--navy);
+    color: var(--white);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--gold);
+}
+
+.header h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Logout */
+.logout {
+    color: var(--navy-dark);
+    background: var(--gold);
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Page container */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Cards */
+.card {
+    background: var(--white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border-left: 5px solid var(--navy);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--navy);
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    background-color: var(--navy-dark);
+    color: var(--white);
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+/* Attendance Status */
+.present { color: #198754; font-weight: bold; }
+.absent  { color: #dc3545; font-weight: bold; }
+.late    { color: #fd7e14; font-weight: bold; }
+
+/* Action button */
+.action-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 22px;
+    background: var(--navy);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--gold);
+    transform: translateY(-2px);
+}
+
+</style>
 </head>
+
 <body>
 
-<h2>Welcome Parent 👋</h2>
+<!-- Header -->
+<div class="header">
+    <h2>Welcome {{ parent_user.get_full_name|default:parent_user.username }} 👋</h2>
+    <a href="{% url 'parent_logout' %}" class="logout">Logout</a>
+</div>
 
-<p><strong>Student Name:</strong> {{ student.name }}</p>
-<p><strong>Register Number:</strong> {{ student.register_number }}</p>
-<p><strong>Class:</strong> {{ student.class_name }}</p>
+<div class="container">
 
-<a href="{% url 'parent_logout' %}">Logout</a>
+    <!-- Student Info -->
+    <div class="card">
+        <h3>Student Details</h3>
+        <p><strong>Name:</strong> {{ student.first_name }} {{ student.last_name }}</p>
+        <p><strong>Register Number:</strong> {{ student.register_number }}</p>
+        <p><strong>Course:</strong> {{ student.course }}</p>
+        <p><strong>Semester:</strong> {{ student.get_semester_display }}</p>
+    </div>
+
+    <!-- Attendance Summary -->
+    <div class="card">
+        <h3>Attendance Overview</h3>
+        <p>
+            <strong>Overall Attendance:</strong>
+{% if attendance_percentage %}
+    <!-- <span style="color: {% if attendance_percentage < 75 %}#dc3545{% else %}var(--gold){% endif %}; font-weight: bold;"> -->
+        {{ attendance_percentage|floatformat:2 }}%
+    </span>
+{% else %}
+    Not available
+{% endif %}
+
+        </p>
+    </div>
+
+    <!-- Today's Attendance -->
+    <div class="card">
+        <h3>Today's Attendance ({{ today }})</h3>
+
+        <table>
+            <tr>
+                <th>Period</th>
+                <th>Subject</th>
+                <th>Status</th>
+            </tr>
+
+            {% for a in today_attendance %}
+            <tr>
+                <td>{{ a.period }}</td>
+                <td>{{ a.subject.name }}</td>
+                <td>
+                    {% if a.status == 'P' %}
+                        <span class="present">Present</span>
+                    {% elif a.status == 'A' %}
+                        <span class="absent">Absent</span>
+                    {% else %}
+                        <span class="late">Late</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">Attendance not marked yet</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- Navigation -->
+    <a href="{% url 'parent_internal_marks' %}" class="action-btn">
+        📘 View Internal Marks
+    </a>
+
+</div>
 
 </body>
 </html>

@@ -124,6 +124,10 @@ def edit_attendance(request, timetable_id):
         for student in students:
             status = request.POST.get(f'status_{student.id}')
 
+            # 🔴 IMPORTANT FIX
+            if not status:
+                continue   # skip this student safely
+
             Attendance.objects.update_or_create(
                 student=student,
                 subject=timetable.subject,
