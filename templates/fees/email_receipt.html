@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial; background:#f4f6f8; padding:20px;">
+<div style="max-width:600px; margin:auto; background:white; padding:20px; border-radius:8px;">
+    <h2 style="color:#142850;">Payment Receipt</h2>
+    <p>Dear Parent,</p>
+    <p>Your payment has been successfully received.</p>
+    <table style="width:100%; border-collapse: collapse;">
+        <tr>
+            <td><strong>Student Name</strong></td>
+            <td>{{ student_name }}</td>
+        </tr>
+        <tr>
+            <td><strong>Register Number</strong></td>
+            <td>{{ register_number }}</td>
+        </tr>
+        <tr>
+            <td><strong>Fee Type</strong></td>
+            <td>{{ fee_type }}</td>
+        </tr>
+        <tr>
+            <td><strong>Amount Paid</strong></td>
+            <td>₹ {{ amount }}</td>
+        </tr>
+        <tr>
+            <td><strong>Payment ID</strong></td>
+            <td>{{ payment_id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Date</strong></td>
+            <td>{{ date }}</td>
+        </tr>
+    </table>
+    <p style="margin-top:20px;">Thank you for your payment.<br><strong>College Management System</strong></p>
+</div>
+</body>
+</html>

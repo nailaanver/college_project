@@ -10,17 +10,18 @@ from django.shortcuts import render, redirect
 from attendance.models import Attendance
 from students.models import Student
 
+from fees.models import Fee
+
 def parent_dashboard(request):
     if not request.session.get('parent_verified'):
         return redirect('parent_send_otp')
 
     student_id = request.session.get('parent_student_id')
     student = Student.objects.get(id=student_id)
-
-    parent_user = student.parent   # User object (parent)
-
+    parent_user = student.parent  # User object (parent)
     today = date.today()
 
+    # Attendance
     today_attendance = Attendance.objects.filter(
         student=student,
         date=today
@@ -31,11 +32,13 @@ def parent_dashboard(request):
         student=student,
         status='P'
     ).count()
-
     attendance_percentage = (
         (present_classes / total_classes) * 100
         if total_classes > 0 else 0
     )
+
+    # Fees
+    student_fees = Fee.objects.filter(student=student, is_paid=False)
 
     return render(request, 'parents/parent_dashboard.html', {
         'student': student,
@@ -43,6 +46,7 @@ def parent_dashboard(request):
         'today_attendance': today_attendance,
         'attendance_percentage': attendance_percentage,
         'today': today,
+        'student_fees': student_fees,   # <-- send fees to template
     })
 
 

@@ -242,6 +242,18 @@
                 <p>{{ total_courses }}</p>
 
             </a>
+            <a href="{% url 'create_fee' %}" class="card">
+                <span><i class="fa-solid fa-money-bill-wave"></i></span>
+                <h4>Manage Fees</h4>
+                <p>Create & Assign Fees</p>
+            </a>
+            <a href="{% url 'fee_list' %}" class="card">
+                <span><i class="fa-solid fa-list"></i></span>
+                <h4>All Student Fees</h4>
+                <p>View & Update</p>
+            </a>
+
+
         </div>
 
     </div>

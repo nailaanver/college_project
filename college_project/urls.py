@@ -31,6 +31,9 @@ urlpatterns = [
     path('library/', include('library.urls')),
     
     path('', include('internal_marks.urls')),
+    path('api/fees/', include('fees.api_urls')),
+    path('fees/', include('fees.urls')),
+
 
 
 

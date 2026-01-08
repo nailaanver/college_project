@@ -2,6 +2,8 @@ from django import forms
 from .models import Student
 from django.core.exceptions import ValidationError
 from datetime import date
+from django.apps import AppConfig
+
 
 class StudentForm(forms.ModelForm):
 
@@ -28,3 +30,10 @@ class StudentForm(forms.ModelForm):
             'profile_photo',
             'parent_email',
         ]
+
+class StudentsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'students'
+
+    def ready(self):
+        import students.signals

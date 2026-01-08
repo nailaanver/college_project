@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Fees</h2>
+<table>
+    <tr>
+        <th>Student</th>
+        <th>Fee Type</th>
+        <th>Semester</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Paid</th>
+    </tr>
+    {% for fee in fees %}
+    <tr>
+        <td>{{ fee.student.first_name }} {{ fee.student.last_name }}</td>
+        <td>{{ fee.fee_type }}</td>
+        <td>{{ fee.semester }}</td>
+        <td>{{ fee.amount }}</td>
+        <td>{{ fee.due_date }}</td>
+        <td>{{ fee.is_paid }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
