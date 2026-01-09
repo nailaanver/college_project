@@ -17,7 +17,7 @@ load_dotenv(BASE_DIR / '.env')
 # =====================================================
 # SECURITY
 # =====================================================
-SECRET_KEY = 'django-insecure-6ztv2!*&lnl-wop1i^roqi=@xty1%fa@ijv!66l-q98@pb02#u'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'library',
     'attendance',
     'internal_marks',
-    'fees',
+    'fees.apps.FeesConfig',
 
     # Third party
     'rest_framework',

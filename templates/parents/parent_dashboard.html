@@ -218,32 +218,28 @@ td {
 
 
 </div>
-
-
 <script>
+
 function payFee(feeId) {
     fetch(`/api/fees/create/${feeId}/`, {
         method: "POST",
-        credentials: "same-origin",   // 🔥 REQUIRED
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
-        }
+        credentials: "same-origin",  // important to send session cookie
     })
-    .then(res => {
-        if (!res.ok) {
-            return res.text().then(t => { throw new Error(t); });
-        }
-        return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-        window.location.href = data.approval_url;
+        if (data.approval_url) {
+            window.location.href = data.approval_url;  // go to PayPal
+        } else {
+            alert("Payment failed: " + JSON.stringify(data.error));
+        }
     })
     .catch(err => {
         console.error(err);
-        alert("Payment failed");
+        alert("Payment failed due to network error");
     });
 }
 </script>
+
 
 
 
