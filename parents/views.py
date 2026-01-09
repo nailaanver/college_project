@@ -220,3 +220,4 @@ def parent_internal_marks(request):
         'student': student,
         'internal_marks': internal_marks
     })
+    

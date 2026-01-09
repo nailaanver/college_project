@@ -1,104 +1,99 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from .models import Fee
-from .utils import send_payment_receipt
-import paypalrestsdk
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
-from rest_framework.authentication import SessionAuthentication
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from students.models import Student
-from django.shortcuts import redirect
-
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 import paypalrestsdk
 from .models import Fee
 from students.models import Student
 from .utils import send_payment_receipt
 
-@method_decorator(csrf_exempt, name='dispatch')
-class CreatePaypalPaymentAPI(APIView):
-    permission_classes = [IsAuthenticated]
+# Custom decorator for OTP-based parent login
+from functools import wraps
+from django.conf import settings
 
-    def post(self, request, fee_id):
-        parent = request.user
-        student = get_object_or_404(Student, parent=parent)
-        fee = get_object_or_404(Fee, id=fee_id, student=student, is_paid=False)
+paypalrestsdk.configure({
+    "mode": settings.PAYPAL_MODE,  # sandbox or live
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
 
-        payment = paypalrestsdk.Payment({
-            "intent": "sale",
-            "payer": {"payment_method": "paypal"},
-            "redirect_urls": {
-                "return_url": f"http://127.0.0.1:8000/api/fees/execute/{fee.id}/",
-                "cancel_url": "http://127.0.0.1:8000/parent/dashboard/"
-            },
-            "transactions": [{
-                "amount": {
-                    "total": str(fee.amount),
-                    "currency": "USD"
-                },
-                "description": f"{fee.fee_type} payment"
-            }]
-        })
+def parent_login_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.session.get('parent_verified'):
+            return view_func(request, *args, **kwargs)
+        # If AJAX/API, return JSON error
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
+        return redirect('parent_send_otp')
+    return wrapper
 
-        if payment.create():
-            fee.paypal_order_id = payment.id
-            fee.save()
-            for link in payment.links:
-                if link.rel == "approval_url":
-                    return Response({"approval_url": link.href})
-        else:
-            return Response({"error": payment.error}, status=400)
+# -------------------------------
+# CREATE PAYPAL PAYMENT
+# -------------------------------
+@parent_login_required
+def create_paypal_payment(request, fee_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid method"}, status=405)
+
+    # Get student from session
+    student_id = request.session.get('parent_student_id')
+    student = get_object_or_404(Student, id=student_id)
+
+    fee = get_object_or_404(Fee, id=fee_id, student=student, is_paid=False)
+
+    # Create PayPal payment
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {"payment_method": "paypal"},
+        "redirect_urls": {
+            "return_url": request.build_absolute_uri(
+    f"/api/fees/execute/{fee.id}/"
+),
+
+            "cancel_url": request.build_absolute_uri("/parent/dashboard/"),
+        },
+        "transactions": [{
+            "amount": {"total": str(fee.amount), "currency": "USD"},
+            "description": f"{fee.fee_type} payment",
+        }],
+    })
+
+    if payment.create():
+        fee.paypal_order_id = payment.id
+        fee.save()
+        for link in payment.links:
+            if link.rel == "approval_url":
+                return JsonResponse({"approval_url": link.href})
+
+    return JsonResponse({"error": payment.error}, status=400)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class ExecutePaypalPaymentAPI(APIView):
-    permission_classes = [IsAuthenticated]
+# -------------------------------
+# EXECUTE PAYPAL PAYMENT
+# -------------------------------
+@parent_login_required
+def execute_paypal_payment(request, fee_id):
+    # Get student from session
+    student_id = request.session.get('parent_student_id')
+    student = get_object_or_404(Student, id=student_id)
 
-    def get(self, request, fee_id):
-        parent = request.user
-        student = get_object_or_404(Student, parent=parent)
-        fee = get_object_or_404(Fee, id=fee_id, student=student)
+    fee = get_object_or_404(Fee, id=fee_id, student=student)
 
-        payment_id = request.GET.get("paymentId")
-        payer_id = request.GET.get("PayerID")
+    payment_id = request.GET.get("paymentId")
+    payer_id = request.GET.get("PayerID")
 
-        payment = paypalrestsdk.Payment.find(payment_id)
+    if not payment_id or not payer_id:
+        return redirect("/parent/dashboard/?payment=failed")
 
-        if payment.execute({"payer_id": payer_id}):
-            fee.is_paid = True
-            fee.save()
-            send_payment_receipt(fee)
-            return Response({"success": True})
-        return Response({"error": "Payment failed"}, status=400)
+    # Find PayPal payment
+    payment = paypalrestsdk.Payment.find(payment_id)
 
+    if payment.execute({"payer_id": payer_id}):
+        fee.is_paid = True
+        fee.paid_on = timezone.now()
+        fee.save()
+        # Send receipt email (optional)
+        send_payment_receipt(fee)
+        return redirect("/parent/dashboard/?payment=success")
 
-class FeeListAPI(APIView):
-    authentication_classes = [SessionAuthentication]
-    permission_classes = []
-
-    def get(self, request):
-        student_id = request.session.get('parent_student_id')
-        student = Student.objects.get(id=student_id)
-
-        fees = Fee.objects.filter(student=student)
-        data = []
-
-        for fee in fees:
-            data.append({
-                "id": fee.id,
-                "fee_type": fee.fee_type,
-                "amount": str(fee.amount),
-                "is_paid": fee.is_paid,
-            })
-
-        return Response(data)
+    return redirect("/parent/dashboard/?payment=failed")

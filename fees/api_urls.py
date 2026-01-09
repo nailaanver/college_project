@@ -1,8 +1,7 @@
 from django.urls import path
-from .api_views import FeeListAPI, CreatePaypalPaymentAPI, ExecutePaypalPaymentAPI
-
+from . import api_views
 urlpatterns = [
-    path('list/', FeeListAPI.as_view(), name='api_fee_list'),
-    path('create/<int:fee_id>/', CreatePaypalPaymentAPI.as_view(), name='api_create_payment'),
-    path('execute/<int:fee_id>/', ExecutePaypalPaymentAPI.as_view(), name='api_execute_payment'),
+    path('create/<int:fee_id>/', api_views.create_paypal_payment, name='api_create_payment'),
+    path('execute/<int:fee_id>/', api_views.execute_paypal_payment, name='api_execute_payment'),
 ]
+
