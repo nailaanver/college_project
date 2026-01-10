@@ -73,6 +73,35 @@ td { padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center; }
             {% endfor %}
         </table>
     </div>
+
+    <!-- Paid Fees -->
+<div class="card">
+    <h3>Paid Fees</h3>
+    <table>
+        <tr>
+            <th>Fee Type</th>
+            <th>Amount</th>
+            <th>Paid On</th>
+            <th>PayPal Order ID</th>
+            <th>Status</th>
+        </tr>
+
+        {% for fee in paid_fees %}
+        <tr>
+            <td>{{ fee.fee_type }}</td>
+            <td>₹ {{ fee.amount }}</td>
+            <td>{{ fee.paid_on|date:"d M Y, h:i A" }}</td>
+            <td>{{ fee.paypal_order_id }}</td>
+            <td class="present">Paid</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No fees paid yet</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
 </div>
 
 <!-- CSRF Meta -->

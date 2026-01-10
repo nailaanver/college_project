@@ -40,6 +40,8 @@ class Fee(models.Model):
     due_date = models.DateField()
     is_paid = models.BooleanField(default=False)
     paypal_order_id = models.CharField(max_length=255, blank=True, null=True)
+    paid_on = models.DateTimeField(null=True, blank=True)  # ✅ ADD THIS
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -12,16 +12,28 @@ from students.models import Student
 
 from fees.models import Fee
 
+from datetime import date
+from django.shortcuts import render, redirect, get_object_or_404
+from attendance.models import Attendance
+from students.models import Student
+from fees.models import Fee
+
+
 def parent_dashboard(request):
+    # OTP verification check
     if not request.session.get('parent_verified'):
         return redirect('parent_send_otp')
 
+    # Get student from session
     student_id = request.session.get('parent_student_id')
-    student = Student.objects.get(id=student_id)
-    parent_user = student.parent  # User object (parent)
+    student = get_object_or_404(Student, id=student_id)
+
+    parent_user = student.parent  # Parent User object
     today = date.today()
 
-    # Attendance
+    # -------------------------
+    # ATTENDANCE
+    # -------------------------
     today_attendance = Attendance.objects.filter(
         student=student,
         date=today
@@ -32,24 +44,39 @@ def parent_dashboard(request):
         student=student,
         status='P'
     ).count()
+
     attendance_percentage = (
         (present_classes / total_classes) * 100
         if total_classes > 0 else 0
     )
 
-    # Fees
-    student_fees = Fee.objects.filter(student=student, is_paid=False)
+    # -------------------------
+    # FEES
+    # -------------------------
+    pending_fees = Fee.objects.filter(
+        student=student,
+        is_paid=False
+    )
 
+    paid_fees = Fee.objects.filter(
+        student=student,
+        is_paid=True
+    ).order_by('-paid_on')
+
+    # -------------------------
+    # RENDER
+    # -------------------------
     return render(request, 'parents/parent_dashboard.html', {
         'student': student,
         'parent_user': parent_user,
         'today_attendance': today_attendance,
         'attendance_percentage': attendance_percentage,
         'today': today,
-        'student_fees': student_fees,   # <-- send fees to template
+
+        # Fees
+        'student_fees': pending_fees,  # Pending fees (already used in template)
+        'paid_fees': paid_fees,        # ✅ Paid fees
     })
-
-
 
 # def parent_dashboard(request):
 #     if not request.session.get('parent_verified'):
