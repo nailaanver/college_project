@@ -2,108 +2,171 @@
 {% load static %}
 {% block content %}
 
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <style>
-    .issue-container {
-        max-width: 550px;
-        margin: 40px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --gold-soft: #f8d85a;
+    --white: #ffffff;
+    --text-light: #f5f5f5;
+}
 
-    .issue-container h2 {
-        text-align: center;
-        margin-bottom: 25px;
-        color: #142850;
-        font-weight: 600;
-    }
+/* Full page background */
+.issue-page {
+    min-height: 100vh;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
 
-    .issue-container form p {
-        margin-bottom: 15px;
-    }
+/* Centered card */
+.issue-container {
+    max-width: 550px;
+    width: 100%;
+    background: rgba(11,28,57,0.85);
+    padding: 40px 30px;
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    color: var(--white);
+}
 
-    .issue-container label {
-        font-weight: 500;
-        color: #333;
-    }
+/* Page Title */
+.issue-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+}
 
-    .issue-container input,
-    .issue-container select {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
+/* Form Fields */
+form p {
+    margin-bottom: 18px;
+}
 
+form label {
+    display: block;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(243,198,35,0.2);
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.btn-issue {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-issue:hover {
+    background: var(--gold-soft);
+}
+
+.btn-back {
+    background: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: var(--white);
+    color: var(--navy-dark);
+}
+
+/* Messages */
+.messages {
+    margin-top: 20px;
+    text-align: center;
+    color: #28a745;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
     .btn-group {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 25px;
+        flex-direction: column;
     }
-
-    .btn-issue {
-        background: #142850;
-        color: #fff;
-        border: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .btn-issue:hover {
-        background: #0b1c39;
-    }
-
-    .btn-back {
-        background: #f3c623;
-        color: #142850;
-        text-decoration: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-
-    .btn-back:hover {
-        background: #f8d85a;
-    }
-
-    .messages {
-        margin-top: 20px;
-        text-align: center;
-        color: green;
-        font-weight: 500;
-    }
+}
 </style>
 
-<div class="issue-container">
-    <h2>📚 Issue Book</h2>
+<div class="issue-page">
+    <div class="issue-container">
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+        <!-- Page Title -->
+        <h2><i class="fas fa-book-reader"></i> Issue Book</h2>
 
-        <div class="btn-group">
-            <a href="{% url 'library-menu' %}" class="btn-back">
-                ← Back to Library
-            </a>
+        <!-- Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-            <button type="submit" class="btn-issue">
-                Issue Book
-            </button>
-        </div>
-    </form>
+            <div class="btn-group">
+                <a href="{% url 'library-menu' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Library
+                </a>
 
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
+                <button type="submit" class="btn-issue">
+                    <i class="fas fa-check"></i> Issue Book
+                </button>
+            </div>
+        </form>
+
+        <!-- Success/Error Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
 </div>
 
 {% endblock %}

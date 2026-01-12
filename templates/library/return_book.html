@@ -1,119 +1,182 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <style>
-    .return-container {
-        max-width: 550px;
-        margin: 40px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --gold-soft: #f8d85a;
+    --white: #ffffff;
+    --text-light: #f5f5f5;
+}
 
-    .return-container h2 {
-        text-align: center;
-        margin-bottom: 25px;
-        color: #142850;
-        font-weight: 600;
-    }
+/* Full page background */
+.return-page {
+    min-height: 100vh;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
 
-    .book-info {
-        text-align: center;
-        background: #f5f6fa;
-        padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        font-weight: 500;
-        color: #333;
-    }
+/* Centered card */
+.return-container {
+    max-width: 550px;
+    width: 100%;
+    background: rgba(11,28,57,0.85);
+    padding: 40px 30px;
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    color: var(--white);
+}
 
-    .return-container form p {
-        margin-bottom: 15px;
-    }
+/* Page Title */
+.return-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+}
 
-    .return-container input {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
+/* Book Info Box */
+.book-info {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    font-weight: 500;
+    color: var(--white);
+}
 
+/* Form Fields */
+form p {
+    margin-bottom: 18px;
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(243,198,35,0.2);
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.btn-return {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-return:hover {
+    background: var(--gold-soft);
+}
+
+.btn-back {
+    background: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: var(--white);
+    color: var(--navy-dark);
+}
+
+/* Messages */
+.messages {
+    margin-top: 20px;
+    text-align: center;
+    color: #28a745;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
     .btn-group {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 25px;
+        flex-direction: column;
     }
-
-    .btn-return {
-        background: #142850;
-        color: #ffffff;
-        border: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .btn-return:hover {
-        background: #0b1c39;
-    }
-
-    .btn-back {
-        background: #f3c623;
-        color: #142850;
-        text-decoration: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-
-    .btn-back:hover {
-        background: #f8d85a;
-    }
-
-    .messages {
-        margin-top: 20px;
-        text-align: center;
-        color: green;
-        font-weight: 500;
-    }
+}
 </style>
 
-<div class="return-container">
+<div class="return-page">
+    <div class="return-container">
 
-    <h2>📦 Return Book</h2>
+        <!-- Page Title -->
+        <h2><i class="fas fa-undo-alt"></i> Return Book</h2>
 
-    <div class="book-info">
-        <strong>{{ issue.book.title }}</strong> <br>
-        Issued to <strong>{{ issue.user.username }}</strong>
+        <!-- Book Info -->
+        <div class="book-info">
+            <strong>{{ issue.book.title }}</strong> <br>
+            Issued to <strong>{{ issue.user.username }}</strong>
+        </div>
+
+        <!-- Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="btn-group">
+                <a href="{% url 'library-menu' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Library
+                </a>
+
+                <button type="submit" class="btn-return">
+                    <i class="fas fa-check"></i> Return Book
+                </button>
+            </div>
+        </form>
+
+        <!-- Success/Error Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
     </div>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-
-        <div class="btn-group">
-            <a href="{% url 'library-menu' %}" class="btn-back">
-                ← Back to Library
-            </a>
-
-            <button type="submit" class="btn-return">
-                Return Book
-            </button>
-        </div>
-    </form>
-
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-
 </div>
 
 {% endblock %}

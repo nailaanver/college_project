@@ -2,47 +2,105 @@
 {% load static %}
 {% block content %}
 
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <style>
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
+    --gold-soft: #f8d85a;
     --white: #ffffff;
-}
-body {
-    font-family: 'Popins',sans-serif;
-}
-.page-title {
-    font-size: 26px;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 25px;
+    --text-light: #f5f5f5;
+    --gray: #d1d5db;
 }
 
-.table-container {
+/* Full page background */
+.books-page {
+    min-height: 100vh;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card wrapper */
+.books-wrapper {
+    max-width: 1200px;
+    width: 100%;
     background: var(--white);
-    padding: 30px;
+    padding: 40px 35px;
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    color: var(--white);
+}
+
+/* Page Title */
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Buttons */
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 10px 20px;
     border-radius: 25px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 12px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    background: var(--gold-soft);
+}
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
+    color: var(--navy-dark);
+}
+
+.table th, .table td {
+    padding: 14px;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .table th {
     background: var(--navy);
     color: var(--white);
-    padding: 14px;
-    text-align: left;
+    font-weight: 600;
 }
 
-.table td {
-    padding: 14px;
-    border-bottom: 1px solid #ddd;
+.table tr:nth-child(even) {
+    background: rgba(255,255,255,0.05);
 }
 
+/* Status Badges */
 .badge {
     padding: 6px 12px;
     border-radius: 15px;
@@ -60,10 +118,14 @@ body {
     color: #fff;
 }
 
+/* Action buttons */
 .action-btn {
     text-decoration: none;
-    margin-right: 10px;
+    margin-right: 8px;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .edit {
@@ -74,72 +136,77 @@ body {
     color: #dc3545;
 }
 
-.add-btn {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--navy-dark);
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: 600;
-    text-decoration: none;
-    margin-bottom: 20px;
+.table a:hover {
+    opacity: 0.8;
 }
 </style>
 
-<h2 class="page-title">
-    <i class="fa-solid fa-book"></i> Manage Books
-</h2>
+<div class="books-page">
+    <div class="books-wrapper">
 
-<a href="{% url 'library-menu' %}" class="add-btn">
-    Back to Dashboard
-</a>
-<a href="{% url 'book-add' %}" class="add-btn">
-    ➕ Add Book
-</a>
+        <h2 class="page-title">
+            <i class="fas fa-book"></i> Manage Books
+        </h2>
 
-<div class="table-container">
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>ISBN</th>
-            <th>Category</th>
-            <th>Total</th>
-            <th>Available</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+        <!-- Buttons -->
+        <a href="{% url 'library-menu' %}" class="add-btn">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <a href="{% url 'book-add' %}" class="add-btn">
+            <i class="fas fa-plus-circle"></i> Add Book
+        </a>
 
-    <tbody>
-    {% for book in books %}
-        <tr>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.category }}</td>
-            <td>{{ book.total_copies }}</td>
-            <td>{{ book.available_copies }}</td>
-            <td>
-                {% if book.available_copies > 0 %}
-                    <span class="badge badge-available">Available</span>
-                {% else %}
-                    <span class="badge badge-unavailable">Out</span>
-                {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'book-edit' book.id %}" class="action-btn edit">✏ Edit</a>
-                <a href="{% url 'book-delete' book.id %}" class="action-btn delete">🗑 Delete</a>
-            </td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="8">No books available</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        <!-- Table -->
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Category</th>
+                        <th>Total</th>
+                        <th>Available</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.category }}</td>
+                        <td>{{ book.total_copies }}</td>
+                        <td>{{ book.available_copies }}</td>
+                        <td>
+                            {% if book.available_copies > 0 %}
+                                <span class="badge badge-available">Available</span>
+                            {% else %}
+                                <span class="badge badge-unavailable">Out</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'book-edit' book.id %}" class="action-btn edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{% url 'book-delete' book.id %}" class="action-btn delete">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align:center;">No books available</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
 
 {% endblock %}
