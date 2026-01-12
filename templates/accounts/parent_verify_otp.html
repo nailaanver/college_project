@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<title>Verify OTP | ACADAMIX</title>
+    <title>Verify OTP | ACADAMIX</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
             --gold-soft: #f8d85a;
             --white: #ffffff;
             --text-dark: #1c1c1c;
-            --text-light: #f5f5f5;
+            --gray: #6b7280;
         }
 
         * {
@@ -29,67 +29,93 @@
         body {
             min-height: 100vh;
             background:
-                linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+                linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .otp-wrapper {
-            width: 100%;
             padding: 20px;
         }
 
-        .otp-card {
+        /* ===== MAIN CARD ===== */
+        .login-container {
             background: var(--white);
-            max-width: 420px;
-            margin: auto;
-            padding: 45px 35px;
+            width: 100%;
+            max-width: 950px;
             border-radius: 28px;
-            text-align: center;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
             animation: fadeUp 0.9s ease;
         }
 
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .otp-card h2 {
-            font-size: 30px;
-            color: var(--navy-dark);
-            margin-bottom: 8px;
+        /* ===== LEFT PANEL ===== */
+        .login-visual {
+            background:
+                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 50px;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-visual h3 {
+            font-size: 34px;
+            margin-bottom: 16px;
             font-weight: 700;
         }
 
-        .otp-card p {
+        .login-visual p {
             font-size: 15px;
-            color: #555;
+            line-height: 1.7;
+            color: #d1d5db;
+            max-width: 360px;
+        }
+
+        /* ===== RIGHT FORM PANEL ===== */
+        .login-form {
+            padding: 55px 45px;
+        }
+
+        .login-form h2 {
+            font-size: 28px;
+            color: var(--navy-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .login-form p {
+            font-size: 14px;
+            color: var(--gray);
             margin-bottom: 28px;
         }
 
         .error {
-            background: #ffdede;
-            color: #8a1f1f;
+            background: #ffe0e0;
+            color: #9b1c1c;
             padding: 12px;
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 14px;
             margin-bottom: 18px;
         }
 
-        .otp-card input {
-            width: 100%;
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
             padding: 16px;
             border-radius: 30px;
-            border: 2px solid #e0e0e0;
+            border: 1.5px solid #ddd;
             font-size: 20px;
             text-align: center;
             letter-spacing: 6px;
@@ -98,36 +124,51 @@
             transition: 0.3s;
         }
 
-        .otp-card input:focus {
+        input:focus {
             border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(243,198,35,0.2);
         }
 
-        .verify-btn {
-            width: 100%;
+        button {
             background: var(--navy);
-            color: var(--text-light);
+            color: var(--white);
+            border: none;
             padding: 16px;
             border-radius: 30px;
-            border: none;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .verify-btn:hover {
+        button:hover {
             background: var(--navy-dark);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.25);
         }
 
-        @media (max-width: 480px) {
-            .otp-card {
-                padding: 35px 25px;
+        .cancel-btn {
+            margin-top: 18px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            color: var(--navy);
+            transition: 0.3s;
+        }
+
+        .cancel-btn:hover {
+            color: var(--navy-dark);
+            transform: translateX(-6px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .login-container {
+                grid-template-columns: 1fr;
             }
 
-            .otp-card h2 {
-                font-size: 26px;
+            .login-visual {
+                display: none;
             }
         }
     </style>
@@ -135,9 +176,19 @@
 
 <body>
 
-<section class="otp-wrapper">
-    <div class="otp-card">
+<div class="login-container">
 
+    <!-- LEFT INFO PANEL -->
+    <div class="login-visual">
+        <h3>Parent Portal</h3>
+        <p>
+            Verify OTP to access your child’s academic information securely.
+            Use the OTP sent to your registered email.
+        </p>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="login-form">
         <h2>Verify OTP</h2>
         <p>Enter the 6-digit OTP sent to your email</p>
 
@@ -147,20 +198,13 @@
 
         <form method="post">
             {% csrf_token %}
-
-            <input type="text"
-                   name="otp"
-                   placeholder="● ● ● ● ● ●"
-                   maxlength="6"
-                   required>
-
-            <button type="submit" class="verify-btn">
-                Verify OTP
-            </button>
+            <input type="text" name="otp" placeholder="● ● ● ● ● ●" maxlength="6" required>
+            <button type="submit">Verify OTP</button>
+            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
         </form>
-
     </div>
-</section>
+
+</div>
 
 </body>
 </html>

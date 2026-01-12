@@ -16,6 +16,7 @@
             --gold-soft: #f8d85a;
             --white: #ffffff;
             --text-dark: #1c1c1c;
+            --gray: #6b7280;
         }
 
         * {
@@ -28,118 +29,167 @@
         body {
             min-height: 100vh;
             background:
-                linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
                 url("{% static 'images/campus.jpg' %}") center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .login-wrapper {
-            width: 100%;
             padding: 20px;
         }
 
-        .login-card {
+        /* ===== MAIN CARD ===== */
+        .login-container {
             background: var(--white);
-            max-width: 420px;
-            margin: auto;
-            padding: 45px 40px;
+            width: 100%;
+            max-width: 950px;
             border-radius: 28px;
-            text-align: center;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
             animation: fadeUp 0.9s ease;
         }
 
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .login-card h2 {
-            font-size: 30px;
-            color: var(--navy-dark);
-            margin-bottom: 8px;
+        /* ===== LEFT INFO PANEL ===== */
+        .login-visual {
+            background:
+                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 50px;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-visual h3 {
+            font-size: 34px;
+            margin-bottom: 16px;
             font-weight: 700;
         }
 
-        .subtitle {
+        .login-visual p {
             font-size: 15px;
-            color: #555;
-            margin-bottom: 30px;
+            line-height: 1.7;
+            color: #d1d5db;
+            max-width: 360px;
+        }
+
+        /* ===== RIGHT FORM PANEL ===== */
+        .login-form {
+            padding: 55px 45px;
+        }
+
+        .login-form h2 {
+            font-size: 28px;
+            color: var(--navy-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .login-form p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 28px;
         }
 
         .error {
-            background: #ffe1e1;
-            color: #a10000;
-            padding: 10px;
+            background: #ffe0e0;
+            color: #9b1c1c;
+            padding: 12px;
             border-radius: 12px;
             font-size: 14px;
             margin-bottom: 18px;
         }
 
-        .login-card input {
-            width: 100%;
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
             padding: 15px 18px;
             border-radius: 30px;
-            border: 1px solid #ddd;
+            border: 1.5px solid #ddd;
             font-size: 14px;
             margin-bottom: 18px;
             outline: none;
+            transition: 0.3s;
         }
 
-        .login-card input:focus {
+        input:focus {
             border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(20,40,80,0.12);
         }
 
-        .login-btn {
-            width: 100%;
+        button {
             background: var(--navy);
             color: var(--white);
-            padding: 16px;
-            border-radius: 30px;
             border: none;
+            padding: 15px;
+            border-radius: 30px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        .login-btn:hover {
+        button:hover {
             background: var(--navy-dark);
             transform: translateY(-2px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.25);
         }
 
         .cancel-btn {
-            display: block;
-            margin-top: 20px;
+            margin-top: 18px;
+            text-align: center;
             text-decoration: none;
-            color: var(--navy);
             font-weight: 600;
+            color: var(--navy);
             transition: 0.3s;
         }
 
         .cancel-btn:hover {
             color: var(--navy-dark);
-            transform: translateX(-5px);
+            transform: translateX(-6px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-visual {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<section class="login-wrapper">
-    <div class="login-card">
+<div class="login-container">
 
+    <!-- LEFT INFO PANEL -->
+    <div class="login-visual">
+        <h3>Parent Portal</h3>
+        <p>
+            Access your child’s academic performance,
+            attendance, and progress reports.
+            Stay connected with teachers through ACADAMIX.
+        </p>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="login-form">
         <h2>Parent Login</h2>
-        <p class="subtitle">Enter details to continue</p>
+        <p>Enter details to continue</p>
 
         {% if error %}
             <div class="error">{{ error }}</div>
@@ -148,23 +198,15 @@
         <form method="post">
             {% csrf_token %}
 
-            <input type="text"
-                   name="register_number"
-                   placeholder="Student Register Number"
-                   required>
+            <input type="text" name="register_number" placeholder="Student Register Number" required>
+            <input type="text" name="parent_name" placeholder="Parent Name" required>
 
-            <input type="text"
-                   name="parent_name"
-                   placeholder="Parent Name"
-                   required>
-
-            <button type="submit" class="login-btn">Login</button>
+            <button type="submit">Login</button>
+            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
         </form>
-
-        <a href="{% url 'role_login' %}" class="cancel-btn">← Back</a>
-
     </div>
-</section>
+
+</div>
 
 </body>
 </html>

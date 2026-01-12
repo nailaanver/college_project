@@ -15,7 +15,8 @@
             --gold: #f3c623;
             --gold-soft: #f8d85a;
             --white: #ffffff;
-            --text-dark: #1c1c1c;
+            --gray: #f2f4f8;
+            --text-muted: #6b7280;
         }
 
         * {
@@ -28,25 +29,24 @@
         body {
             min-height: 100vh;
             background:
-                linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
                 url("{% static 'images/campus.jpg' %}") center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .login-wrapper {
-            width: 100%;
             padding: 20px;
         }
 
-        .login-card {
+        /* MAIN CARD */
+        .login-container {
+            max-width: 920px;
+            width: 100%;
             background: var(--white);
-            max-width: 420px;
-            margin: auto;
-            padding: 45px 38px;
-            border-radius: 28px;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            border-radius: 34px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.45);
             animation: fadeUp 0.9s ease;
         }
 
@@ -61,19 +61,56 @@
             }
         }
 
-        .login-card h2 {
-            font-size: 30px;
-            color: var(--navy-dark);
-            margin-bottom: 8px;
-            text-align: center;
-            font-weight: 700;
+        /* LEFT SIDE */
+        .login-visual {
+            background:
+                linear-gradient(135deg, rgba(20,40,80,0.95), rgba(11,28,57,0.95)),
+                url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 50px;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .login-card p {
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .visual-content h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .visual-content p {
             font-size: 15px;
-            color: #555;
-            text-align: center;
-            margin-bottom: 30px;
+            line-height: 1.7;
+            opacity: 0.9;
+            max-width: 360px;
+        }
+
+        /* RIGHT SIDE */
+        .login-form {
+            padding: 55px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-form p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
         }
 
         .error {
@@ -83,7 +120,6 @@
             border-radius: 12px;
             font-size: 14px;
             margin-bottom: 18px;
-            text-align: center;
         }
 
         form {
@@ -94,18 +130,20 @@
         input {
             padding: 15px 18px;
             border-radius: 30px;
-            border: 1.5px solid #ddd;
+            border: 1.6px solid #ddd;
             font-size: 14px;
             margin-bottom: 18px;
             outline: none;
+            transition: 0.3s;
         }
 
         input:focus {
             border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(20,40,80,0.1);
         }
 
         button {
-            background: var(--navy);
+            background: linear-gradient(135deg, var(--navy), var(--navy-dark));
             color: var(--white);
             border: none;
             padding: 15px;
@@ -117,13 +155,12 @@
         }
 
         button:hover {
-            background: var(--navy-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(20,40,80,0.45);
         }
 
         .cancel-btn {
-            margin-top: 16px;
+            margin-top: 18px;
             text-align: center;
             padding: 14px;
             border-radius: 30px;
@@ -137,12 +174,16 @@
         .cancel-btn:hover {
             background: var(--gold);
             border-color: var(--gold);
-            color: var(--navy-dark);
         }
 
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 35px 25px;
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-visual {
+                display: none;
             }
         }
     </style>
@@ -150,9 +191,23 @@
 
 <body>
 
-<div class="login-wrapper">
-    <div class="login-card">
+<div class="login-container">
 
+    <!-- LEFT VISUAL -->
+    <div class="login-visual">
+        <div class="brand">ACADAMIX</div>
+
+        <div class="visual-content">
+            <h3>Student Portal</h3>
+            <p>
+                Access your attendance, academic records,
+                announcements and campus updates from one secure platform.
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="login-form">
         <h2>Student Login</h2>
         <p>Enter your credentials to continue</p>
 
@@ -163,15 +218,15 @@
         <form method="post">
             {% csrf_token %}
 
-<input type="email" name="email" placeholder="Email ID" required>
+            <input type="email" name="email" placeholder="Email ID" required>
             <input type="password" name="password" placeholder="Date of Birth (YYYYMMDD)" required>
 
             <button type="submit">Login</button>
 
-            <a href="{% url 'role_login' %}" class="cancel-btn">Cancel</a>
+            <a href="{% url 'role_login' %}" class="cancel-btn">Back to Role Selection</a>
         </form>
-
     </div>
+
 </div>
 
 </body>

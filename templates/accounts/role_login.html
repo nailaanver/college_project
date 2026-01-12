@@ -8,6 +8,10 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
     <style>
         :root {
             --navy-dark: #0b1c39;
@@ -43,13 +47,18 @@
 
         .login-card {
             background: var(--white);
-            max-width: 450px;
+            max-width: 460px;
             margin: auto;
-            padding: 50px 40px;
-            border-radius: 28px;
+            padding: 55px 42px;
+            border-radius: 30px;
             text-align: center;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            box-shadow: 0 35px 80px rgba(0,0,0,0.4);
             animation: fadeUp 0.9s ease;
+            transition: transform 0.4s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-6px);
         }
 
         @keyframes fadeUp {
@@ -64,7 +73,7 @@
         }
 
         .login-card h2 {
-            font-size: 32px;
+            font-size: 34px;
             color: var(--navy-dark);
             margin-bottom: 8px;
             font-weight: 700;
@@ -73,49 +82,81 @@
         .subtitle {
             font-size: 15px;
             color: #555;
-            margin-bottom: 35px;
+            margin-bottom: 38px;
         }
 
+        /* LOGIN BUTTONS */
         .login-btn {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
             text-decoration: none;
             background: var(--navy);
             color: var(--text-light);
             padding: 16px;
-            border-radius: 30px;
-            margin-bottom: 16px;
+            border-radius: 32px;
+            margin-bottom: 18px;
             font-size: 16px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn i {
+            font-size: 18px;
+            transition: transform 0.35s ease;
+        }
+
+        .login-btn:hover i {
+            transform: translateX(6px);
         }
 
         .login-btn:hover {
             background: var(--navy-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(20,40,80,0.45);
         }
 
+        /* ADMIN BUTTON */
         .login-btn.admin {
-            background: var(--gold);
+            background: linear-gradient(135deg, var(--gold), var(--gold-soft));
             color: var(--navy-dark);
         }
 
         .login-btn.admin:hover {
-            background: var(--gold-soft);
+            box-shadow: 0 16px 35px rgba(243,198,35,0.6);
         }
 
+        /* BACK HOME */
         .back-home {
-            display: inline-block;
-            margin-top: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
             text-decoration: none;
             color: var(--navy);
             font-weight: 600;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+        }
+
+        .back-home i {
+            transition: transform 0.3s ease;
         }
 
         .back-home:hover {
             color: var(--navy-dark);
+        }
+
+        .back-home:hover i {
             transform: translateX(-6px);
+        }
+
+        @media (max-width: 500px) {
+            .login-card {
+                padding: 45px 28px;
+            }
         }
     </style>
 </head>
@@ -128,12 +169,30 @@
         <h2>Welcome Back</h2>
         <p class="subtitle">Choose your role to continue</p>
 
-        <a href="{% url 'student-login' %}" class="login-btn">🎓 Student Login</a>
-        <a href="{% url 'teacher-login' %}" class="login-btn">👨‍🏫 Teacher Login</a>
-        <a href="{% url 'parent_send_otp' %}" class="login-btn">👨‍👩‍👧 Parent Login</a>
-        <a href="{% url 'admin-login' %}" class="login-btn admin">👨‍💼 Admin Login</a>
+        <a href="{% url 'student-login' %}" class="login-btn">
+            <i class="fa-solid fa-user-graduate"></i>
+            Student Login
+        </a>
 
-        <a href="{% url 'home' %}" class="back-home">← Back to Home</a>
+        <a href="{% url 'teacher-login' %}" class="login-btn">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            Teacher Login
+        </a>
+
+        <a href="{% url 'parent_send_otp' %}" class="login-btn">
+            <i class="fa-solid fa-people-group"></i>
+            Parent Login
+        </a>
+
+        <a href="{% url 'admin-login' %}" class="login-btn admin">
+            <i class="fa-solid fa-shield-halved"></i>
+            Admin Login
+        </a>
+
+        <a href="{% url 'home' %}" class="back-home">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Home
+        </a>
 
     </div>
 </section>
