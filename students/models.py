@@ -16,7 +16,6 @@ class Student(models.Model):
     )
 
 
-
     course = models.CharField(max_length=20, choices=COURSE_CHOICES)
     # other fields...
 
@@ -67,3 +66,15 @@ class Student(models.Model):
         return f"{self.register_number} - {self.first_name} {self.last_name}"
 
 
+class StudentFace(models.Model):
+    student = models.OneToOneField(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='face_data'
+    )
+    face_image = models.ImageField(upload_to='faces/',blank=True)
+    face_encoding = models.BinaryField(null=True, blank=True)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Face data for {self.student.register_number}"

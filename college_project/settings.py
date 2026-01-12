@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'library',
     'attendance',
     'internal_marks',
+    'ai_services',
     'fees.apps.FeesConfig',
 
     # Third party

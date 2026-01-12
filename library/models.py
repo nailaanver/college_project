@@ -51,3 +51,19 @@ class Issue(models.Model):
 
     def __str__(self):
         return f"{self.book.title} → {self.user}"
+
+
+from students.models import Student
+
+class LibraryEntry(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    entry_time = models.DateTimeField(auto_now_add=True)
+    exit_time = models.DateTimeField(null=True, blank=True)
+    method = models.CharField(
+        max_length=10,
+        choices=[('FACE', 'Face'), ('MANUAL', 'Manual')],
+        default='FACE'
+    )
+
+    def __str__(self):
+        return f"{self.student.register_number} - {self.entry_time}"

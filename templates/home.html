@@ -26,70 +26,54 @@
     </div>
 </header>
 
-<!-- HERO SLIDER -->
+<!-- HERO -->
 <section class="hero">
     <div class="hero-content fade-in">
-        <h1>Best Education For Your Future</h1>
+        <h1 id="typing-text"></h1>
         <p>Manage Students, Teachers & Parents in one smart system</p>
         <a href="{% url 'role_login' %}" class="hero-btn">Get Started</a>
     </div>
 </section>
 
-<!-- ABOUT SECTION -->
-<section class="about-section">
+<!-- ABOUT -->
+<section class="about-section fade-in" id="about">
     <div class="about-container">
-
         <div class="about-left">
             <span class="about-badge">ACADAMIX</span>
             <h2>About Our Institution</h2>
         </div>
-
         <div class="about-right">
             <p class="highlight-text">
                 We are building a smart, digital-first college management system
-                that connects Admins, Teachers, Students, and Parents in one platform.
+                that connects Admins, Teachers, Students, and Parents.
             </p>
-
             <p class="about-text">
-                ACADAMIX is designed to simplify academic operations, improve communication,
-                and provide real-time access to academic data. Our goal is to make education
-                management efficient, transparent, and future-ready.
+                ACADAMIX simplifies academic operations and improves communication
+                with real-time academic insights.
             </p>
-
             <a href="#" class="about-btn">Read More →</a>
         </div>
-
     </div>
 
-    <!-- IMAGE STRIP -->
-    <div class="about-image">
-        <img src="{% static 'images/about.jpg' %}" alt="Campus Image">
+    <div class="about-image slide-up">
+        <img src="{% static 'images/about.jpg' %}" alt="Campus">
     </div>
 </section>
 
-
-<!-- OPPORTUNITY SECTION -->
-<section class="opportunity-wrapper">
+<!-- OPPORTUNITY -->
+<section class="opportunity-wrapper fade-in">
     <div class="opportunity-card">
-
-        <!-- LEFT IMAGE -->
         <div class="opportunity-image">
             <img src="{% static 'images/opertunity.jpg' %}" alt="Opportunity">
         </div>
 
-        <!-- RIGHT CONTENT -->
         <div class="opportunity-content">
             <h3>Opportunity</h3>
-
             <p class="opportunity-text">
                 Providing opportunities for your daughter to pursue her passions.
-                From STEM and The Arts to Social Justice, Sport and many more!
             </p>
 
-            <a href="#" class="read-more">
-                → Read more about Opportunity
-            </a>
-
+            <a href="#" class="read-more">→ Read more about Opportunity</a>
             <div class="divider"></div>
 
             <ul class="opportunity-menu">
@@ -100,35 +84,102 @@
                 <li><span>About SAC</span><span>+</span></li>
             </ul>
         </div>
+    </div>
+</section>
+
+<!-- COURSES / FEATURES SECTION -->
+<section class="courses-section" id="features">
+    <div class="courses-header fade-in">
+        <h2>Our Popular Features</h2>
+        <p>
+            Explore powerful tools and modules designed to simplify college
+            management with real-world efficiency.
+        </p>
+    </div>
+
+    <div class="courses-grid">
+
+        <!-- CARD 1 -->
+        <div class="course-card slide-up">
+            <div class="course-image">
+                <img src="{% static 'images/course1.png' %}" alt="Admin Control">
+                <span class="course-tag">Management</span>
+                <span class="course-badge">⚡ Pro</span>
+            </div>
+
+            <div class="course-content">
+                <h3>Admin Control Dashboard</h3>
+
+                <div class="course-meta">
+                    <span>📊 Full Access</span>
+                    <span>👥 Multi-User</span>
+                </div>
+
+                <div class="course-footer">
+                    <span class="price">Core Module</span>
+                    <span class="author">
+                        <img src="{% static 'images/girl-4.jpg' %}" alt="">
+                        ACADAMIX
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="course-card slide-up">
+            <div class="course-image">
+                <img src="{% static 'images/course2.jpg' %}" alt="Student Portal">
+                <span class="course-tag">Students</span>
+                <span class="course-badge">⭐ Popular</span>
+            </div>
+
+            <div class="course-content">
+                <h3>Student Portal</h3>
+
+                <div class="course-meta">
+                    <span>📅 Attendance</span>
+                    <span>📈 Results</span>
+                </div>
+
+                <div class="course-footer">
+                    <span class="price">Included</span>
+                    <span class="author">
+                        <img src="{% static 'images/boy-4.jpg' %}" alt="">
+                        ACADAMIX
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="course-card slide-up">
+            <div class="course-image">
+                <img src="{% static 'images/course3.jpg' %}" alt="Teacher Panel">
+                <span class="course-tag">Faculty</span>
+                <span class="course-badge">🔥 New</span>
+            </div>
+
+            <div class="course-content">
+                <h3>Teacher Management</h3>
+
+                <div class="course-meta">
+                    <span>📚 Classes</span>
+                    <span>📝 Reports</span>
+                </div>
+
+                <div class="course-footer">
+                    <span class="price">Advanced</span>
+                    <span class="author">
+                        <img src="{% static 'images/girl-5.jpg' %}" alt="">
+                        ACADAMIX
+                    </span>
+                </div>
+            </div>
+        </div>
 
     </div>
 </section>
 
-
-
-
-<!-- FEATURES -->
-<section class="features" id="features">
-    <h2>Our Features</h2>
-    <div class="feature-grid">
-        <div class="card slide-up">
-            <h3>Admin Control</h3>
-            <p>Manage everything from one dashboard</p>
-        </div>
-        <div class="card slide-up">
-            <h3>Student Portal</h3>
-            <p>Attendance, profile and results</p>
-        </div>
-        <div class="card slide-up">
-            <h3>Teacher Panel</h3>
-            <p>Classes, students & performance</p>
-        </div>
-        <div class="card slide-up">
-            <h3>Parent Access</h3>
-            <p>Monitor student progress easily</p>
-        </div>
-    </div>
-</section>
 
 <!-- FOOTER -->
 <footer>
@@ -138,15 +189,91 @@
 <script src="{% static 'js/home.js' %}"></script>
 
 <script>
-document.addEventListener("scroll", () => {
-    const about = document.querySelector(".about-section");
-    const position = about.getBoundingClientRect().top;
-    const screenHeight = window.innerHeight;
+/* ===============================
+   INTERSECTION OBSERVER (WEBFLOW STYLE)
+================================ */
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.2 });
 
-    if (position < screenHeight - 100) {
-        about.classList.add("show");
-    }
+document.querySelectorAll(".fade-in, .slide-up").forEach(el => observer.observe(el));
+
+/* ===============================
+   SMOOTH SCROLL
+================================ */
+document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(link.getAttribute('href'))
+            .scrollIntoView({ behavior: 'smooth' });
+    });
 });
+
+/* ===============================
+   HERO TYPING EFFECT
+================================ */
+const text = "Best Education For Your Future";
+let i = 0;
+function typeEffect() {
+    if (i < text.length) {
+        document.getElementById("typing-text").innerHTML += text.charAt(i++);
+        setTimeout(typeEffect, 70);
+    }
+}
+window.addEventListener("load", typeEffect);
+
+/* ===============================
+   HERO PARALLAX
+================================ */
+const hero = document.querySelector(".hero");
+window.addEventListener("scroll", () => {
+    hero.style.backgroundPositionY = window.scrollY * 0.4 + "px";
+});
+
+/* ===============================
+   NAVBAR SCROLL EFFECT
+================================ */
+const navbar = document.querySelector(".navbar");
+window.addEventListener("scroll", () => {
+    navbar.classList.toggle("scrolled", window.scrollY > 60);
+});
+
+/* ===============================
+   OPPORTUNITY IMAGE PARALLAX
+================================ */
+const card = document.querySelector(".opportunity-card");
+const img = document.querySelector(".opportunity-image img");
+
+card.addEventListener("mousemove", e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) / 20;
+    const y = (e.clientY - r.top - r.height / 2) / 20;
+    img.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+});
+
+card.addEventListener("mouseleave", () => {
+    img.style.transform = "scale(1)";
+});
+
+/* ===============================
+   ACCORDION
+================================ */
+document.querySelectorAll(".opportunity-menu li").forEach(item => {
+    item.addEventListener("click", () => item.classList.toggle("open"));
+});
+
+// our feature section
+document.querySelectorAll(".course-card").forEach(card => {
+    card.addEventListener("mouseenter", () => {
+        card.style.transition = "all 0.4s ease";
+    });
+});
+
 </script>
 
 </body>

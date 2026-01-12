@@ -33,6 +33,8 @@ urlpatterns = [
     path('', include('internal_marks.urls')),
     path('api/fees/', include('fees.api_urls')),
     path('fees/', include('fees.urls')),
+    path('ai/', include('ai_services.urls')),
+
 
 
 

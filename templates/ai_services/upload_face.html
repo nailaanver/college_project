@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Face</title>
+</head>
+<body>
+    <h2>Upload Face Image</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="face_image" required>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

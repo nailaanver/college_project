@@ -227,3 +227,21 @@ def is_staff(user):
 @user_passes_test(is_staff)
 def library_menu(request):
     return render(request, 'library/library_menu.html')
+
+from django.http import HttpResponse
+from .models import LibraryEntry
+
+
+
+from django.http import HttpResponse
+from .models import LibraryEntry
+from ai_services.face import recognize_face
+
+def library_face_entry(request):
+    student = recognize_face()
+
+    if student is None:
+        return HttpResponse("Face not recognized", status=400)
+
+    LibraryEntry.objects.create(student=student)
+    return HttpResponse("Library entry recorded")
