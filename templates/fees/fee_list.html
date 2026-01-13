@@ -1,24 +1,188 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<h2>All Fees</h2>
-<table>
-    <tr>
-        <th>Student</th>
-        <th>Fee Type</th>
-        <th>Semester</th>
-        <th>Amount</th>
-        <th>Due Date</th>
-        <th>Paid</th>
-    </tr>
-    {% for fee in fees %}
-    <tr>
-        <td>{{ fee.student.first_name }} {{ fee.student.last_name }}</td>
-        <td>{{ fee.fee_type }}</td>
-        <td>{{ fee.semester }}</td>
-        <td>{{ fee.amount }}</td>
-        <td>{{ fee.due_date }}</td>
-        <td>{{ fee.is_paid }}</td>
-    </tr>
-    {% endfor %}
-</table>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+/* Page wrapper */
+.fees-wrapper {
+    padding: 40px 20px;
+    min-height: calc(100vh - 80px);
+    background:
+        linear-gradient(rgba(11,28,57,0.85), rgba(11,28,57,0.85)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card */
+.fees-card {
+    max-width: 1100px;
+    margin: auto;
+    background: var(--white);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+}
+
+/* Title */
+.fees-card h2 {
+    color: var(--navy-dark);
+    font-weight: 700;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fees-card h2 i {
+    color: var(--gold);
+}
+
+/* Table */
+.fees-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.fees-table thead {
+    background: var(--navy);
+}
+
+.fees-table th {
+    padding: 14px;
+    text-align: left;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.fees-table td {
+    padding: 14px;
+    border-bottom: 1px solid #e6e6e6;
+    color: #333;
+}
+
+.fees-table tbody tr:hover {
+    background: #f5f6fa;
+}
+
+/* Paid / unpaid badge */
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-paid {
+    background: #eafaf1;
+    color: #0a8a42;
+}
+
+.badge-unpaid {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+/* Empty state */
+.empty-row {
+    text-align: center;
+    padding: 20px;
+    font-weight: 500;
+    color: #777;
+}
+
+/* Back button */
+.back-btn {
+    display: inline-block;
+    margin-top: 25px;
+    text-decoration: none;
+    color: var(--navy);
+    font-weight: 600;
+}
+
+.back-btn i {
+    margin-right: 6px;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fees-table {
+        font-size: 14px;
+    }
+}
+</style>
+
+<div class="fees-wrapper">
+    <div class="fees-card">
+
+        <h2>
+            <i class="fa-solid fa-money-check-dollar"></i>
+            All Fees
+        </h2>
+
+        <table class="fees-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Fee Type</th>
+                    <th>Semester</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                <tr>
+                    <td>{{ fee.student.first_name }} {{ fee.student.last_name }}</td>
+                    <td>{{ fee.fee_type }}</td>
+                    <td>Semester {{ fee.semester }}</td>
+                    <td>₹{{ fee.amount }}</td>
+                    <td>{{ fee.due_date }}</td>
+                    <td>
+                        {% if fee.is_paid %}
+                            <span class="badge badge-paid">
+                                <i class="fa-solid fa-circle-check"></i> Paid
+                            </span>
+                        {% else %}
+                            <span class="badge badge-unpaid">
+                                <i class="fa-solid fa-circle-xmark"></i> Unpaid
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-row">
+                        No fee records available
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'admin-dashboard' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -28,12 +28,13 @@ body {
 .attendance-wrapper {
     max-width: 1000px;
     margin: auto;
-    background: rgba(11, 28, 57, 0.92);
+    background: #ffffff; /* white background */
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-    color: var(--white);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    color: var(--navy-dark); /* default text color */
 }
+
 
 /* Title */
 .page-title {
@@ -41,20 +42,19 @@ body {
     font-size: 26px;
     font-weight: 700;
     margin-bottom: 25px;
-    background: linear-gradient(90deg, var(--gold), #ffdd57, var(--white));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--navy-dark);
 }
+
 
 /* Filter Card */
 .filter-card {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    backdrop-filter: blur(12px);
+    background: #f5f7fb;
+    border: 1px solid #e0e6ed;
     padding: 20px;
     border-radius: 16px;
     margin-bottom: 25px;
 }
+
 
 .filter-grid {
     display: grid;
@@ -78,6 +78,39 @@ body {
     outline: none;
     font-size: 14px;
 }
+.filter-group label {
+    font-size: 13px;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+    color: #222;
+    background: #fff;
+}
+.empty-text {
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+}
+.back-btn {
+    background: var(--navy);
+    color: var(--white);
+}
+
+.back-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
 
 /* Button */
 .search-btn {
@@ -105,10 +138,15 @@ body {
     border-collapse: collapse;
 }
 
-.attendance-table th,
+.attendance-table th {
+    color: var(--white);
+    padding: 12px;
+    text-align: center;
+}
 .attendance-table td {
     padding: 12px;
     text-align: center;
+    
 }
 
 .attendance-table th {

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<!-- FontAwesome for icons -->
+<!-- FontAwesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
@@ -12,14 +12,14 @@
     --gold: #f3c623;
     --gold-soft: #f8d85a;
     --white: #ffffff;
-    --text-light: #f5f5f5;
 }
 
 /* Full page background */
 .issue-page {
     min-height: 100vh;
-    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    background:
+        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,15 +27,15 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Centered card */
+/* White Card */
 .issue-container {
     max-width: 550px;
     width: 100%;
-    background: rgba(11,28,57,0.85);
+    background: #ffffff;
     padding: 40px 30px;
     border-radius: 28px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-    color: var(--white);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    color: var(--navy-dark);
 }
 
 /* Page Title */
@@ -44,10 +44,10 @@
     margin-bottom: 30px;
     font-size: 28px;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--navy-dark);
 }
 
-/* Form Fields */
+/* Form fields */
 form p {
     margin-bottom: 18px;
 }
@@ -55,7 +55,7 @@ form p {
 form label {
     display: block;
     font-weight: 600;
-    color: var(--white);
+    color: #333;
     margin-bottom: 6px;
 }
 
@@ -65,16 +65,18 @@ form textarea {
     width: 100%;
     padding: 12px 16px;
     border-radius: 25px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     font-size: 14px;
     outline: none;
+    background: #fff;
+    color: #222;
 }
 
 form input:focus,
 form select:focus,
 form textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(243,198,35,0.2);
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(20,40,80,0.15);
 }
 
 /* Buttons */
@@ -82,48 +84,48 @@ form textarea:focus {
     display: flex;
     justify-content: space-between;
     margin-top: 25px;
-    gap: 10px;
+    gap: 12px;
 }
 
 .btn-issue {
-    background: var(--gold);
-    color: var(--navy-dark);
+    background: var(--navy);
+    color: var(--white);
     border: none;
     padding: 12px 26px;
     border-radius: 25px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s;
     flex: 1;
 }
 
 .btn-issue:hover {
-    background: var(--gold-soft);
+    background: var(--navy-dark);
 }
 
 .btn-back {
     background: transparent;
-    border: 2px solid var(--white);
-    color: var(--white);
+    border: 2px solid var(--navy);
+    color: var(--navy);
     padding: 12px 26px;
     border-radius: 25px;
     font-weight: 600;
     text-decoration: none;
-    flex: 1;
     text-align: center;
-    transition: all 0.3s ease;
+    flex: 1;
+    transition: 0.3s;
 }
 
 .btn-back:hover {
-    background: var(--white);
-    color: var(--navy-dark);
+    background: var(--navy);
+    color: var(--white);
 }
 
 /* Messages */
 .messages {
     margin-top: 20px;
     text-align: center;
-    color: #28a745;
+    color: #2e7d32;
     font-weight: 500;
 }
 
@@ -138,10 +140,10 @@ form textarea:focus {
 <div class="issue-page">
     <div class="issue-container">
 
-        <!-- Page Title -->
-        <h2><i class="fas fa-book-reader"></i> Issue Book</h2>
+        <h2>
+            <i class="fas fa-book-reader"></i> Issue Book
+        </h2>
 
-        <!-- Form -->
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
@@ -157,13 +159,12 @@ form textarea:focus {
             </div>
         </form>
 
-        <!-- Success/Error Messages -->
         {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
         {% endif %}
 
     </div>

@@ -1,110 +1,170 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <style>
-    .return-list-container {
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-        margin: 30px auto;
-        max-width: 1000px;
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --gold-soft: #f8d85a;
+    --white: #ffffff;
+}
+
+/* Page background */
+.return-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* White card */
+.return-list-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 22px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* Header */
+.return-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.return-list-header h2 {
+    color: var(--navy-dark);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Back button */
+.btn-back {
+    background: var(--navy);
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--navy);
+    color: var(--white);
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+}
+
+tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: 0.3s;
+}
+
+tbody tr:hover {
+    background: #f5f6fa;
+}
+
+/* Return button */
+.btn-return {
+    background: var(--navy);
+    color: var(--white);
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-return:hover {
+    background: var(--navy-dark);
+}
+
+/* Empty row */
+.empty-row {
+    text-align: center;
+    padding: 20px;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    th, td {
+        font-size: 13px;
+        padding: 10px;
     }
 
     .return-list-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
+        flex-direction: column;
+        gap: 15px;
     }
-
-    .return-list-header h2 {
-        color: #142850;
-        font-weight: 600;
-    }
-
-    .btn-back {
-        background: #f3c623;
-        color: #142850;
-        text-decoration: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-
-    .btn-back:hover {
-        background: #f8d85a;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background: #142850;
-        color: #ffffff;
-    }
-
-    th, td {
-        padding: 14px;
-        text-align: center;
-    }
-
-    tbody tr {
-        border-bottom: 1px solid #eee;
-        transition: 0.3s;
-    }
-
-    tbody tr:hover {
-        background: #f5f6fa;
-    }
-
-    .btn-return {
-        background: #142850;
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: 20px;
-        text-decoration: none;
-        font-size: 14px;
-        transition: 0.3s;
-    }
-
-    .btn-return:hover {
-        background: #0b1c39;
-    }
-
-    .empty-row {
-        text-align: center;
-        padding: 20px;
-        font-weight: 500;
-        color: #666;
-    }
+}
 </style>
 
-<div class="return-list-container">
+<div class="return-page">
+    <div class="return-list-container">
 
-    <div class="return-list-header">
-        <h2>📚 Return Books</h2>
-        <a href="{% url 'library-menu' %}" class="btn-back">
-            ← Back to Library
-        </a>
-    </div>
+        <div class="return-list-header">
+            <h2>
+                <i class="fas fa-undo-alt"></i>
+                Return Books
+            </h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Book</th>
-                <th>User</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+            <a href="{% url 'library-menu' %}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                Back to Library
+            </a>
+        </div>
 
-        <tbody>
-            {% for issue in issues %}
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fas fa-book"></i> Book</th>
+                    <th><i class="fas fa-user"></i> User</th>
+                    <th><i class="fas fa-calendar-alt"></i> Issue Date</th>
+                    <th><i class="fas fa-clock"></i> Due Date</th>
+                    <th><i class="fas fa-cog"></i> Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for issue in issues %}
                 <tr>
                     <td>{{ issue.book.title }}</td>
                     <td>{{ issue.user.username }}</td>
@@ -112,20 +172,23 @@
                     <td>{{ issue.due_date }}</td>
                     <td>
                         <a href="{% url 'return-book' issue.id %}" class="btn-return">
+                            <i class="fas fa-check-circle"></i>
                             Return
                         </a>
                     </td>
                 </tr>
-            {% empty %}
+                {% empty %}
                 <tr>
                     <td colspan="5" class="empty-row">
-                        No books to return 📭
+                        <i class="fas fa-inbox"></i>
+                        No books to return
                     </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
 
+    </div>
 </div>
 
 {% endblock %}
