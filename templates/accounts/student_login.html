@@ -3,231 +3,287 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
             --navy: #142850;
             --gold: #f3c623;
-            --gold-soft: #f8d85a;
             --white: #ffffff;
-            --gray: #f2f4f8;
-            --text-muted: #6b7280;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+            background: linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* MAIN CARD */
-        .login-container {
-            max-width: 920px;
+        /* 3D Container Setup */
+        .main-wrapper {
+            perspective: 1500px;
             width: 100%;
-            background: var(--white);
-            border-radius: 34px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             overflow: hidden;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.45);
-            animation: fadeUp 0.9s ease;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* LEFT SIDE */
+        /* LEFT SIDE: Visual Info */
         .login-visual {
-            background:
-                linear-gradient(135deg, rgba(20,40,80,0.95), rgba(11,28,57,0.95)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
-            padding: 50px;
+            background: linear-gradient(135deg, rgba(20,40,80,0.8), rgba(11,28,57,0.8)),
+                        url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 60px;
             color: var(--white);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            border-right: 1px solid var(--border);
         }
 
         .brand {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            color: var(--gold);
         }
 
         .visual-content h3 {
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            line-height: 1.2;
         }
 
         .visual-content p {
-            font-size: 15px;
-            line-height: 1.7;
-            opacity: 0.9;
-            max-width: 360px;
+            font-size: 16px;
+            color: #cbd5e1;
+            line-height: 1.8;
+            max-width: 400px;
         }
 
-        /* RIGHT SIDE */
-        .login-form {
-            padding: 55px 50px;
+        /* RIGHT SIDE: Form */
+        .login-form-area {
+            padding: 60px;
+            background: rgba(11, 28, 57, 0.4);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-form h2 {
-            font-size: 30px;
-            font-weight: 700;
-            color: var(--navy-dark);
-            margin-bottom: 8px;
+        .login-form-area h2 {
+            font-size: 32px;
+            color: var(--white);
+            margin-bottom: 10px;
         }
 
-        .login-form p {
+        .login-form-area p.subtitle {
+            color: #94a3b8;
+            margin-bottom: 35px;
             font-size: 15px;
-            color: var(--text-muted);
-            margin-bottom: 28px;
         }
 
-        .error {
-            background: #ffe2e2;
-            color: #a12222;
-            padding: 12px;
-            border-radius: 12px;
+        .error-msg {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             font-size: 14px;
-            margin-bottom: 18px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
+        /* Form Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 18px;
         }
 
         input {
-            padding: 15px 18px;
-            border-radius: 30px;
-            border: 1.6px solid #ddd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            color: white;
+            font-size: 15px;
             outline: none;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
 
         input:focus {
-            border-color: var(--navy);
-            box-shadow: 0 0 0 3px rgba(20,40,80,0.1);
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--navy), var(--navy-dark));
-            color: var(--white);
-            border: none;
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(20,40,80,0.45);
-        }
-
-        .cancel-btn {
-            margin-top: 18px;
-            text-align: center;
-            padding: 14px;
-            border-radius: 30px;
-            text-decoration: none;
-            color: var(--navy-dark);
-            border: 2px solid var(--navy-dark);
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .cancel-btn:hover {
-            background: var(--gold);
+            background: rgba(255, 255, 255, 0.1);
             border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(243, 198, 35, 0.2);
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .login-container {
-                grid-template-columns: 1fr;
-            }
+        button.login-btn {
+            background: var(--gold);
+            color: var(--navy-dark);
+            border: none;
+            padding: 16px;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
 
-            .login-visual {
-                display: none;
-            }
+        button.login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(243, 198, 35, 0.4);
+            background: #ffdb4d;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-link a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link a:hover {
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .login-container { grid-template-columns: 1fr; max-width: 500px; }
+            .login-visual { display: none; }
+            .login-form-area { padding: 40px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
-
-    <!-- LEFT VISUAL -->
-    <div class="login-visual">
-        <div class="brand">ACADAMIX</div>
-
-        <div class="visual-content">
-            <h3>Student Portal</h3>
-            <p>
-                Access your attendance, academic records,
-                announcements and campus updates from one secure platform.
-            </p>
+<div class="main-wrapper">
+    <div class="login-container" id="tiltCard">
+        
+        <div class="login-visual">
+            <div class="brand">ACADA<span>MIX</span></div>
+            <div class="visual-content">
+                <h3>Unlock Your <br>Academic Journey</h3>
+                <p>Track your progress, manage your schedule, and stay connected with your campus community.</p>
+            </div>
+            <div class="visual-footer">
+                <small style="opacity: 0.5;">© 2026 Acadamix System</small>
+            </div>
         </div>
+
+        <div class="login-form-area">
+            <h2>Student Portal</h2>
+            <p class="subtitle">Please enter your university credentials.</p>
+
+            {% if error %}
+            <div class="error-msg">
+                <i class="fas fa-circle-exclamation"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Student Email ID" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="password" name="password" placeholder="Date of Birth (YYYYMMDD)" required>
+                </div>
+
+                <button type="submit" class="login-btn">Secure Login</button>
+
+                <div class="back-link">
+                    <a href="{% url 'role_login' %}">
+                        <i class="fas fa-arrow-left"></i> Change User Role
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <!-- RIGHT FORM -->
-    <div class="login-form">
-        <h2>Student Login</h2>
-        <p>Enter your credentials to continue</p>
-
-        {% if error %}
-        <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-
-            <input type="email" name="email" placeholder="Email ID" required>
-            <input type="password" name="password" placeholder="Date of Birth (YYYYMMDD)" required>
-
-            <button type="submit">Login</button>
-
-            <a href="{% url 'role_login' %}" class="cancel-btn">Back to Role Selection</a>
-        </form>
-    </div>
-
 </div>
+
+<script>
+    /* ===============================
+        3D TILT EFFECT
+    ================================ */
+    const card = document.getElementById('tiltCard');
+
+    document.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Very subtle rotation for a large card
+        const rotateX = (y - centerY) / 30;
+        const rotateY = (centerX - x) / 30;
+        
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+</script>
 
 </body>
 </html>

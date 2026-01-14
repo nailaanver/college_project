@@ -3,199 +3,215 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
             --navy: #142850;
             --gold: #f3c623;
-            --gold-soft: #f8d85a;
             --white: #ffffff;
-            --text-dark: #1c1c1c;
-            --text-light: #f5f5f5;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-hover: rgba(255, 255, 255, 0.18);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+            background: linear-gradient(rgba(11, 28, 57, 0.94), rgba(11, 28, 57, 0.94)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
         }
 
         .login-wrapper {
             width: 100%;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: var(--white);
-            max-width: 460px;
-            margin: auto;
-            padding: 55px 42px;
-            border-radius: 30px;
+            max-width: 1000px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 35px 80px rgba(0,0,0,0.4);
-            animation: fadeUp 0.9s ease;
-            transition: transform 0.4s ease;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .login-card:hover {
-            transform: translateY(-6px);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-card h2 {
-            font-size: 34px;
-            color: var(--navy-dark);
-            margin-bottom: 8px;
+        header h2 {
+            color: var(--white);
+            font-size: clamp(32px, 5vw, 48px);
             font-weight: 700;
+            margin-bottom: 10px;
         }
-
-        .subtitle {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 38px;
-        }
-
-        /* LOGIN BUTTONS */
-        .login-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            text-decoration: none;
-            background: var(--navy);
-            color: var(--text-light);
-            padding: 16px;
-            border-radius: 32px;
-            margin-bottom: 18px;
+        header h2 span { color: var(--gold); }
+        header p {
+            color: #cbd5e1;
+            margin-bottom: 60px;
             font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Roles Grid */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            perspective: 1000px;
+        }
+
+        .role-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 30px;
+            border-radius: 28px;
+            text-decoration: none;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .role-card i {
+            font-size: 50px;
+            color: var(--gold);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .role-card span {
             font-weight: 600;
-            transition: all 0.35s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn i {
             font-size: 18px;
-            transition: transform 0.35s ease;
+            letter-spacing: 0.5px;
         }
 
-        .login-btn:hover i {
-            transform: translateX(6px);
+        /* Hover States */
+        .role-card:hover {
+            background: var(--glass-hover);
+            border-color: rgba(243, 198, 35, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .login-btn:hover {
-            background: var(--navy-dark);
-            transform: translateY(-4px);
-            box-shadow: 0 14px 30px rgba(20,40,80,0.45);
+        .role-card:hover i {
+            transform: translateZ(40px) scale(1.1);
         }
 
-        /* ADMIN BUTTON */
-        .login-btn.admin {
-            background: linear-gradient(135deg, var(--gold), var(--gold-soft));
-            color: var(--navy-dark);
+        /* Admin Special Style */
+        .role-card.admin {
+            border: 1px solid rgba(243, 198, 35, 0.2);
         }
 
-        .login-btn.admin:hover {
-            box-shadow: 0 16px 35px rgba(243,198,35,0.6);
-        }
-
-        /* BACK HOME */
+        /* Back Button */
         .back-home {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 30px;
+            gap: 12px;
+            margin-top: 60px;
             text-decoration: none;
-            color: var(--navy);
+            color: var(--gold);
             font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .back-home i {
-            transition: transform 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
         }
 
         .back-home:hover {
-            color: var(--navy-dark);
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+            transform: translateX(-5px);
         }
 
-        .back-home:hover i {
-            transform: translateX(-6px);
-        }
-
-        @media (max-width: 500px) {
-            .login-card {
-                padding: 45px 28px;
+        @media (max-width: 600px) {
+            .roles-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
             }
+            .role-card { padding: 30px 15px; }
+            .role-card i { font-size: 35px; }
+            .role-card span { font-size: 15px; }
         }
     </style>
 </head>
-
 <body>
 
 <section class="login-wrapper">
-    <div class="login-card">
+    <header>
+        <h2>Welcome to <span>ACADAMIX</span></h2>
+        <p>Select your portal access</p>
+    </header>
 
-        <h2>Welcome Back</h2>
-        <p class="subtitle">Choose your role to continue</p>
-
-        <a href="{% url 'student-login' %}" class="login-btn">
+    <div class="roles-grid">
+        <a href="{% url 'student-login' %}" class="role-card">
             <i class="fa-solid fa-user-graduate"></i>
-            Student Login
+            <span>Student</span>
         </a>
 
-        <a href="{% url 'teacher-login' %}" class="login-btn">
+        <a href="{% url 'teacher-login' %}" class="role-card">
             <i class="fa-solid fa-chalkboard-user"></i>
-            Teacher Login
+            <span>Teacher</span>
         </a>
 
-        <a href="{% url 'parent_send_otp' %}" class="login-btn">
+        <a href="{% url 'parent_send_otp' %}" class="role-card">
             <i class="fa-solid fa-people-group"></i>
-            Parent Login
+            <span>Parent</span>
         </a>
 
-        <a href="{% url 'admin-login' %}" class="login-btn admin">
+        <a href="{% url 'admin-login' %}" class="role-card admin">
             <i class="fa-solid fa-shield-halved"></i>
-            Admin Login
+            <span>Administrator</span>
         </a>
-
-        <a href="{% url 'home' %}" class="back-home">
-            <i class="fa-solid fa-arrow-left"></i>
-            Back to Home
-        </a>
-
     </div>
+
+    <a href="{% url 'home' %}" class="back-home">
+        <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+    </a>
 </section>
+
+<script>
+    /* ===============================
+        3D TILT EFFECT
+    ================================ */
+    const cards = document.querySelectorAll('.role-card');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Subtle rotation values
+            const rotateX = (y - centerY) / 12; 
+            const rotateY = (centerX - x) / 12;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+    });
+</script>
 
 </body>
 </html>

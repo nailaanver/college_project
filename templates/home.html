@@ -3,277 +3,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACADAMIX | College Management System</title>
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
 
-<!-- NAVBAR -->
+<div class="cursor"></div>
+<div class="cursor-follower"></div>
+
+<div class="scroll-progress"></div>
+
 <header class="navbar">
     <div class="container">
-        <div class="logo">ACADAMIX</div>
+        <div class="logo">ACADA<span>MIX</span></div>
         <nav>
             <a href="#">Home</a>
             <a href="#about">About</a>
             <a href="#features">Features</a>
-            <a href="{% url 'role_login' %}" class="btn">Login</a>
+            <a href="{% url 'role_login' %}" class="login-btn">Login</a>
         </nav>
     </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
-    <div class="hero-content fade-in">
+    <div class="hero-content">
         <h1 id="typing-text"></h1>
-        <p>Manage Students, Teachers & Parents in one smart system</p>
-        <a href="{% url 'role_login' %}" class="hero-btn">Get Started</a>
+        <p class="fade-in">Manage Students, Teachers & Parents in one smart system</p>
+        <div class="hero-btns fade-in">
+            <a href="{% url 'role_login' %}" class="hero-btn primary">Get Started <i class="fas fa-arrow-right"></i></a>
+            <a href="#features" class="hero-btn secondary">Explore Features</a>
+        </div>
     </div>
 </section>
 
-<!-- ABOUT -->
-<section class="about-section fade-in" id="about">
+<section class="about-section" id="about">
     <div class="about-container">
-        <div class="about-left">
-            <span class="about-badge">ACADAMIX</span>
-            <h2>About Our Institution</h2>
+        <div class="about-left fade-in">
+            <span class="about-badge">ACADAMIX 2026</span>
+            <h2>Redefining <span>Education</span> Management</h2>
+            <div class="about-image-mobile slide-up">
+                 <img src="{% static 'images/about.jpg' %}" alt="Campus">
+            </div>
         </div>
-        <div class="about-right">
+        <div class="about-right slide-up">
             <p class="highlight-text">
                 We are building a smart, digital-first college management system
                 that connects Admins, Teachers, Students, and Parents.
             </p>
             <p class="about-text">
                 ACADAMIX simplifies academic operations and improves communication
-                with real-time academic insights.
+                with real-time academic insights, automated attendance, and smart grading.
             </p>
-            <a href="#" class="about-btn">Read More →</a>
+            <a href="#" class="about-link">Read More →</a>
         </div>
-    </div>
-
-    <div class="about-image slide-up">
-        <img src="{% static 'images/about.jpg' %}" alt="Campus">
     </div>
 </section>
 
-<!-- OPPORTUNITY -->
-<section class="opportunity-wrapper fade-in">
-    <div class="opportunity-card">
+<section class="opportunity-wrapper">
+    <div class="opportunity-card slide-up">
         <div class="opportunity-image">
             <img src="{% static 'images/opertunity.jpg' %}" alt="Opportunity">
         </div>
 
         <div class="opportunity-content">
-            <h3>Opportunity</h3>
+            <div class="tag">Empowerment</div>
+            <h3>Future-Ready Opportunity</h3>
             <p class="opportunity-text">
-                Providing opportunities for your daughter to pursue her passions.
+                Providing modern tools for your institution to pursue excellence.
             </p>
 
-            <a href="#" class="read-more">→ Read more about Opportunity</a>
-            <div class="divider"></div>
-
             <ul class="opportunity-menu">
-                <li><span>Enrolling with us</span><span>+</span></li>
-                <li><span>Primary</span><span>+</span></li>
-                <li><span>Secondary</span><span>+</span></li>
-                <li><span>Student Wellbeing</span><span>+</span></li>
-                <li><span>About SAC</span><span>+</span></li>
+                <li class="open">
+                    <div class="menu-title"><span>01. Enrolling with us</span><i class="fas fa-plus"></i></div>
+                    <div class="menu-content">Quick and seamless digital admission process for all departments.</div>
+                </li>
+                <li>
+                    <div class="menu-title"><span>02. Student Wellbeing</span><i class="fas fa-plus"></i></div>
+                    <div class="menu-content">Track student progress and mental health with dedicated support modules.</div>
+                </li>
+                <li>
+                    <div class="menu-title"><span>03. Smart Analytics</span><i class="fas fa-plus"></i></div>
+                    <div class="menu-content">Get deep insights into academic performance and faculty efficiency.</div>
+                </li>
             </ul>
         </div>
     </div>
 </section>
 
-<!-- COURSES / FEATURES SECTION -->
 <section class="courses-section" id="features">
     <div class="courses-header fade-in">
-        <h2>Our Popular Features</h2>
-        <p>
-            Explore powerful tools and modules designed to simplify college
-            management with real-world efficiency.
-        </p>
+        <span class="sub-title">Modules</span>
+        <h2>Powerful Platform Features</h2>
+        <p>Explore tools designed to simplify college management with real-world efficiency.</p>
     </div>
 
     <div class="courses-grid">
-
-        <!-- CARD 1 -->
-        <div class="course-card slide-up">
+        <div class="course-card">
             <div class="course-image">
                 <img src="{% static 'images/course1.png' %}" alt="Admin Control">
                 <span class="course-tag">Management</span>
-                <span class="course-badge">⚡ Pro</span>
             </div>
-
             <div class="course-content">
                 <h3>Admin Control Dashboard</h3>
-
                 <div class="course-meta">
-                    <span>📊 Full Access</span>
-                    <span>👥 Multi-User</span>
+                    <span><i class="fas fa-chart-pie"></i> Full Access</span>
+                    <span><i class="fas fa-users"></i> Multi-User</span>
                 </div>
-
                 <div class="course-footer">
                     <span class="price">Core Module</span>
-                    <span class="author">
-                        <img src="{% static 'images/girl-4.jpg' %}" alt="">
-                        ACADAMIX
-                    </span>
+                    <span class="badge-pro">⚡ Pro</span>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 2 -->
-        <div class="course-card slide-up">
+        <div class="course-card">
             <div class="course-image">
                 <img src="{% static 'images/course2.jpg' %}" alt="Student Portal">
                 <span class="course-tag">Students</span>
-                <span class="course-badge">⭐ Popular</span>
             </div>
-
             <div class="course-content">
                 <h3>Student Portal</h3>
-
                 <div class="course-meta">
-                    <span>📅 Attendance</span>
-                    <span>📈 Results</span>
+                    <span><i class="fas fa-calendar-check"></i> Attendance</span>
+                    <span><i class="fas fa-graduation-cap"></i> Results</span>
                 </div>
-
                 <div class="course-footer">
                     <span class="price">Included</span>
-                    <span class="author">
-                        <img src="{% static 'images/boy-4.jpg' %}" alt="">
-                        ACADAMIX
-                    </span>
+                    <span class="badge-pop">⭐ Popular</span>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 3 -->
-        <div class="course-card slide-up">
+        <div class="course-card">
             <div class="course-image">
                 <img src="{% static 'images/course3.jpg' %}" alt="Teacher Panel">
                 <span class="course-tag">Faculty</span>
-                <span class="course-badge">🔥 New</span>
             </div>
-
             <div class="course-content">
                 <h3>Teacher Management</h3>
-
                 <div class="course-meta">
-                    <span>📚 Classes</span>
-                    <span>📝 Reports</span>
+                    <span><i class="fas fa-book"></i> Classes</span>
+                    <span><i class="fas fa-file-alt"></i> Reports</span>
                 </div>
-
                 <div class="course-footer">
                     <span class="price">Advanced</span>
-                    <span class="author">
-                        <img src="{% static 'images/girl-5.jpg' %}" alt="">
-                        ACADAMIX
-                    </span>
+                    <span class="badge-new">🔥 New</span>
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 
-
-<!-- FOOTER -->
 <footer>
-    <p>© 2025 ACADAMIX | College Management System</p>
+    <div class="container">
+        <p>© 2026 ACADAMIX | Designed for the Future of Education</p>
+    </div>
 </footer>
-
-<script src="{% static 'js/home.js' %}"></script>
 
 <script>
 /* ===============================
-   INTERSECTION OBSERVER (WEBFLOW STYLE)
+    CURSOR STALKER
 ================================ */
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            observer.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.2 });
+const cursor = document.querySelector('.cursor');
+const follower = document.querySelector('.cursor-follower');
 
-document.querySelectorAll(".fade-in, .slide-up").forEach(el => observer.observe(el));
+document.addEventListener('mousemove', (e) => {
+    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
+});
+
+document.querySelectorAll('a, button, .course-card, li').forEach(el => {
+    el.addEventListener('mouseenter', () => follower.classList.add('active'));
+    el.addEventListener('mouseleave', () => follower.classList.remove('active'));
+});
 
 /* ===============================
-   SMOOTH SCROLL
+    3D TILT EFFECT
 ================================ */
-document.querySelectorAll('nav a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
-        e.preventDefault();
-        document.querySelector(link.getAttribute('href'))
-            .scrollIntoView({ behavior: 'smooth' });
+document.querySelectorAll('.course-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 15;
+        const rotateY = (centerX - x) / 15;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
     });
 });
 
 /* ===============================
-   HERO TYPING EFFECT
+    SCROLL PROGRESS & NAVBAR
 ================================ */
-const text = "Best Education For Your Future";
+window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.querySelector(".scroll-progress").style.width = scrolled + "%";
+    
+    document.querySelector(".navbar").classList.toggle("scrolled", winScroll > 50);
+});
+
+/* ===============================
+    TYPING EFFECT
+================================ */
+const text = "Smart Education For Your Future";
 let i = 0;
 function typeEffect() {
     if (i < text.length) {
         document.getElementById("typing-text").innerHTML += text.charAt(i++);
-        setTimeout(typeEffect, 70);
+        setTimeout(typeEffect, 80);
     }
 }
 window.addEventListener("load", typeEffect);
 
 /* ===============================
-   HERO PARALLAX
+    SCROLL REVEAL
 ================================ */
-const hero = document.querySelector(".hero");
-window.addEventListener("scroll", () => {
-    hero.style.backgroundPositionY = window.scrollY * 0.4 + "px";
-});
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll(".fade-in, .slide-up, .course-card").forEach(el => observer.observe(el));
 
 /* ===============================
-   NAVBAR SCROLL EFFECT
-================================ */
-const navbar = document.querySelector(".navbar");
-window.addEventListener("scroll", () => {
-    navbar.classList.toggle("scrolled", window.scrollY > 60);
-});
-
-/* ===============================
-   OPPORTUNITY IMAGE PARALLAX
-================================ */
-const card = document.querySelector(".opportunity-card");
-const img = document.querySelector(".opportunity-image img");
-
-card.addEventListener("mousemove", e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width / 2) / 20;
-    const y = (e.clientY - r.top - r.height / 2) / 20;
-    img.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
-});
-
-card.addEventListener("mouseleave", () => {
-    img.style.transform = "scale(1)";
-});
-
-/* ===============================
-   ACCORDION
+    ACCORDION
 ================================ */
 document.querySelectorAll(".opportunity-menu li").forEach(item => {
-    item.addEventListener("click", () => item.classList.toggle("open"));
-});
-
-// our feature section
-document.querySelectorAll(".course-card").forEach(card => {
-    card.addEventListener("mouseenter", () => {
-        card.style.transition = "all 0.4s ease";
+    item.addEventListener("click", () => {
+        document.querySelectorAll(".opportunity-menu li").forEach(li => li.classList.remove("open"));
+        item.classList.add("open");
     });
 });
-
 </script>
 
 </body>

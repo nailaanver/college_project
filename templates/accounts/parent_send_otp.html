@@ -3,210 +3,277 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Verification | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --navy: #142850;
+            --parent-green: #10b981; /* Emerald Green for trust/growth */
             --gold: #f3c623;
-            --gold-soft: #f8d85a;
             --white: #ffffff;
-            --text-dark: #1c1c1c;
-            --gray: #6b7280;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+            background: linear-gradient(rgba(11, 28, 57, 0.96), rgba(11, 28, 57, 0.96)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* ===== MAIN CARD ===== */
-        .login-container {
-            background: var(--white);
+        /* Perspective Wrapper */
+        .wrapper {
+            perspective: 1200px;
             width: 100%;
-            max-width: 950px;
-            border-radius: 28px;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
             display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
-            animation: fadeUp 0.9s ease;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== LEFT PANEL ===== */
-        .login-visual {
-            background:
-                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
-            padding: 50px;
+        /* LEFT SIDE: Visual Info */
+        .visual-side {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.7), rgba(11, 28, 57, 0.9)),
+                        url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 60px;
             color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+        }
+
+        .visual-side h3 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .visual-side h3 span { color: var(--gold); }
+
+        .visual-side p {
+            font-size: 16px;
+            color: #e2e8f0;
+            line-height: 1.8;
+            max-width: 380px;
+        }
+
+        /* RIGHT SIDE: Form */
+        .form-side {
+            padding: 70px 60px;
+            background: rgba(11, 28, 57, 0.4);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-visual h3 {
-            font-size: 34px;
-            margin-bottom: 16px;
-            font-weight: 700;
+        .form-side h2 {
+            font-size: 32px;
+            color: var(--white);
+            margin-bottom: 10px;
         }
 
-        .login-visual p {
+        .form-side .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
             font-size: 15px;
-            line-height: 1.7;
-            color: #d1d5db;
-            max-width: 360px;
         }
 
-        /* ===== RIGHT PANEL ===== */
-        .login-form {
-            padding: 55px 45px;
-        }
-
-        .login-form h2 {
-            font-size: 28px;
-            color: var(--navy-dark);
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-
-        .login-form p {
+        .error-alert {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 28px;
-        }
-
-        .error {
-            background: #ffe0e0;
-            color: #9b1c1c;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        form {
+            margin-bottom: 25px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Input Styling */
+        .input-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-wrap i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--parent-green);
+            font-size: 18px;
         }
 
         input {
-            padding: 15px 18px;
-            border-radius: 30px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            color: white;
+            font-size: 15px;
             outline: none;
             transition: 0.3s;
         }
 
         input:focus {
-            border-color: var(--navy);
-            box-shadow: 0 0 0 3px rgba(20,40,80,0.12);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--parent-green);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
-        button {
-            background: var(--navy);
-            color: var(--white);
+        /* Submit Button */
+        button.otp-btn {
+            background: var(--parent-green);
+            color: white;
             border: none;
-            padding: 15px;
-            border-radius: 30px;
+            padding: 18px;
+            border-radius: 18px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.4s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        button:hover {
-            background: var(--navy-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        button.otp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            background: #059669;
         }
 
-        .cancel-btn {
-            margin-top: 18px;
+        .back-nav {
             text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-nav a {
+            color: #94a3b8;
             text-decoration: none;
-            font-weight: 600;
-            color: var(--navy);
+            font-size: 14px;
             transition: 0.3s;
         }
 
-        .cancel-btn:hover {
-            color: var(--navy-dark);
-            transform: translateX(-6px);
+        .back-nav a:hover {
+            color: var(--gold);
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
-            .login-container {
-                grid-template-columns: 1fr;
-            }
-
-            .login-visual {
-                display: none;
-            }
+            .login-container { grid-template-columns: 1fr; max-width: 500px; }
+            .visual-side { display: none; }
+            .form-side { padding: 50px 30px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="wrapper">
+    <div class="login-container" id="parentTilt">
+        
+        <div class="visual-side">
+            <h3>Parental <br><span>Connection</span></h3>
+            <p>Verify your identity to access your ward's academic journey, attendance reports, and campus notifications.</p>
+        </div>
 
-    <!-- LEFT INFO PANEL -->
-    <div class="login-visual">
-        <h3>Parent Portal</h3>
-        <p>
-            Verify student details to receive a secure OTP.
-            Use the OTP to login and access your child’s academic information
-            through ACADAMIX.
-        </p>
+        <div class="form-side">
+            <h2>Verification</h2>
+            <p class="subtitle">Securely connect to your child's profile.</p>
+
+            {% if error %}
+            <div class="error-alert">
+                <i class="fas fa-user-shield"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="input-wrap">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" name="register_number" placeholder="Student Register Number" required>
+                </div>
+
+                <div class="input-wrap">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <input type="email" name="parent_email" placeholder="Registered Parent Email" required>
+                </div>
+
+                <button type="submit" class="otp-btn">
+                    Send Verification OTP <i class="fas fa-paper-plane"></i>
+                </button>
+
+                <div class="back-nav">
+                    <a href="{% url 'role_login' %}">
+                        <i class="fas fa-arrow-left"></i> Return to Roles
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <!-- RIGHT FORM PANEL -->
-    <div class="login-form">
-        <h2>Parent Verification</h2>
-        <p>Enter student details to receive OTP</p>
-
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-
-            <input type="text" name="register_number" placeholder="Student Register Number" required>
-            <input type="email" name="parent_email" placeholder="Parent Email" required>
-
-            <button type="submit">Send OTP</button>
-            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
-        </form>
-    </div>
-
 </div>
+
+<script>
+    /* ===============================
+        3D TILT EFFECT
+    ================================ */
+    const card = document.getElementById('parentTilt');
+
+    document.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 35;
+        const rotateY = (centerX - x) / 35;
+        
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+</script>
 
 </body>
 </html>

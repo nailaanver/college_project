@@ -3,216 +3,297 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Login | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --navy: #142850;
+            --navy-bright: #2563eb; /* Professional Teacher Blue */
             --gold: #f3c623;
-            --gold-soft: #f8d85a;
             --white: #ffffff;
-            --text-dark: #1c1c1c;
-            --gray: #6b7280;
+            --glass: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.12);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+            background: linear-gradient(rgba(11, 28, 57, 0.96), rgba(11, 28, 57, 0.96)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* ===== MAIN CARD ===== */
-        .login-container {
-            background: var(--white);
+        /* Perspective Wrapper */
+        .page-container {
+            perspective: 1200px;
             width: 100%;
-            max-width: 950px;
-            border-radius: 28px;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-card {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
             display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
-            animation: fadeUp 0.9s ease;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== LEFT PANEL ===== */
-        .login-visual {
-            background:
-                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
-            padding: 50px;
+        /* LEFT VISUAL PANEL */
+        .visual-panel {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(11, 28, 57, 0.9)),
+                        url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 60px;
             color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+            position: relative;
+        }
+
+        .visual-panel::after {
+            content: 'FACULTY';
+            position: absolute;
+            top: 40px;
+            right: -20px;
+            font-size: 80px;
+            font-weight: 900;
+            opacity: 0.05;
+            letter-spacing: 10px;
+            pointer-events: none;
+        }
+
+        .visual-panel h3 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .visual-panel h3 span { color: var(--gold); }
+
+        .visual-panel p {
+            font-size: 16px;
+            color: #d1d5db;
+            line-height: 1.8;
+            max-width: 380px;
+        }
+
+        /* RIGHT FORM PANEL */
+        .form-panel {
+            padding: 70px 60px;
+            background: rgba(11, 28, 57, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-visual h3 {
-            font-size: 34px;
-            margin-bottom: 16px;
-            font-weight: 700;
+        .form-panel h2 {
+            font-size: 30px;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        .login-visual p {
+        .form-panel .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
             font-size: 15px;
-            line-height: 1.7;
-            color: #d1d5db;
-            max-width: 360px;
         }
 
-        /* ===== RIGHT PANEL ===== */
-        .login-form {
-            padding: 55px 45px;
-        }
-
-        .login-form h2 {
-            font-size: 28px;
-            color: var(--navy-dark);
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-
-        .login-form p {
+        /* Error Box */
+        .alert-error {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+            padding: 14px;
+            border-radius: 15px;
             font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 28px;
-        }
-
-        .error {
-            background: #ffe0e0;
-            color: #9b1c1c;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        form {
+            margin-bottom: 25px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Input Styling */
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--navy-bright);
+            font-size: 18px;
+            transition: 0.3s;
         }
 
         input {
-            padding: 15px 18px;
-            border-radius: 30px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            width: 100%;
+            padding: 18px 25px 18px 60px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: white;
+            font-size: 15px;
             outline: none;
             transition: 0.3s;
         }
 
         input:focus {
-            border-color: var(--navy);
-            box-shadow: 0 0 0 3px rgba(20,40,80,0.12);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--navy-bright);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
         }
 
-        button {
-            background: var(--navy);
-            color: var(--white);
+        input:focus + i {
+            color: var(--gold);
+        }
+
+        /* Login Button */
+        .submit-btn {
+            background: var(--navy-bright);
+            color: white;
             border: none;
-            padding: 15px;
-            border-radius: 30px;
+            padding: 18px;
+            border-radius: 20px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 10px;
         }
 
-        button:hover {
-            background: var(--navy-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
+            background: #3b82f6;
         }
 
-        .cancel-btn {
-            margin-top: 18px;
+        /* Navigation Links */
+        .footer-nav {
+            margin-top: 30px;
             text-align: center;
+        }
+
+        .footer-nav a {
+            color: #64748b;
             text-decoration: none;
-            font-weight: 600;
-            color: var(--navy);
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             transition: 0.3s;
         }
 
-        .cancel-btn:hover {
-            color: var(--navy-dark);
-            transform: translateX(-6px);
+        .footer-nav a:hover {
+            color: var(--gold);
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* Responsive Design */
         @media (max-width: 900px) {
-            .login-container {
-                grid-template-columns: 1fr;
-            }
-
-            .login-visual {
-                display: none;
-            }
+            .login-card { grid-template-columns: 1fr; max-width: 480px; }
+            .visual-panel { display: none; }
+            .form-panel { padding: 50px 30px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="page-container">
+    <div class="login-card" id="teacherTilt">
+        
+        <div class="visual-panel">
+            <h3>Faculty <br><span>Dashboard</span></h3>
+            <p>Empowering educators with smart tools for classroom management, grading, and academic coordination.</p>
+        </div>
 
-    <!-- LEFT INFO PANEL -->
-    <div class="login-visual">
-        <h3>Teacher Portal</h3>
-        <p>
-            Manage your classes, track student performance,
-            upload materials, and stay connected with your institution
-            through ACADAMIX.
-        </p>
+        <div class="form-panel">
+            <h2>Welcome back, Professor</h2>
+            <p class="subtitle">Access your educator account credentials.</p>
+
+            {% if error %}
+            <div class="alert-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="input-box">
+                    <i class="fas fa-user-tie"></i>
+                    <input type="email" name="email" placeholder="Institutional Email" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fas fa-key"></i>
+                    <input type="password" name="password" placeholder="Password (YYYYMMDD)" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Login to Portal</button>
+
+                <div class="footer-nav">
+                    <a href="{% url 'role_login' %}">
+                        <i class="fas fa-chevron-left"></i> Switch Role
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <!-- RIGHT FORM PANEL -->
-    <div class="login-form">
-        <h2>Teacher Login</h2>
-        <p>Enter your credentials to continue</p>
-
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-
-            <input type="email" name="email" placeholder="Email Address" required>
-            <input type="password" name="password" placeholder="Date of Birth (YYYYMMDD)" required>
-
-            <button type="submit">Login</button>
-            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
-        </form>
-    </div>
-
 </div>
+
+<script>
+    /* ===============================
+        3D TILT EFFECT
+    ================================ */
+    const card = document.getElementById('teacherTilt');
+
+    document.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 35;
+        const rotateY = (centerX - x) / 35;
+        
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+</script>
 
 </body>
 </html>
