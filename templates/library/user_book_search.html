@@ -1,78 +1,39 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'library/css/library.css' %}">
-
-<div class="library-container">
-
-    <!-- Header + Back Button -->
-    <div class="library-header">
-        <h2>📚 Book Search</h2>
-
-        {% if user.teacher %}
-            <a href="{% url 'teacher-dashboard' %}" class="back-btn teacher">← Back to Teacher Dashboard</a>
-        {% else %}
-            <a href="{% url 'student-dashboard' %}" class="back-btn student">← Back to Student Dashboard</a>
-        {% endif %}
-    </div>
-
-    <!-- Search Box -->
-    <div class="search-box">
-        <form method="GET" action="{% url 'user-book-search' %}" style="width: 100%;">
-            <input type="text" name="q" placeholder="Search by title, author or category..." value="{{ query }}">
-            <button type="submit">🔍 Search</button>
-        </form>
-    </div>
-
-    <!-- Books Table -->
-    <div class="table-container">
-        <table class="library-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Category</th>
-                    <th>Total Copies</th>
-                    <th>Available Copies</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for book in books %}
-                <tr>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
-                    <td>{{ book.category }}</td>
-                    <td>{{ book.total_copies }}</td>
-                    <td>
-                        {% if book.available_copies > 0 %}
-                            <span class="badge available">{{ book.available_copies }}</span>
-                        {% else %}
-                            <span class="badge out-of-stock">Out of stock</span>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5" class="no-books">❌ No books found.</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-</div>
-
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
-    /* ===== General Page ===== */
-.library-container {
-    max-width: 1000px;
-    margin: 40px auto;
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+/* Page background */
+.library-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    padding: 40px 20px;
     font-family: 'Poppins', sans-serif;
 }
 
+/* Card */
+.library-container {
+    max-width: 1000px;
+    margin: auto;
+    background: var(--white);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+}
+
+/* Header */
 .library-header {
     display: flex;
     justify-content: space-between;
@@ -81,69 +42,81 @@
 }
 
 .library-header h2 {
-    color: #142850;
+    color: var(--navy-dark);
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+/* Back buttons */
 .back-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 10px 22px;
+    border-radius: 30px;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--white);
     transition: 0.3s;
-    color: #fff;
 }
 
 .back-btn.teacher {
-    background-color: #142850;
+    background: var(--navy);
 }
 
 .back-btn.student {
-    background-color: #28a745;
+    background: #28a745;
 }
 
 .back-btn:hover {
     opacity: 0.9;
 }
 
-/* ===== Search Box ===== */
+/* Search box */
 .search-box {
-    background-color: #f8f9fa;
+    background: #f8f9fa;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    margin-bottom: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    margin-bottom: 30px;
+}
+
+.search-box form {
     display: flex;
     gap: 10px;
 }
 
-.search-box input[type="text"] {
+.search-box input {
     flex: 1;
-    padding: 10px 15px;
+    padding: 12px 16px;
+    border-radius: 30px;
     border: 1px solid #ccc;
-    border-radius: 8px;
     font-size: 14px;
 }
 
+.search-box input:focus {
+    outline: none;
+    border-color: var(--navy);
+}
+
 .search-box button {
-    padding: 10px 20px;
-    background-color: #f3c623;
+    padding: 12px 26px;
+    background: var(--gold);
     border: none;
-    border-radius: 8px;
-    font-weight: 500;
+    border-radius: 30px;
+    font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .search-box button:hover {
-    opacity: 0.9;
+    background: #f8d85a;
 }
 
-/* ===== Table ===== */
+/* Table */
 .table-container {
     overflow-x: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .library-table {
@@ -152,42 +125,149 @@
     font-size: 14px;
 }
 
-.library-table th {
-    background-color: #142850;
-    color: #fff;
-    padding: 12px;
-    text-align: left;
+.library-table thead {
+    background: var(--navy);
+    color: var(--white);
 }
 
+.library-table th,
 .library-table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+    padding: 14px;
+    text-align: center;
 }
 
-.library-table tr:hover {
-    background-color: #f1f1f1;
+.library-table tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: 0.3s;
 }
 
+.library-table tbody tr:nth-child(even) {
+    background: #f8f9fc;
+}
+
+.library-table tbody tr:hover {
+    background: #eef2ff;
+}
+
+/* Badges */
 .badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 13px;
-    color: #fff;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
 }
 
 .badge.available {
-    background-color: #28a745;
+    background: #28a745;
 }
 
 .badge.out-of-stock {
-    background-color: #dc3545;
+    background: #dc3545;
 }
 
+/* Empty */
 .no-books {
     text-align: center;
-    padding: 20px;
+    padding: 25px;
     color: #777;
+    font-weight: 500;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+    .library-container {
+        padding: 25px;
+    }
+
+    .search-box form {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+}
 </style>
+
+<div class="library-page">
+
+    <div class="library-container">
+
+        <!-- Header -->
+        <div class="library-header">
+            <h2>
+                <i class="fas fa-search"></i>
+                Book Search
+            </h2>
+
+            {% if user.teacher %}
+                <a href="{% url 'teacher-dashboard' %}" class="back-btn teacher">
+                    <i class="fas fa-arrow-left"></i> Teacher Dashboard
+                </a>
+            {% else %}
+                <a href="{% url 'student-dashboard' %}" class="back-btn student">
+                    <i class="fas fa-arrow-left"></i> Student Dashboard
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Search -->
+        <div class="search-box">
+            <form method="GET" action="{% url 'user-book-search' %}">
+                <input type="text" name="q"
+                       placeholder="Search by title, author or category"
+                       value="{{ query }}">
+                <button type="submit">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="library-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-book"></i> Title</th>
+                        <th><i class="fas fa-user-edit"></i> Author</th>
+                        <th><i class="fas fa-tags"></i> Category</th>
+                        <th><i class="fas fa-layer-group"></i> Total</th>
+                        <th><i class="fas fa-check-circle"></i> Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.category }}</td>
+                        <td>{{ book.total_copies }}</td>
+                        <td>
+                            {% if book.available_copies > 0 %}
+                                <span class="badge available">
+                                    {{ book.available_copies }}
+                                </span>
+                            {% else %}
+                                <span class="badge out-of-stock">
+                                    Out of stock
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="no-books">
+                            <i class="fas fa-inbox"></i> No books found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

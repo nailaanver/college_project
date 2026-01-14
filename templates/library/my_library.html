@@ -1,129 +1,183 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+}
+
+/* Page background */
+.library-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card */
+.library-container {
+    max-width: 1100px;
+    margin: auto;
+    background: var(--white);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+}
+
+/* Header */
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.library-header h2 {
+    color: var(--navy-dark);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Back button */
+.btn-back {
+    background: var(--gold);
+    color: var(--navy-dark);
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: #f8d85a;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+thead {
+    background: var(--navy);
+    color: var(--white);
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+}
+
+tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: 0.3s;
+}
+
+tbody tr:nth-child(even) {
+    background: #f8f9fc;
+}
+
+tbody tr:hover {
+    background: #eef2ff;
+}
+
+/* Status */
+.status-issued {
+    color: #0a8a42;
+    font-weight: 600;
+}
+
+.status-returned {
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+/* Fine */
+.fine {
+    color: #c0392b;
+    font-weight: 700;
+}
+
+/* Overdue badge */
+.badge-danger {
+    display: inline-block;
+    margin-left: 6px;
+    background: #c0392b;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Empty state */
+.empty-row {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
     .library-container {
-        max-width: 1100px;
-        margin: 30px auto;
-        background: #ffffff;
-        padding: 35px;
-        border-radius: 25px;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-    }
-
-    .library-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    .library-header h2 {
-        color: #142850;
-        font-weight: 600;
-    }
-
-    .btn-back {
-        background: #f3c623;
-        color: #0b1c39;
-        text-decoration: none;
-        padding: 10px 22px;
-        border-radius: 30px;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-
-    .btn-back:hover {
-        background: #f8d85a;
+        padding: 25px;
     }
 
     table {
-        width: 100%;
-        border-collapse: collapse;
+        font-size: 13px;
     }
-
-    thead {
-        background: #142850;
-        color: white;
-    }
-
-    th, td {
-        padding: 14px;
-        text-align: center;
-    }
-
-    tbody tr {
-        border-bottom: 1px solid #eee;
-        transition: 0.3s;
-    }
-
-    tbody tr:hover {
-        background: #f5f6fa;
-    }
-
-    .badge-danger {
-        background: #c0392b;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 12px;
-        margin-left: 5px;
-    }
-
-    .status-issued {
-        color: #0a8a42;
-        font-weight: 600;
-    }
-
-    .status-returned {
-        color: #7f8c8d;
-        font-weight: 600;
-    }
-
-    .fine {
-        color: #c0392b;
-        font-weight: 600;
-    }
-
-    .empty-row {
-        text-align: center;
-        padding: 20px;
-        color: #777;
-        font-weight: 500;
-    }
+}
 </style>
 
-<div class="library-container">
+<div class="library-page">
 
-    <!-- Header -->
-    <div class="library-header">
-    <h2>📚 My Library</h2>
+    <div class="library-container">
 
-    {% if user.teacher %}
-        <a href="{% url 'teacher-dashboard' %}" class="btn-back">
-            ← Back to Teacher Dashboard
-        </a>
-    {% else %}
-        <a href="{% url 'student-dashboard' %}" class="btn-back">
-            ← Back to Student Dashboard
-        </a>
-    {% endif %}
-</div>
+        <!-- Header -->
+        <div class="library-header">
+            <h2>
+                <i class="fas fa-book"></i>
+                My Library
+            </h2>
 
+            {% if user.teacher %}
+                <a href="{% url 'teacher-dashboard' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Teacher Dashboard
+                </a>
+            {% else %}
+                <a href="{% url 'student-dashboard' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Student Dashboard
+                </a>
+            {% endif %}
+        </div>
 
-    <!-- Table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Book</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th>Fine</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for issue in issues %}
+        <!-- Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fas fa-book-open"></i> Book</th>
+                    <th><i class="fas fa-calendar-plus"></i> Issue Date</th>
+                    <th><i class="fas fa-calendar-times"></i> Due Date</th>
+                    <th><i class="fas fa-info-circle"></i> Status</th>
+                    <th><i class="fas fa-rupee-sign"></i> Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
                 <tr>
                     <td>{{ issue.book.title }}</td>
                     <td>{{ issue.issue_date }}</td>
@@ -131,6 +185,7 @@
                         {{ issue.due_date }}
                         {% if issue.overdue_days > 0 %}
                             <span class="badge-danger">
+                                <i class="fas fa-exclamation-circle"></i>
                                 {{ issue.overdue_days }} days late
                             </span>
                         {% endif %}
@@ -142,15 +197,17 @@
                         ₹{{ issue.live_fine }}
                     </td>
                 </tr>
-            {% empty %}
+                {% empty %}
                 <tr>
                     <td colspan="5" class="empty-row">
-                        No books issued 📭
+                        <i class="fas fa-inbox"></i> No books issued
                     </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 
 </div>
 

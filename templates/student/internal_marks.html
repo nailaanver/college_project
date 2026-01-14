@@ -5,46 +5,63 @@
     <meta charset="UTF-8">
     <title>Internal Marks</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --white: #ffffff;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f4f6fb;
             margin: 0;
-            padding: 40px;
+        }
+
+        /* Page Background */
+        .marks-page {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+            padding: 40px 20px;
         }
 
         /* Back Button */
         .back-btn {
             display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 22px;
-            background: #142850;
-            color: white;
+            margin-bottom: 25px;
+            padding: 10px 24px;
+            background: var(--gold);
+            color: var(--navy-dark);
             text-decoration: none;
             border-radius: 30px;
-            font-weight: 500;
+            font-weight: 600;
             transition: 0.3s;
         }
+
         .back-btn:hover {
-            background: #0b1c39;
+            background: #f8d85a;
         }
 
         /* Card */
         .card {
-            background: white;
-            max-width: 900px;
+            background: var(--white);
+            max-width: 950px;
             margin: auto;
-            border-radius: 14px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.35);
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 25px;
-            color: #142850;
+            margin-bottom: 30px;
+            color: var(--navy-dark);
+            font-weight: 700;
         }
 
         /* Table */
@@ -55,16 +72,17 @@
         }
 
         th {
-            background: #142850;
-            color: white;
-            padding: 12px;
+            background: var(--navy);
+            color: var(--white);
+            padding: 14px;
             text-align: center;
         }
 
         td {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             border-bottom: 1px solid #ddd;
+            color: #333;
         }
 
         tr:nth-child(even) {
@@ -75,52 +93,71 @@
             background: #eef2ff;
         }
 
+        /* Total Highlight */
         .total {
-            font-weight: 600;
-            color: #0b1c39;
+            font-weight: 700;
+            color: var(--navy-dark);
         }
 
-        /* Empty message */
+        /* Empty State */
         .empty {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             color: #777;
             font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card {
+                padding: 25px;
+            }
+
+            table {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
 
-<a href="{% url 'student-dashboard' %}" class="back-btn">← Back to Dashboard</a>
+<div class="marks-page">
 
-<div class="card">
-    <h2>Internal Marks</h2>
+    <a href="{% url 'student-dashboard' %}" class="back-btn">
+        ← Back to Dashboard
+    </a>
 
-    {% if marks %}
-        <table>
-            <tr>
-                <th>Subject</th>
-                <th>Test 1</th>
-                <th>Test 2</th>
-                <th>Assignment</th>
-                <th>Attendance</th>
-                <th>Total</th>
-            </tr>
+    <div class="card">
+        <h2>Internal Marks</h2>
 
-            {% for m in marks %}
-            <tr>
-                <td>{{ m.subject.name }}</td>
-                <td>{{ m.test1 }}</td>
-                <td>{{ m.test2 }}</td>
-                <td>{{ m.assignment }}</td>
-                <td>{{ m.attendance_mark }}</td>
-                <td class="total">{{ m.total_internal }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <div class="empty">No internal marks available.</div>
-    {% endif %}
+        {% if marks %}
+            <table>
+                <tr>
+                    <th>Subject</th>
+                    <th>Test 1</th>
+                    <th>Test 2</th>
+                    <th>Assignment</th>
+                    <th>Attendance</th>
+                    <th>Total</th>
+                </tr>
+
+                {% for m in marks %}
+                <tr>
+                    <td>{{ m.subject.name }}</td>
+                    <td>{{ m.test1 }}</td>
+                    <td>{{ m.test2 }}</td>
+                    <td>{{ m.assignment }}</td>
+                    <td>{{ m.attendance_mark }}</td>
+                    <td class="total">{{ m.total_internal }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="empty">No internal marks available.</div>
+        {% endif %}
+    </div>
+
 </div>
 
 </body>

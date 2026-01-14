@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Dashboard</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
 :root {
     --navy-dark: #0b1c39;
@@ -46,12 +51,18 @@ body {
 .sidebar a {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding: 12px 14px;
     color: var(--white);
     text-decoration: none;
     border-radius: 8px;
     margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.sidebar a i {
+    width: 18px;
+    text-align: center;
 }
 
 .sidebar a:hover {
@@ -76,7 +87,7 @@ body {
     color: var(--navy-dark);
 }
 
-/* ===== Stat Cards (TOP ROW) ===== */
+/* ===== Stat Cards ===== */
 .stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -150,6 +161,9 @@ body {
     border-radius: 10px;
     text-decoration: none;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 </style>
 
@@ -162,16 +176,34 @@ body {
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Student</h2>
-        <a href="{% url 'student-dashboard' %}">🏠 Dashboard</a>
-        <a href="{% url 'student-profile' %}">👤 Profile</a>
-        <a href="{% url 'student-attendance' %}">📊 Attendance</a>
-        <a href="{% url 'student-marks' %}">📝 Internal Marks</a>
-        <a href="{% url 'student-timetable' %}">📅 Timetable</a>
-        <a href="{% url 'student-logout' %}">🚪 Logout</a>
-        <a href="{% url 'upload-face' %}" class="btn btn-primary">
-    Register Face
-</a>
 
+        <a href="{% url 'student-dashboard' %}">
+            <i class="fas fa-house"></i> Dashboard
+        </a>
+
+        <a href="{% url 'student-profile' %}">
+            <i class="fas fa-user"></i> Profile
+        </a>
+
+        <a href="{% url 'student-attendance' %}">
+            <i class="fas fa-chart-line"></i> Attendance
+        </a>
+
+        <a href="{% url 'student-marks' %}">
+            <i class="fas fa-pen"></i> Internal Marks
+        </a>
+
+        <a href="{% url 'student-timetable' %}">
+            <i class="fas fa-calendar-days"></i> Timetable
+        </a>
+
+        <a href="{% url 'upload-face' %}">
+            <i class="fas fa-camera"></i> Register Face
+        </a>
+
+        <a href="{% url 'student-logout' %}">
+            <i class="fas fa-right-from-bracket"></i> Logout
+        </a>
     </div>
 
     <!-- Main -->
@@ -179,22 +211,22 @@ body {
 
         <!-- Top Bar -->
         <div class="topbar">
-            <h3>Welcome {{ student.first_name }} 👋</h3>
+            <h3>Welcome {{ student.first_name }}</h3>
             <p>{{ student.course }} | Semester {{ student.semester }}</p>
         </div>
 
         <!-- Stats -->
         <div class="stats">
             <div class="stat-card">
-                <h4>Attendance</h4>
+                <h4><i class="fas fa-chart-pie"></i> Attendance</h4>
                 <p>{{ attendance_percentage }}%</p>
             </div>
             <div class="stat-card">
-                <h4>Internal Subjects</h4>
+                <h4><i class="fas fa-book-open"></i> Internal Subjects</h4>
                 <p>{{ internals_count }}</p>
             </div>
             <div class="stat-card">
-                <h4>Library Books</h4>
+                <h4><i class="fas fa-book"></i> Library Books</h4>
                 <p>{{ issued_books }}</p>
             </div>
         </div>
@@ -202,24 +234,25 @@ body {
         <!-- Middle Section -->
         <div class="dashboard-grid">
 
-            <!-- Overview -->
             <div class="box">
-                <h4>Overview</h4>
+                <h4><i class="fas fa-chart-column"></i> Overview</h4>
                 <p>Academic performance summary of the semester.</p>
             </div>
 
-            <!-- Attendance Circle -->
             <div class="box" style="text-align:center;">
-                <h4>Total Attendance</h4>
+                <h4><i class="fas fa-circle-check"></i> Total Attendance</h4>
                 <div class="circle">{{ attendance_percentage }}%</div>
             </div>
 
-            <!-- Activity -->
             <div class="box">
-                <h4>Quick Actions</h4>
+                <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
                 <div class="quick-actions">
-                    <a href="{% url 'my-library' %}">📚 My Library</a>
-                    <a href="{% url 'user-book-search' %}">🔍 Search Books</a>
+                    <a href="{% url 'my-library' %}">
+                        <i class="fas fa-book-reader"></i> My Library
+                    </a>
+                    <a href="{% url 'user-book-search' %}">
+                        <i class="fas fa-magnifying-glass"></i> Search Books
+                    </a>
                 </div>
             </div>
 
