@@ -1,136 +1,287 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-.page-title {
-    font-size: 26px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 20px;
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+    --save-blue: #3b82f6;
+    --submit-gold: #f3c623;
 }
 
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.94), rgba(11,28,57,0.94)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+    color: var(--white);
+}
+
+.marks-container {
+    max-width: 1200px;
+    margin: auto;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header & Nav */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-nav {
+    background: var(--glass);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav:hover {
+    background: rgba(255,255,255,0.2);
+    color: var(--gold);
+    transform: translateX(-3px);
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    text-align: right;
+    color: var(--gold);
+}
+
+/* Data Entry Card */
 .card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.98);
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--navy-dark);
 }
 
 .table th {
-    background: #142850;
-    color: white;
-    padding: 12px;
+    background: var(--navy);
+    color: var(--white);
+    padding: 15px;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
+
+.table th:first-child { border-radius: 12px 0 0 0; }
+.table th:last-child { border-radius: 0 12px 0 0; }
 
 .table td {
-    padding: 12px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #edf2f7;
+    font-size: 14px;
 }
 
+/* Input Styling */
 input[type="number"] {
-    width: 70px;
+    width: 80px;
+    padding: 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--navy);
+    transition: 0.3s;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--navy);
+    background: #f8fafc;
+}
+
+input[type="number"]:disabled {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* Total & Status Badges */
+.total-cell {
+    font-weight: 800;
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pending { background: #fff7ed; color: #c2410c; }
+.status-submitted { background: #dcfce7; color: #15803d; }
+
+/* Footer Actions */
+.action-footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn-action {
+    padding: 14px 30px;
+    border-radius: 15px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+    font-size: 15px;
 }
 
 .save-btn {
-    background: #0d6efd;
+    background: var(--save-blue);
     color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: none;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
 }
 
 .submit-btn {
-    background: #f3c623;
-    color: #0b1c39;
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: none;
-    font-weight: 600;
+    background: var(--gold);
+    color: var(--navy-dark);
+    box-shadow: 0 8px 20px rgba(243, 198, 35, 0.3);
 }
 
-.dashboard-btn {
-    background: #142850;
-    color: #ffffff;
-    padding: 10px 22px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    margin-right: 10px;
-    display: inline-block;
+.btn-action:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.1);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
 
-.dashboard-btn:hover {
-    background: #0b1c39;
-    color: #ffffff;
+@media (max-width: 768px) {
+    .top-nav { flex-direction: column; align-items: flex-start; }
+    .page-title { text-align: left; }
 }
-
 </style>
-<div style="margin-bottom: 20px;">
-    <a href="{% url 'teacher-dashboard' %}" class="dashboard-btn">
-        ⬅ Back to  Dashboard
-    </a>
+
+<div class="marks-container">
+    
+    <div class="top-nav">
+        <div class="nav-buttons">
+            <a href="{% url 'teacher-dashboard' %}" class="btn-nav">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="{% url 'teacher-internal-subjects' %}" class="btn-nav">
+                <i class="fas fa-book"></i> Back to Subjects
+            </a>
+        </div>
+        <h2 class="page-title">
+            <i class="fas fa-file-signature"></i> {{ subject.name }} 
+            <br><small style="font-size: 14px; opacity: 0.8; color: white;">{{ course }} | Semester {{ semester }}</small>
+        </h2>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Reg No</th>
+                        <th>Student Name</th>
+                        <th>Test 1</th>
+                        <th>Test 2</th>
+                        <th>Assignment</th>
+                        <th><i class="fas fa-user-check"></i> Attd</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for mark in internal_marks %}
+                    <tr>
+                        <td><strong>{{ mark.student.register_number }}</strong></td>
+                        <td>{{ mark.student.first_name }} {{ mark.student.last_name }}</td>
+
+                        <td>
+                            <input type="number" name="test1_{{ mark.id }}" step="0.5"
+                                   value="{{ mark.test1 }}"
+                                   {% if mark.status == 'Submitted' %}disabled{% endif %}>
+                        </td>
+
+                        <td>
+                            <input type="number" name="test2_{{ mark.id }}" step="0.5"
+                                   value="{{ mark.test2 }}"
+                                   {% if mark.status == 'Submitted' %}disabled{% endif %}>
+                        </td>
+
+                        <td>
+                            <input type="number" name="assignment_{{ mark.id }}" step="0.5"
+                                   value="{{ mark.assignment }}"
+                                   {% if mark.status == 'Submitted' %}disabled{% endif %}>
+                        </td>
+
+                        <td style="color: #64748b; font-weight: 600;">{{ mark.attendance_mark }}</td>
+                        <td class="total-cell">{{ mark.total_internal }}</td>
+                        <td>
+                            <span class="status-badge {% if mark.status == 'Submitted' %}status-submitted{% else %}status-pending{% endif %}">
+                                {{ mark.status }}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="action-footer">
+            <button type="submit" class="btn-action save-btn">
+                <i class="fas fa-save"></i> Save Draft
+            </button>
+            <button type="submit" name="submit" class="btn-action submit-btn">
+                <i class="fas fa-paper-plane"></i> Final Submit
+            </a>
+        </div>
+    </form>
 </div>
-
-
-<h2 class="page-title">
-    {{ subject.name }} | {{ course }} | Semester {{ semester }}
-</h2>
-
-<form method="post">
-{% csrf_token %}
-
-<div class="card">
-<table class="table">
-    <thead>
-        <tr>
-            <th>Reg No</th>
-            <th>Name</th>
-            <th>Test 1</th>
-            <th>Test 2</th>
-            <th>Assignment</th>
-            <th>Attendance</th>
-            <th>Total</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    {% for mark in internal_marks %}
-        <tr>
-            <td>{{ mark.student.register_number }}</td>
-            <td>{{ mark.student.first_name }} {{ mark.student.last_name }}</td>
-
-            <td>
-                <input type="number" name="test1_{{ mark.id }}"
-                       value="{{ mark.test1 }}"
-                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
-            </td>
-
-            <td>
-                <input type="number" name="test2_{{ mark.id }}"
-                       value="{{ mark.test2 }}"
-                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
-            </td>
-
-            <td>
-                <input type="number" name="assignment_{{ mark.id }}"
-                       value="{{ mark.assignment }}"
-                       {% if mark.status == 'Submitted' %}disabled{% endif %}>
-            </td>
-
-            <td>{{ mark.attendance_mark }}</td>
-            <td>{{ mark.total_internal }}</td>
-            <td>{{ mark.status }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-
-<br>
-
-<button type="submit" class="save-btn">💾 Save</button>
-<button type="submit" name="submit" class="submit-btn">📤 Submit</button>
-
-</form>
 
 {% endblock %}

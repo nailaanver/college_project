@@ -2,213 +2,262 @@
 {% load static %}
 {% load attendance_extras %}
 
-
 {% block content %}
-
-<div class="edit-attendance-wrapper">
-
-  <h2 class="page-title">
-    <i class="fa-solid fa-pen-to-square"></i> Edit Attendance
-  </h2>
-
-  <p class="class-info">
-    Period {{ timetable.period_number }} |
-    {{ timetable.course }} |
-    Sem {{ timetable.semester }} |
-    {{ timetable.subject.name }}
-  </p>
-
-  <form method="post">
-    {% csrf_token %}
-
-    <div class="attendance-grid">
-
-      {% for s in students %}
-      {% with attendance_map|get_item:s.id as status %}
-      <div class="student-card">
-
-        <img
-          src="{% if s.profile_photo %}{{ s.profile_photo.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}"
-          class="avatar"
-        >
-
-        <div class="student-name">
-          {{ s.first_name }} {{ s.last_name }}
-        </div>
-
-        <div class="status-buttons">
-
-          <label class="status present">
-            <input type="radio" name="status_{{ s.id }}" value="P"
-                   {% if status == 'P' %}checked{% endif %}>
-            <span>P</span>
-          </label>
-
-          <label class="status absent">
-            <input type="radio" name="status_{{ s.id }}" value="A"
-                   {% if status == 'A' %}checked{% endif %}>
-            <span>A</span>
-          </label>
-
-          <label class="status late">
-            <input type="radio" name="status_{{ s.id }}" value="L"
-                   {% if status == 'L' %}checked{% endif %}>
-            <span>L</span>
-          </label>
-
-        </div>
-
-      </div>
-      {% endwith %}
-      {% endfor %}
-
-    </div>
-
-    <div class="submit-wrap">
-      <button class="submit-btn" type="submit">
-        Update Attendance
-      </button>
-    </div>
-
-  </form>
-
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* ===== WRAPPER ===== */
-.edit-attendance-wrapper {
-  max-width: 1100px;
-  margin: auto;
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.12);
+    --present: #10b981;
+    --absent: #ef4444;
+    --late: #f59e0b;
 }
 
-/* ===== TITLE ===== */
-.page-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #142850;
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.94), rgba(11,28,57,0.94)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+    color: var(--white);
 }
+
+.edit-attendance-wrapper {
+    max-width: 1100px;
+    margin: auto;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--white);
+}
+.page-title i { color: var(--gold); margin-right: 12px; }
 
 .class-info {
-  text-align: center;
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 25px;
+    text-align: center;
+    font-size: 15px;
+    color: var(--gold);
+    margin-bottom: 35px;
+    letter-spacing: 1px;
+    opacity: 0.9;
 }
 
-/* ===== GRID ===== */
+/* Grid Layout */
 .attendance-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
 }
 
-/* ===== STUDENT CARD ===== */
+/* Student Card Style */
 .student-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px 12px;
-  text-align: center;
-  border: 1px solid #edf0f5;
-  transition: transform 0.2s, box-shadow 0.2s;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 20px 15px;
+    text-align: center;
+    color: var(--navy-dark);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .student-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
-/* ===== AVATAR ===== */
+/* Card states based on checked radio */
+.student-card:has(input[value="P"]:checked) { border-color: var(--present); background: #f0fff4; }
+.student-card:has(input[value="A"]:checked) { border-color: var(--absent); background: #fff5f5; }
+.student-card:has(input[value="L"]:checked) { border-color: var(--late); background: #fffaf0; }
+
+/* Avatar */
 .avatar {
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border: 2px solid #142850;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 3px solid var(--navy);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* ===== NAME ===== */
 .student-name {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #1f2937;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* ===== STATUS BUTTONS ===== */
+/* Status Buttons */
 .status-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
 }
 
 .status {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
+    position: relative;
+    cursor: pointer;
 }
 
 .status input {
-  display: none;
+    display: none;
 }
 
 .status span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: all 0.3s ease;
+    background: #f1f3f5;
+    color: #adb5bd;
+    border: 1px solid #dee2e6;
 }
 
-.status:hover span {
-  transform: scale(1.1);
-}
+/* Active Button Styles */
+.status.present input:checked + span { background: var(--present); color: white; border-color: var(--present); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+.status.absent input:checked + span { background: var(--absent); color: white; border-color: var(--absent); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+.status.late input:checked + span { background: var(--late); color: white; border-color: var(--late); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
 
-/* soft professional colors */
-.present span { background: #eafaf1; color: #198754; }
-.absent span  { background: #fdeaea; color: #dc3545; }
-.late span    { background: #fff4e5; color: #fd7e14; }
-
-.status input:checked + span {
-  box-shadow: inset 0 0 0 2px currentColor;
-}
-
-/* ===== SUBMIT ===== */
+/* Submit Button Area */
 .submit-wrap {
-  text-align: center;
-  margin-top: 30px;
+    text-align: center;
+    margin-top: 50px;
+    position: sticky;
+    bottom: 20px;
 }
 
 .submit-btn {
-  background: #142850;
-  color: #fff;
-  padding: 12px 34px;
-  border-radius: 24px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 16px 50px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(243, 198, 35, 0.3);
 }
 
 .submit-btn:hover {
-  background: #1f3a6d;
-  transform: scale(1.05);
+    background: var(--white);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 15px 30px rgba(243, 198, 35, 0.5);
 }
 
-/* ===== MOBILE ===== */
+/* Mobile Responsiveness */
 @media (max-width: 480px) {
-  .attendance-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
+    .attendance-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .student-card { padding: 15px 10px; }
+    .avatar { width: 60px; height: 60px; }
 }
 </style>
+
+<div class="edit-attendance-wrapper">
+
+    <h2 class="page-title">
+        <i class="fa-solid fa-pen-to-square"></i> Edit Attendance
+    </h2>
+
+    <p class="class-info">
+        <i class="fas fa-calendar-day"></i> Period {{ timetable.period_number }} | 
+        {{ timetable.course }} | 
+        Sem {{ timetable.semester }} | 
+        {{ timetable.subject.name }}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="attendance-grid">
+            {% for s in students %}
+            {% with attendance_map|get_item:s.id as status %}
+            <div class="student-card">
+                <img src="{% if s.profile_photo %}{{ s.profile_photo.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" class="avatar">
+
+                <div class="student-name">
+                    {{ s.first_name }} {{ s.last_name }}
+                </div>
+
+                <div class="status-buttons">
+                    <label class="status present">
+                        <input type="radio" name="status_{{ s.id }}" value="P" {% if status == 'P' %}checked{% endif %}>
+                        <span>P</span>
+                    </label>
+
+                    <label class="status absent">
+                        <input type="radio" name="status_{{ s.id }}" value="A" {% if status == 'A' %}checked{% endif %}>
+                        <span>A</span>
+                    </label>
+
+                    <label class="status late">
+                        <input type="radio" name="status_{{ s.id }}" value="L" {% if status == 'L' %}checked{% endif %}>
+                        <span>L</span>
+                    </label>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+        <div class="submit-wrap">
+            <button class="submit-btn" type="submit">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Visual feedback: Change card style immediately when clicked
+    document.querySelectorAll('.status input').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const card = this.closest('.student-card');
+            // Remove previous classes
+            card.style.background = '';
+            card.style.borderColor = '';
+            
+            if(this.value === 'P') {
+                card.style.background = '#f0fff4';
+                card.style.borderColor = '#10b981';
+            } else if(this.value === 'A') {
+                card.style.background = '#fff5f5';
+                card.style.borderColor = '#ef4444';
+            } else if(this.value === 'L') {
+                card.style.background = '#fffaf0';
+                card.style.borderColor = '#f59e0b';
+            }
+        });
+    });
+</script>
 
 {% endblock %}

@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -11,254 +11,270 @@
     --navy: #142850;
     --gold: #f3c623;
     --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+    --success: #10b981;
+    --danger: #ef4444;
 }
 
 /* Page background */
 .library-page {
     min-height: 100vh;
-    background:
-        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    background: linear-gradient(rgba(11,28,57,0.94), rgba(11,28,57,0.94)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     padding: 40px 20px;
     font-family: 'Poppins', sans-serif;
+    color: var(--white);
 }
 
-/* Card */
 .library-container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: auto;
-    background: var(--white);
-    padding: 35px;
-    border-radius: 25px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+    animation: fadeIn 0.8s ease-out;
 }
 
-/* Header */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header & Nav */
 .library-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .library-header h2 {
-    color: var(--navy-dark);
+    font-size: 28px;
     font-weight: 700;
+    margin: 0;
+}
+
+.library-header h2 span { color: var(--gold); }
+
+.back-btn {
+    background: var(--glass);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: var(--gold);
+    transform: translateX(-5px);
+}
+
+/* Search Box Redesign */
+.search-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.search-section form {
+    display: flex;
+    gap: 15px;
+}
+
+.search-section input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 15px;
+    color: var(--navy-dark);
+    font-weight: 500;
+}
+
+.search-section button {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 0 30px;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Back buttons */
-.back-btn {
-    padding: 10px 22px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 600;
-    color: var(--white);
-    transition: 0.3s;
+.search-section button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 198, 35, 0.4);
 }
 
-.back-btn.teacher {
-    background: var(--navy);
-}
-
-.back-btn.student {
-    background: #28a745;
-}
-
-.back-btn:hover {
-    opacity: 0.9;
-}
-
-/* Search box */
-.search-box {
-    background: #f8f9fa;
+/* Table Card Styling */
+.results-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    margin-bottom: 30px;
-}
-
-.search-box form {
-    display: flex;
-    gap: 10px;
-}
-
-.search-box input {
-    flex: 1;
-    padding: 12px 16px;
-    border-radius: 30px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: var(--navy);
-}
-
-.search-box button {
-    padding: 12px 26px;
-    background: var(--gold);
-    border: none;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.search-box button:hover {
-    background: #f8d85a;
-}
-
-/* Table */
-.table-container {
-    overflow-x: auto;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .library-table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+    border-collapse: separate;
+    border-spacing: 0 10px;
 }
 
-.library-table thead {
-    background: var(--navy);
-    color: var(--white);
+.library-table thead th {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 10px 20px;
+    text-align: left;
 }
 
-.library-table th,
-.library-table td {
-    padding: 14px;
-    text-align: center;
-}
-
-.library-table tbody tr {
-    border-bottom: 1px solid #eee;
+.library-table tbody tr td {
+    background: rgba(255, 255, 255, 0.98);
+    color: var(--navy-dark);
+    padding: 20px;
     transition: 0.3s;
 }
 
-.library-table tbody tr:nth-child(even) {
-    background: #f8f9fc;
+.library-table tbody tr td:first-child { 
+    border-radius: 15px 0 0 15px; 
+    font-weight: 700;
+    color: var(--navy);
 }
 
-.library-table tbody tr:hover {
-    background: #eef2ff;
+.library-table tbody tr td:last-child { 
+    border-radius: 0 15px 15px 0; 
 }
 
-/* Badges */
+.library-table tbody tr:hover td {
+    transform: scale(1.01);
+    background: var(--white);
+}
+
+/* Badge Styling */
 .badge {
-    padding: 5px 12px;
-    border-radius: 15px;
+    padding: 6px 12px;
+    border-radius: 8px;
     font-size: 12px;
-    font-weight: 600;
-    color: white;
+    font-weight: 700;
 }
 
-.badge.available {
-    background: #28a745;
-}
+.badge.available { background: #dcfce7; color: var(--success); }
+.badge.out-of-stock { background: #fee2e2; color: var(--danger); }
 
-.badge.out-of-stock {
-    background: #dc3545;
-}
-
-/* Empty */
-.no-books {
-    text-align: center;
-    padding: 25px;
-    color: #777;
+.category-tag {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
     font-weight: 500;
 }
 
-/* Responsive */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}
+
 @media (max-width: 768px) {
-    .library-container {
-        padding: 25px;
-    }
-
-    .search-box form {
-        flex-direction: column;
-    }
-
-    .search-box button {
-        width: 100%;
+    .search-section form { flex-direction: column; }
+    .search-section button { padding: 15px; justify-content: center; }
+    thead { display: none; }
+    tbody tr td { 
+        display: block; 
+        text-align: left !important; 
+        border-radius: 15px !important; 
+        margin-bottom: 10px; 
     }
 }
 </style>
 
 <div class="library-page">
-
     <div class="library-container">
 
-        <!-- Header -->
         <div class="library-header">
-            <h2>
-                <i class="fas fa-search"></i>
-                Book Search
-            </h2>
-
+            <h2><i class="fas fa-book-open"></i> Book <span>Search</span></h2>
+            
             {% if user.teacher %}
-                <a href="{% url 'teacher-dashboard' %}" class="back-btn teacher">
-                    <i class="fas fa-arrow-left"></i> Teacher Dashboard
+                <a href="{% url 'teacher-dashboard' %}" class="back-btn">
+                    <i class="fas fa-chevron-left"></i> Dashboard
                 </a>
             {% else %}
-                <a href="{% url 'student-dashboard' %}" class="back-btn student">
-                    <i class="fas fa-arrow-left"></i> Student Dashboard
+                <a href="{% url 'student-dashboard' %}" class="back-btn">
+                    <i class="fas fa-chevron-left"></i> Dashboard
                 </a>
             {% endif %}
         </div>
 
-        <!-- Search -->
-        <div class="search-box">
+        <div class="search-section">
             <form method="GET" action="{% url 'user-book-search' %}">
-                <input type="text" name="q"
-                       placeholder="Search by title, author or category"
-                       value="{{ query }}">
+                <input type="text" name="q" 
+                       placeholder="Enter book title, author, or category..." 
+                       value="{{ query|default:'' }}">
                 <button type="submit">
-                    <i class="fas fa-search"></i> Search
+                    <i class="fas fa-search"></i> Find Books
                 </button>
             </form>
         </div>
 
-        <!-- Table -->
-        <div class="table-container">
+        <div class="results-card">
             <table class="library-table">
                 <thead>
                     <tr>
-                        <th><i class="fas fa-book"></i> Title</th>
-                        <th><i class="fas fa-user-edit"></i> Author</th>
-                        <th><i class="fas fa-tags"></i> Category</th>
-                        <th><i class="fas fa-layer-group"></i> Total</th>
-                        <th><i class="fas fa-check-circle"></i> Available</th>
+                        <th>Title & Author</th>
+                        <th>Category</th>
+                        <th style="text-align: center;">Total</th>
+                        <th style="text-align: center;">Stock Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for book in books %}
                     <tr>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.category }}</td>
-                        <td>{{ book.total_copies }}</td>
                         <td>
+                            <div style="font-size: 15px;">{{ book.title }}</div>
+                            <small style="color: #64748b;"><i class="fas fa-pen-nib"></i> {{ book.author }}</small>
+                        </td>
+                        <td><span class="category-tag">{{ book.category }}</span></td>
+                        <td style="text-align: center; font-weight: 600;">{{ book.total_copies }}</td>
+                        <td style="text-align: center;">
                             {% if book.available_copies > 0 %}
                                 <span class="badge available">
-                                    {{ book.available_copies }}
+                                    <i class="fas fa-check"></i> {{ book.available_copies }} Available
                                 </span>
                             {% else %}
                                 <span class="badge out-of-stock">
-                                    Out of stock
+                                    <i class="fas fa-times"></i> Out of Stock
                                 </span>
                             {% endif %}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="no-books">
-                            <i class="fas fa-inbox"></i> No books found
+                        <td colspan="4" class="empty-state">
+                            <i class="fas fa-search" style="font-size: 40px; opacity: 0.3; margin-bottom: 15px; display: block;"></i>
+                            {% if query %}
+                                No books found matching "<strong>{{ query }}</strong>"
+                            {% else %}
+                                Start searching for books in the library collection.
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -267,7 +283,6 @@
         </div>
 
     </div>
-
 </div>
 
 {% endblock %}

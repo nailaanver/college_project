@@ -1,94 +1,207 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-    body {
-    font-family: 'Inter', sans-serif;
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
 }
 
-    table {
-        width: 100%;
-        background: white;
-        color: #0b1c39;
-        border-collapse: collapse;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(0,0,0,.3);
-    }
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+    color: var(--white);
+}
 
-    th, td {
-        padding: 14px;
-        text-align: center;
-    }
+.timetable-wrapper {
+    max-width: 1200px;
+    margin: auto;
+    animation: fadeIn 0.8s ease-out;
+}
 
-    th {
-        background: #142850;
-        color: #f3c623;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-    tr:nth-child(even) {
-        background: #f5f7fa;
-    }
-    .top-bar {
-    margin-bottom: 15px;
+/* Navigation Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .back-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background: #f3c623;     /* YELLOW */
-    color: #0b1c39;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--glass);
+    color: var(--white);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 600;
-    transition: 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
 }
 
 .back-btn:hover {
-    background: #e6b800;
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: translateX(-5px);
 }
 
+.page-header h2 {
+    color: var(--gold);
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Modern Table Styling */
+.table-container {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+
+th {
+    background: var(--navy);
+    color: var(--gold);
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Period Column Styling */
+tbody th {
+    background: rgba(243, 198, 35, 0.1) !important;
+    color: var(--gold) !important;
+    font-size: 13px;
+    width: 100px;
+}
+
+td {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--navy-dark);
+    padding: 15px;
+    border-radius: 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+/* Hover effect for slots */
+td:hover:not(:empty) {
+    transform: scale(1.05);
+    background: var(--white);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+/* Class Info Text */
+.class-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.class-entry strong {
+    font-size: 15px;
+    color: var(--navy);
+}
+
+.class-entry small {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    background: #f0f2f5;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Empty slots */
+td:empty {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255,255,255,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-bar { flex-direction: column; gap: 15px; text-align: center; }
+}
 </style>
-<div class="top-bar">
-    <a href="{% url 'teacher-dashboard' %}" class="back-btn">
-        ← Back to Dashboard
-    </a>
-</div>
 
+<div class="timetable-wrapper">
+    <div class="top-bar">
+        <a href="{% url 'teacher-dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+        <div class="page-header">
+            <h2>My <span>Timetable</span></h2>
+        </div>
+        <div style="width: 120px;"></div> </div>
 
-<h2 style="color:#f3c623; text-align:center;">My Timetable</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fas fa-clock"></i></th>
+                    {% for day in days %}
+                        <th>{{ day }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
 
-<table>
-    <thead>
-        <tr>
-            <th>Period</th>
-            {% for day in days %}
-                <th>{{ day }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
+            <tbody>
+                {% for period in periods %}
+                <tr>
+                    <th>Period {{ period }}</th>
 
-    <tbody>
-        {% for period in periods %}
-        <tr>
-            <th>Period {{ period }}</th>
-
-            {% for day in days %}
-            <td>
-                {% for t in timetables %}
-                    {% if t.day == day and t.period_number == period %}
-                        <strong>{{ t.subject.name }}</strong><br>
-                        <small>{{ t.course }} | Sem {{ t.semester }}</small>
-                    {% endif %}
+                    {% for day in days %}
+                    <td>
+                        <div class="class-entry">
+                        {% for t in timetables %}
+                            {% if t.day == day and t.period_number == period %}
+                                <strong>{{ t.subject.name }}</strong>
+                                <small><i class="fas fa-graduation-cap"></i> {{ t.course }} | Sem {{ t.semester }}</small>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

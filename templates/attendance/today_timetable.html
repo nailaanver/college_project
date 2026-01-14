@@ -3,100 +3,194 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
 :root {
-    --navy: #0b1c39;
-    --navy-dark: #07152a;
-    --gold: #f5c542;
+    --navy: #142850;
+    --navy-dark: #0b1c39;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
 }
 
-/* Wrapper for page content */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+    color: var(--white);
+}
+
 .attendance-wrapper {
     max-width: 900px;
     margin: auto;
-    padding: 30px;
+    animation: fadeIn 0.6s ease-out;
 }
 
-/* Page title */
-.page-title {
-    font-size: 26px;
-    margin-bottom: 25px;
-    color: var(--gold);
-    font-weight: 600;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.page-title i {
-    margin-right: 8px;
-}
-
-/* Classes container */
-.classes-container {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-/* Card */
-.class-card {
-    background: rgba(255,255,255,0.95);
-    color: var(--navy-dark);
-    border-radius: 16px;
-    padding: 20px 24px;
+/* Header Area */
+.header-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
     gap: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: 0.3s ease;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--white);
+}
+
+.page-title span {
+    color: var(--gold);
+}
+
+/* Back Button Style */
+.btn-back {
+    background: var(--glass);
+    color: var(--white);
+    padding: 10px 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-5px);
+    color: var(--gold);
+}
+
+/* Search Bar */
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    border-radius: 12px;
+    border: 1px solid var(--glass);
+    background: var(--glass);
+    color: white;
+    backdrop-filter: blur(5px);
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-box input:focus {
+    background: rgba(255,255,255,0.2);
+    border-color: var(--gold);
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+}
+
+/* Cards Container */
+.classes-container {
+    display: grid;
+    gap: 20px;
+}
+
+.class-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--navy-dark);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-left: 6px solid var(--gold);
 }
 
 .class-card:hover {
-    transform: translateY(-4px);
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-/* Info inside card */
-.class-info {
+/* Content Layout */
+.class-main-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.period-badge {
+    background: var(--navy);
+    color: var(--gold);
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-}
-
-.class-info span {
-    font-size: 14px;
-}
-
-.class-info i {
-    margin-right: 6px;
-    color: var(--navy);
-}
-
-.period {
-    font-weight: 600;
-}
-
-/* Button container */
-.class-action {
-    flex-shrink: 0;  /* Prevent button from collapsing */
-}
-
-/* Button */
-.attendance-btn {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    min-width: 160px;  /* Reserve space for button */
+    align-items: center;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.period-badge small {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 2px;
+}
+
+.subject-details h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.subject-details p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Action Button */
+.attendance-btn {
     background: var(--navy);
     color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
     text-decoration: none;
-    font-size: 14px;
-    transition: 0.3s ease;
-    white-space: nowrap;
-}
-
-.attendance-btn i {
-    margin-right: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
 }
 
 .attendance-btn:hover {
@@ -104,67 +198,112 @@
     color: var(--navy-dark);
 }
 
-/* Empty state */
-.no-class {
+/* Empty State */
+.empty-state {
+    background: var(--glass);
+    padding: 50px;
+    border-radius: 20px;
     text-align: center;
-    color: #999;
-    margin-top: 40px;
-    font-size: 16px;
+    backdrop-filter: blur(10px);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.empty-state i {
+    font-size: 50px;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .header-flex { flex-direction: column; align-items: flex-start; }
+    .header-left { flex-direction: column; align-items: flex-start; gap: 10px; }
     .class-card {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
+        gap: 20px;
     }
-
-    .attendance-btn {
-        width: 100%;
-        text-align: center;
-    }
+    .class-action { width: 100%; }
+    .attendance-btn { justify-content: center; }
 }
 </style>
 
 <div class="attendance-wrapper">
 
-<h2 class="page-title">
-    <i class="fas fa-calendar-day"></i> Today’s Classes
-</h2>
-
-<div class="classes-container">
-{% for t in timetables %}
-    <div class="class-card">
-
-        <div class="class-info">
-            <span class="period">
-                <i class="fas fa-clock"></i>
-                Period {{ t.period_number }}
-            </span>
-
-            <span class="subject">
-                <i class="fas fa-book"></i>
-                {{ t.subject.name }}
-            </span>
-
-            <span class="meta">
-                <i class="fas fa-users"></i>
-                {{ t.course }} | Sem {{ t.semester }}
-            </span>
-        </div>
-
-        <div class="class-action">
-            <a href="{% url 'mark_attendance' t.id %}" class="attendance-btn">
-                <i class="fas fa-clipboard-check"></i> Mark Attendance
+    <div class="header-flex">
+        <div class="header-left">
+            <a href="{% url 'teacher-dashboard' %}" class="btn-back">
+                <i class="fas fa-chevron-left"></i> Dashboard
             </a>
+            <h2 class="page-title">Today's <span>Classes</span></h2>
         </div>
-
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="classSearch" placeholder="Filter classes...">
+        </div>
     </div>
-{% empty %}
-    <p class="no-class">No classes today</p>
-{% endfor %}
+
+    <div class="classes-container" id="classesList">
+    {% for t in timetables %}
+        <div class="class-card">
+            <div class="class-main-info">
+                <div class="period-badge">
+                    <small>Prd</small>
+                    {{ t.period_number }}
+                </div>
+                <div class="subject-details">
+                    <h4>{{ t.subject.name }}</h4>
+                    <p>
+                        <i class="fas fa-graduation-cap"></i> {{ t.course }} 
+                        &nbsp;&nbsp;
+                        <i class="fas fa-layer-group"></i> Sem {{ t.semester }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="class-action">
+                <a href="{% url 'mark_attendance' t.id %}" class="attendance-btn">
+                    <i class="fas fa-user-check"></i>
+                    Mark Attendance
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-calendar-day"></i>
+            <h3>No classes found for today</h3>
+            <p>Your schedule for today is clear.</p>
+        </div>
+    {% endfor %}
+    </div>
 </div>
 
-</div>
+<script>
+    // 1. Live Search/Filter Feature
+    document.getElementById('classSearch').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let cards = document.querySelectorAll('.class-card');
+        
+        cards.forEach(card => {
+            let text = card.textContent.toLowerCase();
+            if(text.includes(filter)) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+
+    // 2. Staggered Entry Animation
+    document.querySelectorAll('.class-card').forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 150 * index);
+    });
+</script>
 
 {% endblock %}
