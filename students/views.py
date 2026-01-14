@@ -13,14 +13,18 @@ from attendance.models import Attendance
 from internal_marks.models import InternalMark
 from library.models import Issue
 
+from django.db.models import Avg
+from students.utils.performance_ai import generate_academic_summary
+
+
 @login_required(login_url='student-login')
 def student_dashboard(request):
     user = request.user
 
     try:
-        student = user.student_profile   # ✅ FIXED
+        student = user.student_profile
     except Student.DoesNotExist:
-        return redirect('student-login')  # or show error page
+        return redirect('student-login')
 
     total_classes = Attendance.objects.filter(student=student).count()
     present_classes = Attendance.objects.filter(
@@ -33,6 +37,20 @@ def student_dashboard(request):
         if total_classes > 0 else 0
     )
 
+    # ✅ NEW: Average internal marks
+    internal_avg = InternalMark.objects.filter(
+        student=student,
+        status='Approved'
+    ).aggregate(avg=Avg('total_internal'))['avg'] or 0
+
+    internal_avg = round(internal_avg, 2)
+
+    # ✅ NEW: Rule-based AI summary
+    academic_summary = generate_academic_summary(
+        attendance_percentage,
+        internal_avg
+    )
+
     internals_count = InternalMark.objects.filter(student=student).count()
     issued_books = Issue.objects.filter(user=user, status='ISSUED').count()
 
@@ -41,7 +59,9 @@ def student_dashboard(request):
         'attendance_percentage': attendance_percentage,
         'internals_count': internals_count,
         'issued_books': issued_books,
+        'academic_summary': academic_summary,   # ✅ SEND TO TEMPLATE
     }
+
     return render(request, 'student/dashboard.html', context)
 
 
