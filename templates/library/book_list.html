@@ -1,205 +1,283 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 
-<!-- FontAwesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
-    --gold-soft: #f8d85a;
     --white: #ffffff;
-    --text-light: #f5f5f5;
-    --gray: #d1d5db;
+    --success: #10b981;
+    --danger: #ef4444;
+    --light-bg: #f8f9fa;
 }
 
-/* Full page background */
+/* Page Setup */
 .books-page {
     min-height: 100vh;
-    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
+    background: linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    padding: 60px 20px;
     font-family: 'Poppins', sans-serif;
 }
 
 /* Card wrapper */
 .books-wrapper {
     max-width: 1200px;
-    width: 100%;
+    margin: 0 auto;
     background: var(--white);
-    padding: 40px 35px;
-    border-radius: 28px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-title i {
+    color: var(--gold);
+    background: rgba(243, 198, 35, 0.1);
+    padding: 12px;
+    border-radius: 15px;
+}
+
+/* Action Buttons Header */
+.btn-group {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-custom {
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.btn-back {
+    background: var(--light-bg);
+    color: var(--navy-dark);
+}
+
+.btn-add {
+    background: var(--navy-dark);
     color: var(--white);
 }
 
-/* Page Title */
-.page-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* Buttons */
-.add-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+.btn-add:hover {
     background: var(--gold);
     color: var(--navy-dark);
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: 600;
-    text-decoration: none;
-    margin-right: 12px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
 }
 
-.add-btn:hover {
-    background: var(--gold-soft);
-}
-
-/* Table */
-.table-container {
-    overflow-x: auto;
+/* Table Design */
+.table-responsive {
     border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    padding: 20px;
+    overflow: hidden;
+    border: 1px solid #eee;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
+    margin: 0;
+}
+
+.table thead th {
+    background: var(--light-bg);
+    color: #666;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 18px 20px;
+    text-align: left;
+}
+
+.table tbody td {
+    padding: 18px 20px;
+    color: var(--navy-dark);
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 14px;
+}
+
+.table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+.book-info strong {
+    display: block;
+    font-size: 15px;
     color: var(--navy-dark);
 }
 
-.table th, .table td {
-    padding: 14px;
-    text-align: left;
-    white-space: nowrap;
+.book-info span {
+    font-size: 12px;
+    color: #888;
 }
 
-.table th {
-    background: var(--navy);
-    color: var(--white);
-    font-weight: 600;
-}
-
-.table tr:nth-child(even) {
-    background: rgba(255,255,255,0.05);
-}
-
-/* Status Badges */
-.badge {
+/* Modern Badges */
+.status-pill {
     padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.badge-available {
-    background: #28a745;
-    color: #fff;
-}
-
-.badge-unavailable {
-    background: #dc3545;
-    color: #fff;
-}
-
-/* Action buttons */
-.action-btn {
-    text-decoration: none;
-    margin-right: 8px;
-    font-weight: 500;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
 }
 
-.edit {
-    color: #0d6efd;
+.available {
+    background: #dcfce7;
+    color: #166534;
 }
 
-.delete {
-    color: #dc3545;
+.unavailable {
+    background: #fee2e2;
+    color: #991b1b;
 }
 
-.table a:hover {
-    opacity: 0.8;
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.available .status-dot { background: var(--success); }
+.unavailable .status-dot { background: var(--danger); }
+
+/* Action Links */
+.action-link {
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.edit-link { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+.delete-link { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+.action-link:hover { transform: scale(1.1); }
+.edit-link:hover { background: #3b82f6; color: white; }
+.delete-link:hover { background: #ef4444; color: white; }
+
+@media (max-width: 992px) {
+    .table thead { display: none; }
+    .table td { display: block; text-align: right; border: none; padding: 10px 20px; }
+    .table td::before { content: attr(data-label); float: left; font-weight: bold; color: #999; }
+    .table tr { display: block; border-bottom: 2px solid #eee; padding: 10px 0; }
 }
 </style>
 
 <div class="books-page">
     <div class="books-wrapper">
 
-        <h2 class="page-title">
-            <i class="fas fa-book"></i> Manage Books
-        </h2>
+        <div class="header-flex">
+            <h2 class="page-title">
+                <i class="fas fa-book-open"></i> Book Catalog
+            </h2>
+            <div class="btn-group">
+                <a href="{% url 'library-menu' %}" class="btn-custom btn-back">
+                    <i class="fas fa-chevron-left"></i> Library Hub
+                </a>
+                <a href="{% url 'book-add' %}" class="btn-custom btn-add">
+                    <i class="fas fa-plus"></i> Register New Book
+                </a>
+            </div>
+        </div>
 
-        <!-- Buttons -->
-        <a href="{% url 'library-menu' %}" class="add-btn">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-        <a href="{% url 'book-add' %}" class="add-btn">
-            <i class="fas fa-plus-circle"></i> Add Book
-        </a>
-
-        <!-- Table -->
-        <div class="table-container">
+        <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Author</th>
+                        <th>Title & Author</th>
                         <th>ISBN</th>
                         <th>Category</th>
-                        <th>Total</th>
-                        <th>Available</th>
+                        <th>Inventory</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th style="text-align: right;">Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 {% for book in books %}
                     <tr>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.isbn }}</td>
-                        <td>{{ book.category }}</td>
-                        <td>{{ book.total_copies }}</td>
-                        <td>{{ book.available_copies }}</td>
-                        <td>
+                        <td data-label="Title & Author">
+                            <div class="book-info">
+                                <strong>{{ book.title }}</strong>
+                                <span>by {{ book.author }}</span>
+                            </div>
+                        </td>
+                        <td data-label="ISBN"><code>{{ book.isbn }}</code></td>
+                        <td data-label="Category">{{ book.category }}</td>
+                        <td data-label="Inventory">
+                            <strong>{{ book.available_copies }}</strong> / {{ book.total_copies }}
+                        </td>
+                        <td data-label="Status">
                             {% if book.available_copies > 0 %}
-                                <span class="badge badge-available">Available</span>
+                                <span class="status-pill available">
+                                    <div class="status-dot"></div> Available
+                                </span>
                             {% else %}
-                                <span class="badge badge-unavailable">Out</span>
+                                <span class="status-pill unavailable">
+                                    <div class="status-dot"></div> Out of Stock
+                                </span>
                             {% endif %}
                         </td>
-                        <td>
-                            <a href="{% url 'book-edit' book.id %}" class="action-btn edit">
-                                <i class="fas fa-edit"></i> Edit
+                        <td data-label="Actions" style="text-align: right;">
+                            <a href="{% url 'book-edit' book.id %}" class="action-link edit-link" title="Edit Book">
+                                <i class="fas fa-pen-to-square"></i>
                             </a>
-                            <a href="{% url 'book-delete' book.id %}" class="action-btn delete">
-                                <i class="fas fa-trash-alt"></i> Delete
+                            <a href="{% url 'book-delete' book.id %}" class="action-link delete-link" title="Delete Book">
+                                <i class="fas fa-trash-can"></i>
                             </a>
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="8" style="text-align:center;">No books available</td>
+                        <td colspan="6" style="text-align:center; padding: 50px; color: #999;">
+                            <i class="fas fa-box-open" style="font-size: 40px; display: block; margin-bottom: 10px;"></i>
+                            No books found in the catalog.
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

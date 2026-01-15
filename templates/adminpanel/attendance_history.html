@@ -3,107 +3,72 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
     --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;
-    background:
-        linear-gradient(rgba(11,28,57,0.85), rgba(11,28,57,0.85)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
 }
 
-
-/* Wrapper */
+/* Container */
 .attendance-wrapper {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: auto;
-    background: #ffffff; /* white background */
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    color: var(--navy-dark); /* default text color */
+    animation: fadeIn 0.8s ease-in-out;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-/* Title */
-.page-title {
-    text-align: center;
-    font-size: 26px;
+/* Header Section */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.page-title h2 {
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 25px;
-    color: var(--navy-dark);
-}
-
-
-/* Filter Card */
-.filter-card {
-    background: #f5f7fb;
-    border: 1px solid #e0e6ed;
-    padding: 20px;
-    border-radius: 16px;
-    margin-bottom: 25px;
-}
-
-
-.filter-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-}
-
-.filter-group label {
-    font-size: 13px;
-    color: #ddd;
-    display: block;
-    margin-bottom: 6px;
-}
-
-.filter-group select,
-.filter-group input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-}
-.filter-group label {
-    font-size: 13px;
-    color: #333;
-    display: block;
-    margin-bottom: 6px;
-}
-
-.filter-group select,
-.filter-group input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 14px;
-    color: #222;
-    background: #fff;
-}
-.empty-text {
-    text-align: center;
-    color: #666;
-    margin-top: 20px;
-}
-.back-btn {
-    background: var(--navy);
     color: var(--white);
+    margin: 0;
+}
+
+.page-title i {
+    color: var(--gold);
+    margin-right: 12px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.3s;
 }
 
 .back-btn:hover {
@@ -111,26 +76,69 @@ body {
     color: var(--navy-dark);
 }
 
+/* Filter Section */
+.filter-card {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+}
 
-/* Button */
-.search-btn {
-    margin-top: 22px;
-    background: var(--gold);
-    color: var(--navy-dark);
-    border: none;
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
     padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: var(--white);
+    color: var(--navy-dark);
+}
+
+.search-btn {
+    width: 100%;
+    margin-top: 25px;
+    background: var(--navy-dark);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px;
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
-}
-.search-btn:hover {
-    background: #ffdd57;
+    font-size: 15px;
 }
 
-/* Table */
-.table-wrapper {
-    overflow-x: auto;
+.search-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: translateY(-2px);
+}
+
+/* Table Card */
+.table-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
 
 .attendance-table {
@@ -139,92 +147,81 @@ body {
 }
 
 .attendance-table th {
-    color: var(--white);
-    padding: 12px;
+    background: #f8f9fa;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 15px;
     text-align: center;
+    border-bottom: 2px solid #eee;
 }
+
 .attendance-table td {
-    padding: 12px;
+    padding: 16px 15px;
     text-align: center;
-    
-}
-
-.attendance-table th {
-    background: var(--navy);
-    font-size: 14px;
-}
-
-.attendance-table tr:nth-child(even) {
-    background: rgba(255,255,255,0.08);
-}
-
-/* Status */
-.status-p { color: #4caf50; font-weight: 600; }
-.status-a { color: #f44336; font-weight: 600; }
-.status-l { color: #ff9800; font-weight: 600; }
-
-/* Empty */
-.empty-text {
-    text-align: center;
-    color: #ccc;
-    margin-top: 20px;
-}
-
-
-/* back to dashboard buttun */
-
-.page-actions {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--navy);
-    color: var(--white);
-    padding: 10px 16px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.back-btn i {
-    font-size: 14px;
-}
-
-.back-btn:hover {
-    background: var(--gold);
     color: var(--navy-dark);
+    font-size: 14px;
+    border-bottom: 1px solid #f2f2f2;
 }
 
+.student-name { font-weight: 600; color: var(--navy); }
+.reg-no { font-family: monospace; font-size: 13px; color: #777; }
+
+/* Status Pills */
+.status-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-p { background: #e8f5e9; color: #2e7d32; }
+.status-a { background: #ffebee; color: #c62828; }
+.status-l { background: #fff3e0; color: #ef6c00; }
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--glass);
+    border-radius: 20px;
+    color: var(--white);
+}
+
+.empty-state i {
+    font-size: 50px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .page-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .attendance-table thead { display: none; }
+    .attendance-table tr { display: block; margin-bottom: 15px; border: 1px solid #eee; border-radius: 10px; }
+    .attendance-table td { display: block; text-align: right; padding-left: 50%; position: relative; }
+    .attendance-table td::before { content: attr(data-label); position: absolute; left: 15px; font-weight: 600; color: #999; }
+}
 </style>
 
 <div class="attendance-wrapper">
 
-    <div class="page-title">
-        <i class="fas fa-chart-bar"></i> Attendance History
+    <div class="page-header">
+        <div class="page-title">
+            <h2><i class="fas fa-history"></i> Attendance History</h2>
+        </div>
+        <a href="{% url 'admin-dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
     </div>
 
-    <div class="page-actions">
-    <a href="{% url 'admin-dashboard' %}" class="back-btn">
-        <i class="fas fa-arrow-left"></i> Back to Dashboard
-    </a>
-</div>
-
-
-    <!-- Filter -->
     <form method="get" class="filter-card">
         <div class="filter-grid">
-
             <div class="filter-group">
-                <label><i class="fas fa-graduation-cap"></i> Course</label>
+                <label>Course</label>
                 <select name="course">
-                    <option value="">Select Course</option>
+                    <option value="">All Courses</option>
                     <option value="BCA">BCA</option>
                     <option value="BSC_CS">BSc CS</option>
                     <option value="BSC_IT">BSc IT</option>
@@ -232,9 +229,9 @@ body {
             </div>
 
             <div class="filter-group">
-                <label><i class="fas fa-layer-group"></i> Semester</label>
+                <label>Semester</label>
                 <select name="semester">
-                    <option value="">Select Semester</option>
+                    <option value="">All Semesters</option>
                     {% for i in "123456" %}
                         <option value="{{ i }}">{{ i }}</option>
                     {% endfor %}
@@ -242,9 +239,9 @@ body {
             </div>
 
             <div class="filter-group">
-                <label><i class="fas fa-clock"></i> Period</label>
+                <label>Period</label>
                 <select name="period">
-                    <option value="">Select Period</option>
+                    <option value="">All Periods</option>
                     {% for i in "1234567" %}
                         <option value="{{ i }}">{{ i }}</option>
                     {% endfor %}
@@ -252,56 +249,59 @@ body {
             </div>
 
             <div class="filter-group">
-                <label><i class="fas fa-calendar-alt"></i> Date</label>
+                <label>Date</label>
                 <input type="date" name="date">
             </div>
-
         </div>
 
         <button type="submit" class="search-btn">
-            <i class="fas fa-search"></i> Search Attendance
+            <i class="fas fa-search"></i> Generate Report
         </button>
     </form>
 
-    <!-- Table -->
     {% if attendance %}
-    <div class="table-wrapper">
-        <table class="attendance-table">
-            <tr>
-                <th><i class="fas fa-user"></i> Student</th>
-                <th><i class="fas fa-id-card"></i> Roll No</th>
-                <th><i class="fas fa-book"></i> Subject</th>
-                <th><i class="fas fa-calendar"></i> Date</th>
-                <th><i class="fas fa-clock"></i> Period</th>
-                <th><i class="fas fa-check-circle"></i> Status</th>
-            </tr>
-
-            {% for a in attendance %}
-            <tr>
-                <td>{{ a.student.first_name }} {{ a.student.last_name }}</td>
-                <td>{{ a.student.register_number }}</td>
-
-                <td>{{ a.subject.name }}</td>
-                <td>{{ a.date }}</td>
-                <td>{{ a.period }}</td>
-                <td>
-                    {% if a.status == 'P' %}
-                        <span class="status-p">Present</span>
-                    {% elif a.status == 'A' %}
-                        <span class="status-a">Absent</span>
-                    {% else %}
-                        <span class="status-l">Late</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="table-card">
+        <div style="overflow-x: auto;">
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Roll No</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Period</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in attendance %}
+                    <tr>
+                        <td data-label="Student" class="student-name">{{ a.student.first_name }} {{ a.student.last_name }}</td>
+                        <td data-label="Roll No" class="reg-no">{{ a.student.register_number }}</td>
+                        <td data-label="Subject">{{ a.subject.name }}</td>
+                        <td data-label="Date">{{ a.date }}</td>
+                        <td data-label="Period">P{{ a.period }}</td>
+                        <td data-label="Status">
+                            {% if a.status == 'P' %}
+                                <span class="status-pill status-p">Present</span>
+                            {% elif a.status == 'A' %}
+                                <span class="status-pill status-a">Absent</span>
+                            {% else %}
+                                <span class="status-pill status-l">Late</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% else %}
-        <p class="empty-text">
-            <i class="fas fa-info-circle"></i>
-            Select course, semester and period to view attendance
-        </p>
+    <div class="empty-state">
+        <i class="fas fa-clipboard-list"></i>
+        <h3>No Records Found</h3>
+        <p>Please select your filter criteria above to display attendance data.</p>
+    </div>
     {% endif %}
 
 </div>

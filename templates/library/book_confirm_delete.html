@@ -1,15 +1,157 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
-<h2>Delete Book</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-<p>Are you sure you want to delete:</p>
-<strong>{{ book.title }}</strong>
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --danger: #ef4444;
+}
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a href="{% url 'book-list' %}">Cancel</a>
-</form>
+/* Page Setup */
+.delete-page {
+    min-height: 100vh;
+    background: linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Delete Card */
+.delete-card {
+    background: var(--white);
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    text-align: center;
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Warning Icon */
+.warning-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    border: 2px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Typography */
+.delete-card h2 {
+    color: var(--navy-dark);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.delete-card p {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.book-title {
+    display: block;
+    color: var(--navy-dark);
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 30px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+/* Buttons */
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.confirm-btn {
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirm-btn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+.cancel-btn {
+    background: #f1f3f5;
+    color: #666;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.cancel-btn:hover {
+    background: #e9ecef;
+    color: var(--navy-dark);
+}
+</style>
+
+<div class="delete-page">
+    <div class="delete-card">
+        
+        <div class="warning-icon">
+            <i class="fas fa-trash-can"></i>
+        </div>
+
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to remove</p>
+        <span class="book-title">{{ book.title }}</span>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-container">
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-exclamation-triangle"></i> Yes, Delete Book
+                </button>
+                <a href="{% url 'book-list' %}" class="cancel-btn">
+                    No, Keep This Book
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
 
 {% endblock %}

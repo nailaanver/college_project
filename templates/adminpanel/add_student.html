@@ -2,8 +2,7 @@
 {% load static %}
 {% block content %}
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
 :root {
@@ -11,6 +10,8 @@
     --navy: #142850;
     --gold: #f3c623;
     --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.95);
 }
 
 /* Page background */
@@ -18,7 +19,7 @@
     min-height: 100vh;
     background:
         linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,93 +27,132 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Card */
+/* Card - Matched to your Widget style */
 .add-student-card {
-    background: var(--white);
-    max-width: 550px;
+    background: var(--card-bg);
+    max-width: 600px;
     width: 100%;
-    padding: 35px;
+    padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+    box-shadow: 0 25px 55px rgba(0,0,0,0.4);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Title */
 .add-student-card h2 {
     text-align: center;
     color: var(--navy-dark);
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     font-weight: 700;
+    font-size: 24px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.add-student-card h2 i {
+    color: var(--gold);
+    margin-right: 10px;
+}
+
+/* Styling Django's form.as_p */
+form p {
+    margin-bottom: 18px;
+}
+
+form label {
+    display: block;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Target all inputs, selects, and textareas */
+form input, 
+form select, 
+form textarea,
+.email-input {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+form input:focus, 
+form select:focus {
+    border-color: var(--gold);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(243, 198, 35, 0.1);
+}
+
+/* Helper text (if any) */
+.helptext {
+    display: block;
+    font-size: 11px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Submit button */
+.submit-btn {
+    margin-top: 10px;
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-/* Form */
-form label {
-    font-weight: 600;
-    color: #333;
-}
-
-form input,
-form select,
-form textarea {
-    width: 100%;
-    padding: 12px 15px;
-    margin-top: 6px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    outline: none;
-    background: #fff;
-}
-
-form input:focus,
-form select:focus,
-form textarea:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(20,40,80,0.15);
-}
-
-/* Submit button */
-.submit-btn {
-    margin-top: 20px;
-    width: 100%;
-    background: var(--navy);
-    color: var(--white);
-    padding: 12px;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
 .submit-btn:hover {
     background: var(--gold);
     color: var(--navy-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 198, 35, 0.3);
 }
 
-/* Back button */
-.back-btn {
-    display: block;
-    margin-top: 20px;
+/* Footer Actions */
+.form-footer {
+    margin-top: 25px;
     text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.back-link {
     text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.back-link:hover {
     color: var(--navy);
-    font-weight: 600;
 }
 
-.back-btn:hover {
-    text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .add-student-card {
-        padding: 25px;
-    }
+/* Handle file input specifically */
+input[type="file"] {
+    padding: 8px;
+    background: transparent;
+    border: none;
 }
 </style>
 
@@ -121,27 +161,31 @@ form textarea:focus {
 
         <h2>
             <i class="fas fa-user-plus"></i>
-            Add Student
+            Add New Student
         </h2>
 
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <label>
-                <i class="fas fa-envelope"></i> Email
-            </label>
-            <input type="email" name="email" required>
+            <div style="margin-bottom: 18px;">
+                <label for="id_email">
+                    <i class="fas fa-envelope" style="color: var(--navy); margin-right: 5px;"></i> Account Email
+                </label>
+                <input type="email" name="email" id="id_email" class="email-input" placeholder="student@example.com" required>
+            </div>
 
             {{ form.as_p }}
 
             <button type="submit" class="submit-btn">
-                <i class="fas fa-save"></i> Save Student
+                <i class="fas fa-check-circle"></i> Create Student Account
             </button>
         </form>
 
-        <a href="{% url 'admin-dashboard' %}" class="back-btn">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+        <div class="form-footer">
+            <a href="{% url 'student-list' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Student List
+            </a>
+        </div>
 
     </div>
 </div>

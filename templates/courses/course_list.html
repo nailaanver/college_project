@@ -2,116 +2,186 @@
 {% load static %}
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
-/* ===== Theme Variables (same as dashboard) ===== */
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
     --white: #ffffff;
-}
-/* Back Button */
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--navy);
-    color: var(--white);
-    text-decoration: none;
-    padding: 10px 22px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.back-btn i {
-    font-size: 14px;
-}
-
-.back-btn:hover {
-    background: var(--navy-dark);
+    --glass: rgba(255, 255, 255, 0.1);
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--navy);
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
 }
 
-/* Page Title */
+/* Header Section */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+}
+
 .page-title {
-    font-size: 26px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
     color: var(--white);
-    margin-bottom: 30px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-/* Cards Grid */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 30px;
+.page-title i {
+    color: var(--gold);
 }
 
-/* Course Card */
-.course-card {
-    background: var(--white);
-    border-radius: 30px;
-    padding: 35px 25px;
-    text-align: center;
+/* Glassy Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--glass);
+    color: var(--white);
     text-decoration: none;
-    color: var(--navy-dark);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    padding: 12px 25px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
 
+.back-btn:hover {
+    background: var(--white);
+    color: var(--navy-dark);
+    transform: translateX(-5px);
+}
+
+/* Grid Layout */
+.courses-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Modern Course Card */
+.course-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 40px 30px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--navy-dark);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Icon Decoration */
+.course-card::after {
+    content: '\f19d'; /* Graduation cap icon code */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    bottom: -20px;
+    right: -10px;
+    font-size: 80px;
+    color: rgba(20, 40, 80, 0.03);
+    pointer-events: none;
+}
+
 .course-card i {
-    font-size: 42px;
-    margin-bottom: 15px;
+    font-size: 50px;
+    margin-bottom: 20px;
     color: var(--navy);
+    transition: transform 0.3s ease;
 }
 
 .course-card h4 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--navy-dark);
 }
 
 .course-card p {
-    font-size: 14px;
-    opacity: 0.8;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: #f0f2f5;
+    padding: 6px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
-/* Hover Effect */
+/* Hover Effects */
 .course-card:hover {
-    background: var(--gold);
-    transform: translateY(-8px);
+    transform: translateY(-12px);
+    background: var(--white);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
 
 .course-card:hover i {
-    color: var(--navy-dark);
+    color: var(--gold);
+    transform: scale(1.1);
+}
+
+.course-card:hover p {
+    background: var(--navy-dark);
+    color: var(--white);
+}
+
+@media (max-width: 600px) {
+    .page-header { flex-direction: column; gap: 20px; text-align: center; }
 }
 </style>
 
-<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:30px;">
-    <h2 class="page-title">
-        <i class="fa-solid fa-book-open"></i> Courses
-    </h2>
+<div class="courses-container">
+    <div class="page-header">
+        <h2 class="page-title">
+            <i class="fas fa-book-bookmark"></i> Academic Courses
+        </h2>
 
-    <a href="{% url 'admin-dashboard' %}" class="back-btn">
-        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-    </a>
-</div>
+        <a href="{% url 'admin-dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+    </div>
 
-
-<div class="courses-grid">
-  {% for code, name in courses %}
-    <a href="{% url 'course-detail' code %}" class="course-card">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <h4>{{ name }}</h4>
-        <p>View Students</p>
-    </a>
-  {% endfor %}
+    <div class="courses-grid">
+        {% for code, name in courses %}
+        <a href="{% url 'course-detail' code %}" class="course-card">
+            <i class="fas fa-graduation-cap"></i>
+            <h4>{{ name }}</h4>
+            <p>View Directory</p>
+        </a>
+        {% empty %}
+        <div style="color: white; text-align: center; grid-column: 1/-1; padding: 50px;">
+            <i class="fas fa-folder-open fa-3x" style="opacity: 0.5; margin-bottom: 15px;"></i>
+            <p>No courses found in the system.</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

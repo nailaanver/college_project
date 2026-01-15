@@ -2,138 +2,180 @@
 {% load static %}
 {% block content %}
 
-<!-- FontAwesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
-    --gold-soft: #f8d85a;
     --white: #ffffff;
+    --input-bg: #f8f9fa;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
 }
 
-/* Full page background */
+/* Page Setup */
 .issue-page {
     min-height: 100vh;
-    background:
-        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    background: linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
     font-family: 'Poppins', sans-serif;
 }
 
-/* White Card */
+/* Main Container Card */
 .issue-container {
-    max-width: 550px;
+    max-width: 500px;
     width: 100%;
-    background: #ffffff;
-    padding: 40px 30px;
-    border-radius: 28px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    color: var(--navy-dark);
+    background: var(--white);
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    animation: fadeIn 0.6s ease-out;
 }
 
-/* Page Title */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
 .issue-container h2 {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
+    margin-bottom: 35px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--navy-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Form fields */
+.issue-container h2 i {
+    color: var(--gold);
+    background: rgba(243, 198, 35, 0.1);
+    padding: 20px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+/* Form Customization for Django {{ form.as_p }} */
 form p {
-    margin-bottom: 18px;
+    margin-bottom: 22px;
 }
 
 form label {
     display: block;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 6px;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 form input,
 form select,
 form textarea {
     width: 100%;
-    padding: 12px 16px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1.5px solid #eee;
+    background-color: var(--input-bg);
     font-size: 14px;
-    outline: none;
-    background: #fff;
-    color: #222;
+    color: var(--navy-dark);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 form input:focus,
 form select:focus,
 form textarea:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(20,40,80,0.15);
+    border-color: var(--gold);
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(243, 198, 35, 0.1);
 }
 
-/* Buttons */
+/* Button Group */
 .btn-group {
     display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
+    flex-direction: column;
     gap: 12px;
+    margin-top: 30px;
 }
 
 .btn-issue {
-    background: var(--navy);
+    background: var(--navy-dark);
     color: var(--white);
     border: none;
-    padding: 12px 26px;
-    border-radius: 25px;
-    font-weight: 600;
+    padding: 15px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
-    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .btn-issue:hover {
-    background: var(--navy-dark);
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .btn-back {
-    background: transparent;
-    border: 2px solid var(--navy);
-    color: var(--navy);
-    padding: 12px 26px;
-    border-radius: 25px;
-    font-weight: 600;
+    color: #888;
     text-decoration: none;
     text-align: center;
-    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
     transition: 0.3s;
 }
 
 .btn-back:hover {
-    background: var(--navy);
-    color: var(--white);
+    color: var(--navy);
 }
 
-/* Messages */
-.messages {
-    margin-top: 20px;
+/* Integrated Messages/Alerts */
+.alert-box {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 14px;
     text-align: center;
-    color: #2e7d32;
-    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-/* Responsive */
+.alert-success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid rgba(22, 101, 52, 0.1);
+}
+
+/* Error messages from Django forms */
+.errorlist {
+    color: #ef4444;
+    font-size: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
 @media (max-width: 600px) {
-    .btn-group {
-        flex-direction: column;
-    }
+    .issue-container { padding: 30px 20px; }
 }
 </style>
 
@@ -141,30 +183,32 @@ form textarea:focus {
     <div class="issue-container">
 
         <h2>
-            <i class="fas fa-book-reader"></i> Issue Book
+            <i class="fas fa-hand-holding-hand"></i>
+            Issue Resource
         </h2>
 
         <form method="post">
             {% csrf_token %}
+            
             {{ form.as_p }}
 
             <div class="btn-group">
-                <a href="{% url 'library-menu' %}" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Back to Library
-                </a>
-
                 <button type="submit" class="btn-issue">
-                    <i class="fas fa-check"></i> Issue Book
+                    Confirm Check-out <i class="fas fa-chevron-right"></i>
                 </button>
+                
+                <a href="{% url 'library-menu' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Return to Library Menu
+                </a>
             </div>
         </form>
 
         {% if messages %}
-        <div class="messages">
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <div class="alert-box alert-success">
+                    <i class="fas fa-circle-check"></i> {{ message }}
+                </div>
             {% endfor %}
-        </div>
         {% endif %}
 
     </div>

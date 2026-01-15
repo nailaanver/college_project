@@ -1,37 +1,182 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Student | ACADAMIX</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <style>
-        body { font-family: Arial; background: #f4f6f8; margin: 0; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; margin-bottom: 20px; }
-        form input, form select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
-        button { padding: 10px 20px; background: #1f2937; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #374151; }
-        .back-link { text-align: center; margin-top: 15px; }
-        .back-link a { color: #1f2937; text-decoration: none; }
-        .back-link a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
+{% block content %}
 
-<div class="container">
-    <h2>Edit Student</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Update</button>
-    </form>
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.95);
+}
 
-    <div class="back-link">
-        <a href="{% url 'student-list' %}">← Back to Student List</a>
+/* Page background */
+.edit-student-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card Styling */
+.edit-student-card {
+    background: var(--card-bg);
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.4);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Title */
+.edit-student-card h2 {
+    text-align: center;
+    color: var(--navy-dark);
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 24px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.edit-student-card h2 i {
+    color: var(--navy);
+    margin-right: 10px;
+}
+
+/* Form Styling for form.as_p */
+form p {
+    margin-bottom: 18px;
+}
+
+form label {
+    display: block;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Target all inputs, selects, and textareas */
+form input, 
+form select, 
+form textarea {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+form input:focus, 
+form select:focus {
+    border-color: var(--navy);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(20, 40, 80, 0.1);
+}
+
+/* Styling for existing profile photo link in Django forms */
+form a {
+    color: var(--navy);
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* Submit button */
+.update-btn {
+    margin-top: 10px;
+    width: 100%;
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.update-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Footer Actions */
+.form-footer {
+    margin-top: 25px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    color: var(--navy);
+}
+
+/* Checkbox alignment for BooleanFields */
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+</style>
+
+<div class="edit-student-page">
+    <div class="edit-student-card">
+
+        <h2>
+            <i class="fas fa-user-edit"></i>
+            Edit Student Details
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="update-btn">
+                <i class="fas fa-sync-alt"></i> Update Information
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <a href="{% url 'student-list' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Student List
+            </a>
+        </div>
+
     </div>
 </div>
 
-</body>
-</html>
+{% endblock %}

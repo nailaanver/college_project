@@ -1,205 +1,260 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Timetable | Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <style>
-        :root {
-            --navy-dark: #0b1c39;
-            --navy: #142850;
-            --gold: #f3c623;
-            --white: #ffffff;
-        }
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+}
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.95), rgba(11,28,57,0.95)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+}
 
-        /* ===== BODY ===== */
-        body {
-            margin: 0;
-            padding: 40px;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+.form-wrapper {
+    max-width: 700px;
+    margin: auto;
+    animation: fadeIn 0.6s ease-out;
+}
 
-        /* ===== BACKGROUND FIX (IMPORTANT) ===== */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background:
-                linear-gradient(rgba(11,28,57,0.95), rgba(11,28,57,0.95)),
-                url("{% static 'images/campus.jpg' %}") center / cover no-repeat;
-            z-index: -1;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-            /* 🔥 THIS LINE FIXES THE PROBLEM */
-            pointer-events: none;
-        }
+/* Back Link */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 25px;
+    transition: 0.3s;
+    opacity: 0.8;
+}
 
-        /* ===== CONTAINER ===== */
-        .container {
-            max-width: 650px;
-            margin: auto;
-            background: var(--white);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-            color: var(--navy-dark);
-            position: relative;
-        }
+.back-link:hover {
+    opacity: 1;
+    color: var(--gold);
+}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+/* Glass Card */
+.form-card {
+    background: var(--white);
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+}
 
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: 500;
-        }
+.form-card h2 {
+    color: var(--navy-dark);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: 28px;
+}
 
-        /* ===== INPUT & SELECT (NATIVE SAFE) ===== */
-        input,
-        select {
-            width: 100%;
-            padding: 12px 14px;
-            margin-top: 8px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            color: #0b1c39;
-            font-size: 14px;
+.form-card h2 i {
+    color: var(--gold);
+    margin-right: 10px;
+}
 
-            appearance: auto;
-            -webkit-appearance: menulist;
-            -moz-appearance: menulist;
-        }
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
 
-        /* ===== BUTTON ===== */
-        button {
-            width: 100%;
-            margin-top: 30px;
-            padding: 14px;
-            border: none;
-            border-radius: 30px;
-            background: var(--navy);
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+.form-group {
+    margin-bottom: 20px;
+}
 
-        button:hover {
-            background: var(--gold);
-            color: var(--navy-dark);
-        }
+.full-width {
+    grid-column: span 2;
+}
 
-        /* ===== BACK LINK ===== */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 500;
-        }
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+/* Input Fields */
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1.5px solid #eee;
+    background-color: #fcfcfc;
+    font-size: 14px;
+    color: var(--navy-dark);
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
 
-        .error {
-            background: #ffe6e6;
-            color: #b30000;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-    </style>
-</head>
+select:focus {
+    border-color: var(--gold);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(243, 198, 35, 0.1);
+}
 
-<body>
+/* Messages */
+.message-box {
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
 
-<a href="{% url 'admin-dashboard' %}" class="back-link">⬅ Back to Dashboard</a>
+.error-msg {
+    background: #fff0f0;
+    color: #d63031;
+    border: 1px solid #ffcccc;
+}
 
-<div class="container">
-    <h2>Add Timetable</h2>
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 16px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="error">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+.submit-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
 
-    <form method="post">
-        {% csrf_token %}
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+    .form-card { padding: 30px 20px; }
+}
+</style>
 
-        <label>Course</label>
-        <select name="course" required>
-            <option value="">Select Course</option>
-            {% for value, label in courses %}
-                <option value="{{ value }}">{{ label }}</option>
+<div class="form-wrapper">
+    <a href="{% url 'admin-dashboard' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+
+    <div class="form-card">
+        <h2><i class="fas fa-calendar-plus"></i> Add Timetable</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box error-msg">
+                    <i class="fas fa-exclamation-circle"></i> {{ message }}
+                </div>
             {% endfor %}
-        </select>
+        {% endif %}
 
-        <label>Semester</label>
-        <select name="semester" required>
-            <option value="">Select Semester</option>
-            {% for value, label in semesters %}
-                <option value="{{ value }}">{{ label }}</option>
-            {% endfor %}
-        </select>
+        <form method="post">
+            {% csrf_token %}
 
-        <label>Day</label>
-        <select name="day" required>
-            <option value="">Select Day</option>
-            {% for value, label in days %}
-                <option value="{{ value }}">{{ label }}</option>
-            {% endfor %}
-        </select>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Course</label>
+                    <select name="course" required>
+                        <option value="">Select Course</option>
+                        {% for value, label in courses %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <label>Period Number</label>
-        <select name="period_number" required>
-            <option value="">Select Period</option>
-            {% for i in "1234567" %}
-                <option value="{{ forloop.counter }}">Period {{ forloop.counter }}</option>
-            {% endfor %}
-        </select>
+                <div class="form-group">
+                    <label>Semester</label>
+                    <select name="semester" required>
+                        <option value="">Select Semester</option>
+                        {% for value, label in semesters %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <label>Subject</label>
-        <select name="subject" required>
-            <option value="">Select Subject</option>
-            {% for subject in subjects %}
-                <option value="{{ subject.id }}">{{ subject.name }}</option>
-            {% endfor %}
-        </select>
-        <label>Teacher</label>
-        <select name="teacher" required>
-            <option value="">Select Teacher</option>
+                <div class="form-group">
+                    <label>Day</label>
+                    <select name="day" required>
+                        <option value="">Select Day</option>
+                        {% for value, label in days %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            {% for teacher in teachers %}
-                <option value="{{ teacher.id }}">
-                    {{ teacher.user.first_name }} {{ teacher.user.last_name }}
-                </option>
-            {% empty %}
-                <option disabled>No teachers available for this period</option>
-            {% endfor %}
-        </select>
+                <div class="form-group">
+                    <label>Period Number</label>
+                    <select name="period_number" required>
+                        <option value="">Select Period</option>
+                        {% for i in "1234567" %}
+                            <option value="{{ forloop.counter }}">Period {{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div class="form-group full-width">
+                    <label>Subject</label>
+                    <select name="subject" required>
+                        <option value="">Select Subject</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div class="form-group full-width">
+                    <label>Teacher</label>
+                    <select name="teacher" required>
+                        <option value="">Select Teacher</option>
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}">
+                                {{ teacher.user.first_name }} {{ teacher.user.last_name }}
+                            </option>
+                        {% empty %}
+                            <option disabled>No teachers available</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
-        <button type="submit">Save Timetable</button>
-    </form>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-save"></i> Save Schedule Slot
+            </button>
+        </form>
+    </div>
 </div>
 
-</body>
-</html>
+{% endblock %}

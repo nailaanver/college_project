@@ -1,153 +1,219 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Select Timetable</title>
+{% block content %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <style>
-        body {
-    background: url("{% static 'images/campus.jpg' %}") no-repeat center center fixed;
-    background-size: cover;
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.98);
+}
+
+/* Background & Overlay */
+.timetable-selection-page {
+    min-height: 100vh;
+    background: 
+        linear-gradient(rgba(11, 28, 57, 0.9), rgba(11, 28, 57, 0.9)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
     font-family: 'Poppins', sans-serif;
-    color: white;
-    padding: 40px;
-}
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(11, 28, 57, 0.75);
-    z-index: -1;
 }
 
-
-        .box {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            color: #0b1c39;
-            box-shadow: 0 20px 40px rgba(0,0,0,.3);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        label {
-            font-weight: 500;
-            margin-top: 15px;
-            display: block;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        button,
-        .create-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        button {
-            background: #142850;
-            color: white;
-        }
-
-        button:hover {
-            background: #0b1c39;
-        }
-
-        .create-btn {
-            background: #1f4068;
-            color: white;
-        }
-
-        .create-btn:hover {
-            background: #142850;
-        }
+/* Back Button */
 .back-btn {
     position: fixed;
-    top: 25px;
-    left: 25px;
-    padding: 10px 18px;
-    background: rgba(255, 255, 255, 0.15);
+    top: 30px;
+    left: 30px;
+    padding: 10px 22px;
+    background: rgba(255, 255, 255, 0.1);
     color: white;
     border-radius: 30px;
     text-decoration: none;
     font-weight: 500;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: all 0.3s ease;
-    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.3s;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .back-btn:hover {
-    background: white;
-    color: #0b1c39;
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-color: var(--gold);
 }
 
-    </style>
-</head>
+/* The Selection Card */
+.selection-card {
+    background: var(--card-bg);
+    max-width: 500px;
+    width: 100%;
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    text-align: center;
+    animation: slideUp 0.6s ease-out;
+}
 
-<body>
-    <div class="overlay"></div>
-<a href="{% url 'admin-dashboard' %}" class="back-btn">
-    ← Back to Dashboard
-</a>
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
+.selection-card h2 {
+    color: var(--navy-dark);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
 
-<div class="box">
-    <h2>Select Timetable</h2>
+.selection-card p {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
 
-    <form method="get" action="{% url 'timetable-view' %}">
-        <label>Course</label>
-        <select name="course" required>
-            {% for value, label in courses %}
-                <option value="{{ value }}">{{ label }}</option>
-            {% endfor %}
-        </select>
+/* Form Styling */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
 
-        <label>Semester</label>
-        <select name="semester" required>
-            {% for value, label in semesters %}
-                <option value="{{ value }}">{{ label }}</option>
-            {% endfor %}
-        </select>
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        <div class="btn-group">
-            <button type="submit">View Timetable</button>
+.form-group label i {
+    color: var(--gold);
+}
 
-            <a href="{% url 'add-timetable' %}" class="create-btn">
-                Create Timetable
-            </a>
-        </div>
-    </form>
+.form-control {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    transition: 0.3s;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--navy);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(20, 40, 80, 0.1);
+}
+
+/* Action Group */
+.action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.view-btn {
+    background: var(--navy-dark);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.view-btn:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.create-link {
+    background: #f0f2f5;
+    color: var(--navy-dark);
+    padding: 15px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.create-link:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+</style>
+
+<div class="timetable-selection-page">
+    <a href="{% url 'admin-dashboard' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Dashboard
+    </a>
+
+    <div class="selection-card">
+        <h2>Select Timetable</h2>
+        <p>Choose a course and semester to manage or view the schedule.</p>
+
+        <form method="get" action="{% url 'timetable-view' %}">
+            
+            <div class="form-group">
+                <label><i class="fas fa-graduation-cap"></i> Course</label>
+                <select name="course" class="form-control" required>
+                    <option value="" disabled selected>Select Department</option>
+                    {% for value, label in courses %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-calendar-alt"></i> Semester</label>
+                <select name="semester" class="form-control" required>
+                    <option value="" disabled selected>Select Semester</option>
+                    {% for value, label in semesters %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="action-group">
+                <button type="submit" class="view-btn">
+                    <i class="fas fa-eye"></i> View Timetable
+                </button>
+
+                <a href="{% url 'add-timetable' %}" class="create-link">
+                    <i class="fas fa-plus-circle"></i> Create New Schedule
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
-</body>
-</html>
+{% endblock %}

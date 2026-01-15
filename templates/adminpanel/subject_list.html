@@ -1,194 +1,278 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Subjects | ACADAMIX</title>
+{% block content %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy-dark: #0b1c39;
-            --navy: #142850;
-            --gold: #f3c623;
-            --gold-soft: #f8d85a;
-            --white: #ffffff;
-            --light: #f5f6fa;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            /* Gradient overlay + dashboard background image */
-            background: 
-                linear-gradient(rgba(11, 28, 57, 0.85), rgba(11, 28, 57, 0.85)),
-                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
-            padding: 30px;
-            color: var(--white);  /* text color over dark background */
-        }
-
-        h2 {
-            color: var(--gold);
-            margin-bottom: 20px;
-        }
-
-        select {
-            padding: 10px 12px;
-            border-radius: 20px;
-            border: 1.5px solid #ddd;
-            margin-right: 15px;
-            outline: none;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: var(--navy);
-            color: var(--white);
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: var(--navy-dark);
-        }
-
-        .add-btn {
-            display: inline-block;
-            margin-bottom: 15px;
-            padding: 10px 20px;
-            background: var(--gold);
-            color: var(--navy-dark);
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .add-btn:hover {
-            background: var(--gold-soft);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            background: var(--navy-dark); /* Dark background for table */
-        }
-
-        th {
-            padding: 12px 15px;
-            background: var(--navy);
-            color: var(--white);
-            text-align: center;
-        }
-
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            color: var(--navy); /* White text by default */
-            transition: all 0.3s ease;
-            background: var(--white);
-        }
-
-        /* Optional: alternating rows darker */
-        /* tr:nth-child(even) td {
-            background: #0d264d;
-        } */
-
-        /* Hover effect: reveal background change */
-        tr:hover td {
-            background: var(--gold-soft); /* highlight row */
-            color: var(--navy-dark);      /* text color on hover */
-        }
-
-
-        a {
-            text-decoration: none;
-            color: var(--navy);
-            font-weight: 500;
-        }
-
-.back-btn {
-    position: fixed;
-    top: 25px;
-    left: 25px;
-    padding: 10px 22px;
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--white);
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 500;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: all 0.3s ease;
-    z-index: 1000;
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy: #142850;
+    --gold: #f3c623;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.95);
 }
 
-.back-btn:hover {
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding: 40px 20px;
+}
+
+.manage-wrapper {
+    max-width: 1100px;
+    margin: auto;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.page-title h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0;
+}
+
+.page-title i {
+    color: var(--gold);
+    margin-right: 10px;
+}
+
+/* Action Buttons */
+.btn-group {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 10px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back {
+    background: var(--glass);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+}
+
+.btn-add {
     background: var(--gold);
     color: var(--navy-dark);
 }
 
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
 
-    </style>
-</head>
-<body>
-    <a href="{% url 'admin-dashboard' %}" class="back-btn">
-    ← Back to Dashboard
-</a>
+/* Filter Bar */
+.filter-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
 
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
 
-    <h2>Subjects</h2>
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    <a href="{% url 'add-subject' %}" class="add-btn">+ Add Subject</a>
+.filter-group label {
+    color: var(--white);
+    font-weight: 500;
+    font-size: 14px;
+}
 
-    <form method="get">
-        <label>Course:</label>
-        <select name="course">
-            <option value="">All Courses</option>
-            {% for value, display in courses %}
-            <option value="{{ value }}" {% if selected_course == value %}selected{% endif %}>{{ display }}</option>
-            {% endfor %}
-        </select>
+.filter-select {
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: var(--white);
+    font-size: 14px;
+    color: var(--navy-dark);
+}
 
-        <label>Semester:</label>
-        <select name="semester">
-            <option value="">All Semesters</option>
-            {% for value, display in semesters %}
-            <option value="{{ value }}" {% if selected_semester == value %}selected{% endif %}>{{ display }}</option>
-            {% endfor %}
-        </select>
+.filter-submit {
+    padding: 8px 25px;
+    background: var(--navy);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
 
-        <button type="submit">Filter</button>
-    </form>
+.filter-submit:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Subject Name</th>
-                <th>Course</th>
-                <th>Semester</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for subject in subjects %}
-            <tr>
-                <td>{{ subject.name }}</td>
-                <td>{{ subject.course }}</td>
-                <td>{{ subject.semester }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">No subjects found</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+/* Table Widget */
+.table-widget {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 25px;
+    color: var(--navy-dark);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
 
-    <br>
-    <!-- <a href="{% url 'admin-dashboard' %}">⬅ Back to Dashboard</a> -->
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-</body>
-</html>
+th {
+    text-align: left;
+    padding: 15px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #f0f0f0;
+    color: #666;
+}
+
+td {
+    padding: 18px 15px;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 15px;
+}
+
+tr:hover td {
+    background: #fcfcfc;
+}
+
+.subject-name {
+    font-weight: 600;
+    color: var(--navy-dark);
+}
+
+.badge-course {
+    background: rgba(20, 40, 80, 0.05);
+    color: var(--navy);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.badge-semester {
+    background: rgba(243, 198, 35, 0.1);
+    color: #8a6d00;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .page-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .filter-form { flex-direction: column; align-items: stretch; }
+}
+</style>
+
+<div class="manage-wrapper">
+    <div class="page-header">
+        <div class="page-title">
+            <h2><i class="fas fa-book-open"></i> Subjects</h2>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'admin-dashboard' %}" class="action-btn btn-back">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <a href="{% url 'add-subject' %}" class="action-btn btn-add">
+                <i class="fas fa-plus"></i> Add Subject
+            </a>
+        </div>
+    </div>
+
+    <div class="filter-card">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label><i class="fas fa-filter"></i> Course</label>
+                <select name="course" class="filter-select">
+                    <option value="">All Courses</option>
+                    {% for value, display in courses %}
+                    <option value="{{ value }}" {% if selected_course == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fas fa-calendar-alt"></i> Semester</label>
+                <select name="semester" class="filter-select">
+                    <option value="">All Semesters</option>
+                    {% for value, display in semesters %}
+                    <option value="{{ value }}" {% if selected_semester == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="filter-submit">Apply Filter</button>
+        </form>
+    </div>
+
+    <div class="table-widget">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject Name</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td class="subject-name">{{ subject.name }}</td>
+                    <td><span class="badge-course">{{ subject.course }}</span></td>
+                    <td><span class="badge-semester">{{ subject.semester }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 50px; color: #999;">
+                        <i class="fas fa-search fa-3x" style="display: block; margin-bottom: 10px; opacity: 0.5;"></i>
+                        No subjects found matching the filters.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -2,9 +2,7 @@
 {% load static %}
 {% block content %}
 
-<!-- Font Awesome -->
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 :root {
@@ -12,175 +10,253 @@
     --navy: #142850;
     --gold: #f3c623;
     --white: #ffffff;
+    --success: #10b981;
+    --danger: #ef4444;
 }
 
 /* Page wrapper */
 .fees-wrapper {
-    padding: 40px 20px;
-    min-height: calc(100vh - 80px);
+    padding: 60px 20px;
+    min-height: 100vh;
     background:
-        linear-gradient(rgba(11,28,57,0.85), rgba(11,28,57,0.85)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+        linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     font-family: 'Poppins', sans-serif;
+}
+
+/* Container */
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Header Section */
+.header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-area h2 {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-area h2 i {
+    color: var(--gold);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 15px;
 }
 
 /* Card */
 .fees-card {
-    max-width: 1100px;
-    margin: auto;
     background: var(--white);
-    padding: 35px;
+    padding: 0; /* Remove padding to let table header hit edges */
     border-radius: 25px;
-    box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+    box-shadow: 0 25px 55px rgba(0,0,0,0.4);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
 }
 
-/* Title */
-.fees-card h2 {
-    color: var(--navy-dark);
-    font-weight: 700;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.fees-card h2 i {
-    color: var(--gold);
+/* Table styling */
+.table-container {
+    overflow-x: auto;
 }
 
-/* Table */
 .fees-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
 }
 
-.fees-table thead {
-    background: var(--navy);
-}
-
-.fees-table th {
-    padding: 14px;
+.fees-table thead th {
+    background: #f8f9fa;
+    padding: 20px;
     text-align: left;
-    color: var(--white);
-    font-weight: 600;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eee;
 }
 
 .fees-table td {
-    padding: 14px;
-    border-bottom: 1px solid #e6e6e6;
-    color: #333;
+    padding: 20px;
+    border-bottom: 1px solid #f2f2f2;
+    color: var(--navy-dark);
+    font-size: 15px;
+}
+
+.fees-table tbody tr {
+    transition: 0.3s;
 }
 
 .fees-table tbody tr:hover {
-    background: #f5f6fa;
+    background: #fcf9ee;
 }
 
-/* Paid / unpaid badge */
+/* Data specific styling */
+.student-name {
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.amount-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--navy-dark);
+}
+
+.due-date {
+    font-size: 13px;
+    color: #777;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Modern Status Badges */
 .badge {
     padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-block;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
 }
 
 .badge-paid {
-    background: #eafaf1;
-    color: #0a8a42;
+    background: #d1fae5;
+    color: #065f46;
 }
 
 .badge-unpaid {
-    background: #fdecea;
-    color: #c0392b;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Back button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-color: var(--gold);
 }
 
 /* Empty state */
 .empty-row {
     text-align: center;
-    padding: 20px;
-    font-weight: 500;
-    color: #777;
+    padding: 60px 20px !important;
+    color: #999;
 }
 
-/* Back button */
-.back-btn {
-    display: inline-block;
-    margin-top: 25px;
-    text-decoration: none;
-    color: var(--navy);
-    font-weight: 600;
+.empty-row i {
+    font-size: 50px;
+    display: block;
+    margin-bottom: 15px;
+    opacity: 0.3;
 }
 
-.back-btn i {
-    margin-right: 6px;
-}
-
-.back-btn:hover {
-    text-decoration: underline;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-    .fees-table {
-        font-size: 14px;
-    }
+    .header-area { flex-direction: column; gap: 20px; align-items: flex-start; }
+    .fees-table thead { display: none; }
+    .fees-table tr { display: block; border-bottom: 2px solid #eee; padding: 15px; }
+    .fees-table td { display: block; text-align: right; padding: 10px 5px; border: none; }
+    .fees-table td::before { content: attr(data-label); float: left; font-weight: 700; color: #999; }
 }
 </style>
 
 <div class="fees-wrapper">
-    <div class="fees-card">
+    <div class="container">
+        
+        <div class="header-area">
+            <h2>
+                <i class="fa-solid fa-money-check-dollar"></i>
+                Fee Management
+            </h2>
+            <a href="{% url 'admin-dashboard' %}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
 
-        <h2>
-            <i class="fa-solid fa-money-check-dollar"></i>
-            All Fees
-        </h2>
-
-        <table class="fees-table">
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Fee Type</th>
-                    <th>Semester</th>
-                    <th>Amount</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for fee in fees %}
-                <tr>
-                    <td>{{ fee.student.first_name }} {{ fee.student.last_name }}</td>
-                    <td>{{ fee.fee_type }}</td>
-                    <td>Semester {{ fee.semester }}</td>
-                    <td>₹{{ fee.amount }}</td>
-                    <td>{{ fee.due_date }}</td>
-                    <td>
-                        {% if fee.is_paid %}
-                            <span class="badge badge-paid">
-                                <i class="fa-solid fa-circle-check"></i> Paid
-                            </span>
-                        {% else %}
-                            <span class="badge badge-unpaid">
-                                <i class="fa-solid fa-circle-xmark"></i> Unpaid
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="empty-row">
-                        No fee records available
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <a href="{% url 'admin-dashboard' %}" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i>
-            Back to Dashboard
-        </a>
+        <div class="fees-card">
+            <div class="table-container">
+                <table class="fees-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Fee Type</th>
+                            <th>Semester</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fee in fees %}
+                        <tr>
+                            <td data-label="Student" class="student-name">
+                                {{ fee.student.first_name }} {{ fee.student.last_name }}
+                            </td>
+                            <td data-label="Fee Type">{{ fee.fee_type }}</td>
+                            <td data-label="Semester">Sem {{ fee.semester }}</td>
+                            <td data-label="Amount" class="amount-text">₹{{ fee.amount }}</td>
+                            <td data-label="Due Date">
+                                <span class="due-date">
+                                    <i class="fa-regular fa-calendar"></i> {{ fee.due_date }}
+                                </span>
+                            </td>
+                            <td data-label="Status">
+                                {% if fee.is_paid %}
+                                    <span class="badge badge-paid">
+                                        <i class="fa-solid fa-check"></i> Paid
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-unpaid">
+                                        <i class="fa-solid fa-clock"></i> Pending
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-row">
+                                <i class="fa-solid fa-folder-open"></i>
+                                No fee records found in the system.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 </div>

@@ -2,191 +2,237 @@
 {% load static %}
 {% block content %}
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 :root {
     --navy-dark: #0b1c39;
     --navy: #142850;
     --gold: #f3c623;
-    --gold-soft: #f8d85a;
     --white: #ffffff;
+    --light-bg: #f8f9fa;
+    --accent-blue: #3b82f6;
 }
 
-/* Page background */
+/* Page Background */
 .return-page {
     min-height: 100vh;
-    background:
-        linear-gradient(rgba(11,28,57,0.9), rgba(11,28,57,0.9)),
-        url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+    background: linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
     font-family: 'Poppins', sans-serif;
 }
 
-/* White card */
+/* Main Card */
 .return-list-container {
     background: var(--white);
-    padding: 30px;
-    border-radius: 22px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    max-width: 1000px;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.4);
+    max-width: 1100px;
     width: 100%;
+    animation: fadeIn 0.6s ease-out;
 }
 
-/* Header */
-.return-list-header {
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
+.header-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.return-list-header h2 {
+.header-flex h2 {
     color: var(--navy-dark);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
-/* Back button */
+.header-flex h2 i {
+    color: var(--gold);
+    background: rgba(243, 198, 35, 0.1);
+    padding: 12px;
+    border-radius: 15px;
+}
+
+/* Back Button */
 .btn-back {
-    background: var(--navy);
-    color: var(--white);
+    background: var(--light-bg);
+    color: var(--navy-dark);
     text-decoration: none;
-    padding: 10px 22px;
-    border-radius: 30px;
-    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
     transition: 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 14px;
 }
 
 .btn-back:hover {
-    background: var(--gold);
-    color: var(--navy-dark);
+    background: var(--navy-dark);
+    color: var(--white);
 }
 
-/* Table */
+/* Table Management */
+.table-responsive {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
 thead {
-    background: var(--navy);
-    color: var(--white);
+    background: var(--light-bg);
 }
 
-th, td {
-    padding: 14px;
-    text-align: center;
+th {
+    padding: 18px 20px;
+    text-align: left;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-tbody tr {
-    border-bottom: 1px solid #eee;
-    transition: 0.3s;
+td {
+    padding: 18px 20px;
+    color: var(--navy-dark);
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 14px;
 }
 
 tbody tr:hover {
-    background: #f5f6fa;
+    background: #fcfcfc;
 }
 
-/* Return button */
+/* Book/User Info Combo */
+.info-main { font-weight: 700; color: var(--navy-dark); display: block; }
+.info-sub { font-size: 12px; color: #888; display: block; }
+
+/* Return Button Action */
 .btn-return {
-    background: var(--navy);
+    background: var(--accent-blue);
     color: var(--white);
     padding: 8px 18px;
-    border-radius: 20px;
+    border-radius: 50px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
     transition: 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
 }
 
 .btn-return:hover {
     background: var(--navy-dark);
+    transform: translateY(-2px);
 }
 
-/* Empty row */
+/* Empty State */
 .empty-row {
     text-align: center;
-    padding: 20px;
-    font-weight: 500;
-    color: #666;
+    padding: 60px 20px !important;
+    color: #999;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    th, td {
-        font-size: 13px;
-        padding: 10px;
-    }
+.empty-row i {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 15px;
+    opacity: 0.3;
+}
 
-    .return-list-header {
-        flex-direction: column;
-        gap: 15px;
-    }
+/* Mobile Friendly Labels */
+@media (max-width: 768px) {
+    .header-flex { flex-direction: column; text-align: center; }
+    thead { display: none; }
+    td { display: block; text-align: right; border: none; padding: 10px 20px; }
+    td::before { content: attr(data-label); float: left; font-weight: 700; color: #999; }
+    tr { display: block; border-bottom: 2px solid #eee; padding: 10px 0; }
 }
 </style>
 
 <div class="return-page">
     <div class="return-list-container">
 
-        <div class="return-list-header">
+        <div class="header-flex">
             <h2>
-                <i class="fas fa-undo-alt"></i>
-                Return Books
+                <i class="fas fa-rotate-left"></i>
+                Active Loans
             </h2>
 
             <a href="{% url 'library-menu' %}" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-                Back to Library
+                <i class="fas fa-chevron-left"></i>
+                Library Hub
             </a>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th><i class="fas fa-book"></i> Book</th>
-                    <th><i class="fas fa-user"></i> User</th>
-                    <th><i class="fas fa-calendar-alt"></i> Issue Date</th>
-                    <th><i class="fas fa-clock"></i> Due Date</th>
-                    <th><i class="fas fa-cog"></i> Action</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource & Borrower</th>
+                        <th>Issued On</th>
+                        <th>Expected Return</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for issue in issues %}
-                <tr>
-                    <td>{{ issue.book.title }}</td>
-                    <td>{{ issue.user.username }}</td>
-                    <td>{{ issue.issue_date }}</td>
-                    <td>{{ issue.due_date }}</td>
-                    <td>
-                        <a href="{% url 'return-book' issue.id %}" class="btn-return">
-                            <i class="fas fa-check-circle"></i>
-                            Return
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="empty-row">
-                        <i class="fas fa-inbox"></i>
-                        No books to return
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <tbody>
+                    {% for issue in issues %}
+                    <tr>
+                        <td data-label="Resource & Borrower">
+                            <span class="info-main">{{ issue.book.title }}</span>
+                            <span class="info-sub"><i class="far fa-user"></i> {{ issue.user.username }}</span>
+                        </td>
+                        <td data-label="Issued On">
+                            {{ issue.issue_date }}
+                        </td>
+                        <td data-label="Expected Return">
+                            <span style="font-weight: 600; color: var(--navy);">
+                                {{ issue.due_date }}
+                            </span>
+                        </td>
+                        <td data-label="Action" style="text-align: right;">
+                            <a href="{% url 'return-book' issue.id %}" class="btn-return">
+                                <i class="fas fa-file-import"></i>
+                                Process Return
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="empty-row">
+                            <i class="fas fa-check-double"></i>
+                            All issued books have been returned.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
     </div>
 </div>

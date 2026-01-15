@@ -3,207 +3,304 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --navy: #142850;
-            --gold: #f3c623;
-            --gold-soft: #f8d85a;
+            --admin-gold: #f3c623;
+            --admin-accent: #eab308; /* Slightly deeper gold */
             --white: #ffffff;
-            --text-dark: #1c1c1c;
-            --gray: #6b7280;
+            --glass: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.12);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11,28,57,0.92), rgba(11,28,57,0.92)),
-                url("{% static 'images/campus.jpg' %}") center/cover no-repeat;
+            background: linear-gradient(rgba(11, 28, 57, 0.96), rgba(11, 28, 57, 0.96)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-x: hidden;
         }
 
-        /* ===== MAIN CARD ===== */
-        .login-container {
-            background: var(--white);
+        /* Perspective Wrapper for 3D effect */
+        .page-container {
+            perspective: 1200px;
             width: 100%;
-            max-width: 950px;
-            border-radius: 28px;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-card {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
             display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
-            animation: fadeUp 0.9s ease;
+            grid-template-columns: 1fr 1.1fr;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== LEFT PANEL ===== */
-        .login-visual {
-            background:
-                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
-            padding: 50px;
+        /* LEFT VISUAL PANEL */
+        .visual-panel {
+            background: linear-gradient(135deg, rgba(11, 28, 57, 0.9), rgba(20, 40, 80, 0.8)),
+                        url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 60px;
             color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+            position: relative;
+        }
+
+        .visual-panel::after {
+            content: 'ADMIN';
+            position: absolute;
+            top: 40px;
+            right: -10px;
+            font-size: 80px;
+            font-weight: 900;
+            opacity: 0.05;
+            letter-spacing: 10px;
+            pointer-events: none;
+        }
+
+        .visual-panel h3 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .visual-panel h3 span { color: var(--admin-gold); }
+
+        .visual-panel p {
+            font-size: 16px;
+            color: #d1d5db;
+            line-height: 1.8;
+            max-width: 380px;
+        }
+
+        /* RIGHT FORM PANEL */
+        .form-panel {
+            padding: 70px 60px;
+            background: rgba(11, 28, 57, 0.4);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-visual h3 {
-            font-size: 34px;
-            margin-bottom: 16px;
-            font-weight: 700;
+        .form-panel h2 {
+            font-size: 32px;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        .login-visual p {
+        .form-panel .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
             font-size: 15px;
-            line-height: 1.7;
-            color: #d1d5db;
-            max-width: 360px;
         }
 
-        /* ===== RIGHT FORM PANEL ===== */
-        .login-form {
-            padding: 55px 45px;
-        }
-
-        .login-form h2 {
-            font-size: 28px;
-            color: var(--navy-dark);
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-
-        .login-form p {
+        /* Error Box Styling */
+        .alert-error {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+            padding: 14px;
+            border-radius: 15px;
             font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 28px;
-        }
-
-        .error {
-            background: #ffe0e0;
-            color: #9b1c1c;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        form {
+            margin-bottom: 25px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Input Styling */
+        .input-box {
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--admin-gold);
+            font-size: 18px;
+            transition: 0.3s;
         }
 
         input {
-            padding: 15px 18px;
-            border-radius: 30px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            width: 100%;
+            padding: 18px 25px 18px 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: white;
+            font-size: 15px;
             outline: none;
             transition: 0.3s;
         }
 
         input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(243,198,35,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--admin-gold);
+            box-shadow: 0 0 20px rgba(243, 198, 35, 0.15);
         }
 
-        button {
-            background: var(--gold);
+        input::placeholder { color: #94a3b8; }
+
+        /* Login Button */
+        .submit-btn {
+            background: var(--admin-gold);
             color: var(--navy-dark);
             border: none;
-            padding: 16px;
-            border-radius: 30px;
+            padding: 18px;
+            border-radius: 20px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 10px;
         }
 
-        button:hover {
-            background: var(--gold-soft);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(243, 198, 35, 0.3);
+            background: var(--admin-accent);
         }
 
-        .cancel-btn {
-            margin-top: 18px;
+        /* Navigation Links */
+        .footer-nav {
+            margin-top: 30px;
             text-align: center;
+        }
+
+        .footer-nav a {
+            color: #64748b;
             text-decoration: none;
-            font-weight: 600;
-            color: var(--navy);
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             transition: 0.3s;
         }
 
-        .cancel-btn:hover {
-            color: var(--navy-dark);
-            transform: translateX(-6px);
+        .footer-nav a:hover {
+            color: var(--admin-gold);
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* Responsive Design */
         @media (max-width: 900px) {
-            .login-container {
-                grid-template-columns: 1fr;
-            }
-
-            .login-visual {
-                display: none;
-            }
+            .login-card { grid-template-columns: 1fr; max-width: 480px; }
+            .visual-panel { display: none; }
+            .form-panel { padding: 50px 30px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="page-container">
+    <div class="login-card" id="adminTilt">
+        
+        <div class="visual-panel">
+            <h3>Admin <br><span>Control Center</span></h3>
+            <p>Full system management. Access tools for user oversight, database monitoring, and infrastructure configurations.</p>
+        </div>
 
-    <!-- LEFT INFO PANEL -->
-    <div class="login-visual">
-        <h3>Admin Portal</h3>
-        <p>
-            Manage all administrative tasks, user accounts, and system settings
-            through the ACADAMIX admin panel securely.
-        </p>
+        <div class="form-panel">
+            <h2>System Authentication</h2>
+            <p class="subtitle">Secure login for authorized administrators only.</p>
+
+            {% if error %}
+            <div class="alert-error">
+                <i class="fas fa-shield-halved"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="input-box">
+                    <i class="fas fa-user-shield"></i>
+                    <input type="text" name="username" placeholder="Admin Username" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="System Password" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Authorize Access</button>
+
+                <div class="footer-nav">
+                    <a href="{% url 'role_login' %}">
+                        <i class="fas fa-chevron-left"></i> Return to Roles
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <!-- RIGHT FORM PANEL -->
-    <div class="login-form">
-        <h2>Admin Login</h2>
-        <p>Enter your admin credentials to access the portal</p>
-
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
-        </form>
-    </div>
-
 </div>
+
+<script>
+    /* ===============================
+        3D TILT EFFECT LOGIC
+    ================================ */
+    const card = document.getElementById('adminTilt');
+
+    document.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Adjust the divisor (35) to increase or decrease tilt intensity
+        const rotateX = (y - centerY) / 35;
+        const rotateY = (centerX - x) / 35;
+        
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+</script>
 
 </body>
 </html>
