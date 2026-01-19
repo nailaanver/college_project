@@ -20,26 +20,33 @@ from fees.models import Fee
 
 
 def parent_dashboard(request):
-    # OTP verification check
+    # -------------------------
+    # OTP VERIFICATION CHECK
+    # -------------------------
     if not request.session.get('parent_verified'):
         return redirect('parent_send_otp')
 
-    # Get student from session
+    # -------------------------
+    # GET STUDENT FROM SESSION
+    # -------------------------
     student_id = request.session.get('parent_student_id')
     student = get_object_or_404(Student, id=student_id)
 
-    parent_user = student.parent  # Parent User object
+    parent_user = student.parent
     today = date.today()
 
     # -------------------------
-    # ATTENDANCE
+    # ATTENDANCE (TODAY + %)
     # -------------------------
     today_attendance = Attendance.objects.filter(
         student=student,
         date=today
     ).order_by('period')
 
-    total_classes = Attendance.objects.filter(student=student).count()
+    total_classes = Attendance.objects.filter(
+        student=student
+    ).count()
+
     present_classes = Attendance.objects.filter(
         student=student,
         status='P'
@@ -64,30 +71,43 @@ def parent_dashboard(request):
     ).order_by('-paid_on')
 
     # -------------------------
+    # INTERNAL MARKS (APPROVED ONLY)
+    # -------------------------
+    internal_marks = (
+        InternalMark.objects
+        .filter(
+            student=student,
+            status='Approved'
+        )
+        .select_related('subject')
+        .order_by('subject__name')
+    )
+
+    # -------------------------
     # RENDER
     # -------------------------
-    return render(request, 'parents/parent_dashboard.html', {
+    context = {
         'student': student,
         'parent_user': parent_user,
+
+        # Attendance
         'today_attendance': today_attendance,
         'attendance_percentage': attendance_percentage,
         'today': today,
 
         # Fees
-        'student_fees': pending_fees,  # Pending fees (already used in template)
-        'paid_fees': paid_fees,        # ✅ Paid fees
-    })
+        'student_fees': pending_fees,
+        'paid_fees': paid_fees,
 
-# def parent_dashboard(request):
-#     if not request.session.get('parent_verified'):
-#         return redirect('parent_send_otp')
+        # Internal Marks
+        'internal_marks': internal_marks,
+    }
 
-#     student_id = request.session.get('parent_student_id')
-#     student = Student.objects.get(id=student_id)
-
-#     return render(request, 'parents/parent_dashboard.html', {
-#         'student': student
-#     })
+    return render(
+        request,
+        'parents/parent_dashboard.html',
+        context
+    )
     
 def parent_logout(request):
     request.session.flush()
