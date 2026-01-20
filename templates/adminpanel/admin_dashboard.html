@@ -202,11 +202,37 @@ body {
             <small id="live-clock"></small>
         </div>
 
-        <div class="header-actions">
-            <a href="{% url 'logout' %}" class="logout-btn" id="logout-trigger">
-                <i class="fas fa-power-off"></i>
-            </a>
-        </div>
+        <div class="header-actions" style="display:flex; align-items:center; gap:15px;">
+
+    <!-- 🔔 Notification Bell -->
+    <a href="{% url 'notifications:notification_list' %}"
+       style="position:relative; color:white; font-size:18px; text-decoration:none;">
+        <i class="fas fa-bell"></i>
+
+        {% if unread_notification_count > 0 %}
+            <span style="
+                position:absolute;
+                top:-6px;
+                right:-8px;
+                background:#ef4444;
+                color:white;
+                font-size:10px;
+                font-weight:700;
+                padding:3px 6px;
+                border-radius:50%;
+            ">
+                {{ unread_notification_count }}
+            </span>
+        {% endif %}
+    </a>
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}" class="logout-btn" id="logout-trigger">
+        <i class="fas fa-power-off"></i>
+    </a>
+
+</div>
+
     </div>
 
     <div class="stats-row">
