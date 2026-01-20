@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'internal_marks',
     'ai_services',
     'fees.apps.FeesConfig',
-
+    'notifications',
     # Third party
     'rest_framework',
 ]
@@ -100,10 +100,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'notifications.context_processors.notification_count',
             ],
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'college_project.wsgi.application'
 

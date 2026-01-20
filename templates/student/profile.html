@@ -5,26 +5,30 @@
     <meta charset="UTF-8">
     <title>My Profile</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy: #142850;
+            --gold: #f3c623;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-card: rgba(255, 255, 255, 0.15);
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: url("{% static 'images/campus.jpg' %}") no-repeat center center fixed;
+            background: linear-gradient(rgba(11, 28, 57, 0.75), rgba(11, 28, 57, 0.75)), 
+                        url("{% static 'images/campus.jpg' %}") no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(11, 28, 57, 0.75);
-            z-index: -1;
+            padding: 20px;
         }
 
         /* Back Button */
@@ -32,35 +36,45 @@
             position: fixed;
             top: 25px;
             left: 25px;
-            padding: 10px 22px;
-            background: rgba(255,255,255,0.2);
+            padding: 12px 25px;
+            background: var(--glass);
             color: white;
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 12px;
             font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: 0.3s;
-        }
-        .back-btn:hover {
-            background: white;
-            color: #0b1c39;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Card */
+        .back-btn:hover {
+            background: var(--gold);
+            color: var(--navy-dark);
+            transform: translateX(-5px);
+        }
+
+        /* Glass Profile Card */
         .profile-card {
-            background: white;
-            width: 420px;
-            border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            background: var(--glass-card);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            color: white;
         }
 
         .profile-img {
             position: relative;
-            width: 130px;
-            height: 130px;
-            margin: auto;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
         }
 
         .profile-img img {
@@ -68,84 +82,112 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #142850;
+            border: 4px solid var(--gold);
+            padding: 3px;
+            background: rgba(255,255,255,0.1);
         }
 
         h2 {
             text-align: center;
-            margin: 15px 0 25px;
-            color: #0b1c39;
+            margin: 0 0 30px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* Form fields */
+        /* Form Styling */
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 20px;
         }
 
         label {
+            display: block;
             font-size: 13px;
-            font-weight: 500;
-            color: #555;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 8px;
+            margin-left: 5px;
+            text-transform: uppercase;
         }
 
-        input, select {
+        /* Styling the Django Form Widgets */
+        input, select, textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            margin-top: 5px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-size: 14px;
+            box-sizing: border-box;
+            transition: 0.3s;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #142850;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+        }
+
+        /* Fix for file upload text */
+        input[type="file"] {
+            padding: 10px;
+            font-size: 12px;
         }
 
         /* Save Button */
         .save-btn {
             width: 100%;
-            margin-top: 15px;
-            padding: 12px;
-            background: #142850;
-            color: white;
+            margin-top: 20px;
+            padding: 14px;
+            background: var(--gold);
+            color: var(--navy-dark);
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
         }
 
         .save-btn:hover {
-            background: #0b1c39;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 198, 35, 0.4);
         }
 
-        /* Messages */
+        /* Message Styling */
         .messages {
-            margin-bottom: 15px;
+            padding: 0;
+            margin-bottom: 20px;
         }
         .messages li {
             list-style: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 8px;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            font-size: 13px;
+            background: rgba(40, 167, 69, 0.2);
+            color: #75ff8a;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            text-align: center;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-<a href="{% url 'student-dashboard' %}" class="back-btn">← Student Dashboard</a>
+<a href="{% url 'student-dashboard' %}" class="back-btn">
+    <i class="fas fa-arrow-left"></i> Dashboard
+</a>
 
 <div class="profile-card">
 
     <div class="profile-img">
         {% if student.profile_photo %}
-            <img src="{{ student.profile_photo.url }}">
+            <img src="{{ student.profile_photo.url }}" alt="Profile Photo">
         {% else %}
-            <img src="{% static 'images/default_profile.png' %}">
+            <img src="{% static 'images/default_profile.png' %}" alt="Default Profile">
         {% endif %}
     </div>
 
@@ -154,7 +196,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li>{{ message }}</li>
+                <li><i class="fas fa-check-circle"></i> {{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -169,7 +211,9 @@
             </div>
         {% endfor %}
 
-        <button type="submit" class="save-btn">Save Changes</button>
+        <button type="submit" class="save-btn">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
     </form>
 
 </div>

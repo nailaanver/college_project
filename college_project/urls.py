@@ -34,12 +34,7 @@ urlpatterns = [
     path('api/fees/', include('fees.api_urls')),
     path('fees/', include('fees.urls')),
     path('ai/', include('ai_services.urls')),
-
-
-
-
-
-
+    path('notifications/', include('notifications.urls')),
 
 ]
 

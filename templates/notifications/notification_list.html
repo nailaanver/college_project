@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>🔔 Notifications</h3>
+    <hr>
+
+    {% if notifications %}
+        <ul class="list-group">
+            {% for notification in notifications %}
+                <li class="list-group-item {% if not notification.is_read %}fw-bold{% endif %}">
+                    <strong>{{ notification.title }}</strong>
+                    <p class="mb-1">{{ notification.message }}</p>
+                    <small class="text-muted">
+                        {{ notification.created_at|date:"d M Y, h:i A" }}
+                    </small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No notifications available.</p>
+    {% endif %}
+</div>
+{% endblock %}

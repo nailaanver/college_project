@@ -207,6 +207,77 @@ body {
     color: white;
 }
 
+/* Notification Styling */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adds space between bell, profile, and logout */
+}
+
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--glass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.notification-btn:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    transform: scale(1.1);
+}
+
+.notification-btn .badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff4d4d;
+    color: white;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    border: 2px solid var(--navy-dark);
+}
+
+/* Optional Dropdown Styling */
+.notification-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 0;
+    top: 55px;
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+    color: var(--navy-dark);
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 12px;
+    font-weight: bold;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-body {
+    padding: 15px;
+    font-size: 13px;
+}
+
 @media (max-width: 900px) {
     .dashboard-grid { grid-template-columns: 1fr; }
 }
@@ -220,15 +291,24 @@ body {
             <small id="live-clock"></small>
         </div>
 
-        <div class="header-actions">
-            <a href="{% url 'teacher_profile' %}">
-                <img src="{% if request.user.teacher.profile_photo %}{{ request.user.teacher.profile_photo.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
-                     class="profile-pic" title="Profile Settings">
-            </a>
-            <a href="{% url 'logout' %}" class="logout-btn" id="logout-trigger">
-                <i class="fas fa-power-off"></i>
-            </a>
-        </div>
+<div class="header-actions">
+    <div class="notification-wrapper">
+        <a href="{% url 'notifications:notification_list' %}"
+   class="notification-btn">
+
+            <i class="fas fa-bell"></i>
+             </a>
+        
+    </div>
+
+    <a href="{% url 'teacher_profile' %}">
+        <img src="{% if request.user.teacher.profile_photo %}{{ request.user.teacher.profile_photo.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+             class="profile-pic" title="Profile Settings">
+    </a>
+    <a href="{% url 'logout' %}" class="logout-btn" id="logout-trigger">
+        <i class="fas fa-power-off"></i>
+    </a>
+</div>
     </div>
 
     <div class="stats-row">

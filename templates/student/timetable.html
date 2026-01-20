@@ -3,164 +3,222 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Timetable</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Academic Schedule</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* --- BODY & BACKGROUND --- */
+        :root {
+            --navy-primary: #0b1c39;
+            --navy-light: #142850;
+            --gold: #f3c623;
+            --border-color: #e2e8f0;
+            --highlight-bg: rgba(243, 198, 35, 0.12);
+        }
+
         body {
-            background: url("{% static 'images/campus.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Poppins', sans-serif;
-            padding: 40px;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            /* Campus Background with Navy Overlay */
+            background: linear-gradient(rgba(11, 28, 57, 0.85), rgba(11, 28, 57, 0.85)), 
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+            min-height: 100vh;
+            padding: 40px 20px;
             color: white;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(11, 28, 57, 0.75);
-            z-index: -1;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 22px;
-        }
-
-        /* --- TABLE STYLING --- */
-        table {
-            width: 92%;
-            margin: auto;
-            border-collapse: collapse;
-            background: white;
-            color: #0b1c39;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,.3);
-            font-size: 14px;
-        }
-
-        th, td {
-            padding: 8px 10px;
-            text-align: center;
-            border: 1px solid #e6e9ef;
-        }
-
-        th {
-            background: #142850;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* --- PERIOD COLUMN --- */
-        .period-col {
-            background: #0b1c39;
-            color: white;
-            font-weight: 600;
-            width: 90px;
-            font-size: 14px;
-        }
-
-        /* --- CELLS --- */
-        td {
-            background: #f9fafc;
-        }
-
-        .cell-box {
-            background: white;
-            border-radius: 8px;
-            padding: 6px 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,.12);
-        }
-
-        .subject {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .teacher {
-            font-size: 12px;
-            color: #555;
-        }
-
-        tbody tr {
-            height: 60px;
-        }
-
-        /* --- BACK BUTTON --- */
+        /* Back Button */
         .back-btn {
-            position: fixed;
-            top: 25px;
-            left: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 8px;
             font-weight: 500;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             transition: 0.3s;
-            z-index: 10;
         }
 
         .back-btn:hover {
-            background: white;
-            color: #0b1c39;
+            background: var(--gold);
+            color: var(--navy-primary);
+            transform: translateX(-5px);
         }
 
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h2 {
+            font-size: 26px;
+            margin: 0;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Timetable Structure */
+        .table-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            color: var(--navy-primary);
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 20px 10px;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .time-col {
+            width: 90px;
+            background: #f1f5f9;
+            font-weight: 700;
+            border-right: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        td {
+            height: 100px;
+            vertical-align: top;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Subject Blocks */
+        .subject-block {
+            background: #eff6ff;
+            border-left: 4px solid var(--navy-light);
+            padding: 10px;
+            border-radius: 6px;
+            height: calc(100% - 20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .subject-name {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .teacher-name {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* --- CURRENT DAY HIGHLIGHTING --- */
+        .current-day-column {
+            background-color: var(--highlight-bg) !important;
+        }
+
+        .current-day-header {
+            background-color: var(--gold) !important;
+            color: var(--navy-primary) !important;
+        }
+
+        @media (max-width: 900px) {
+            .table-container { overflow-x: auto; }
+            table { width: 900px; }
+        }
     </style>
 </head>
-
 <body>
-    <!-- Back Button -->
+
     <a href="{% url 'student-dashboard' %}" class="back-btn">
-        ← Back to Dashboard
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
     </a>
 
-    <!-- TITLE -->
-    <h2>{{ course }} – Semester {{ semester }} Timetable</h2>
+    <header>
+        <h2>Class Timetable</h2>
+        <p>{{ course }} — Semester {{ semester }}</p>
+    </header>
 
-    <!-- TIMETABLE -->
-    <table>
-        <thead>
-            <tr>
-                <th>Period</th>
-                {% for day in days %}
-                    <th>{{ day }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for period in periods %}
-            <tr>
-                <th class="period-col">Period {{ period }}</th>
-
-                {% for day in days %}
-                <td>
-                    {% for t in timetables %}
-                        {% if t.day == day and t.period_number == period %}
-                            <div class="cell-box">
-                                <div class="subject">{{ t.subject.name }}</div>
-                                <div class="teacher">{{ t.teacher.user.get_full_name }}</div>
-                            </div>
-                        {% endif %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">Period</th>
+                    {% for day in days %}
+                        <th class="day-header" data-day="{{ day }}">{{ day }}</th>
                     {% endfor %}
-                </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for period in periods %}
+                <tr>
+                    <td class="time-col">P{{ period }}</td>
+
+                    {% for day in days %}
+                    <td class="day-cell" data-day="{{ day }}">
+                        {% for t in timetables %}
+                            {% if t.day == day and t.period_number == period %}
+                                <div class="subject-block">
+                                    <div class="subject-name">{{ t.subject.name }}</div>
+                                    <div class="teacher-name">
+                                        <i class="fas fa-user-tie"></i> {{ t.teacher.user.get_full_name }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="{{ days|length|add:'1' }}">No timetable available</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get today's name (e.g., Monday)
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const today = daysOfWeek[new Date().getDay()];
+
+            // Highlight the matching headers
+            const headers = document.querySelectorAll('.day-header');
+            headers.forEach(th => {
+                if (th.getAttribute('data-day') === today) {
+                    th.classList.add('current-day-header');
+                }
+            });
+
+            // Highlight the matching column cells
+            const cells = document.querySelectorAll('.day-cell');
+            cells.forEach(td => {
+                if (td.getAttribute('data-day') === today) {
+                    td.classList.add('current-day-column');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
