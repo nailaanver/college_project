@@ -79,23 +79,25 @@ def teacher_login(request):
 
 
 
+from django.contrib.auth import authenticate, login
+
 def parent_login(request):
     if request.method == 'POST':
         reg_no = request.POST.get('register_number')
 
         try:
             parent_user = User.objects.get(
-                username=reg_no + "_parent",
+                username=f"{reg_no}_parent",
                 role='parent'
             )
 
             user = authenticate(
                 request,
                 username=parent_user.username,
-                password=reg_no
+                password=reg_no  # must MATCH set_password()
             )
 
-            if user:
+            if user is not None:
                 login(request, user)
                 return redirect('parent-dashboard')
 
