@@ -17,97 +17,67 @@ from django.shortcuts import render, redirect, get_object_or_404
 from attendance.models import Attendance
 from students.models import Student
 from fees.models import Fee
+from parents.models import ParentNotification
 
 
 def parent_dashboard(request):
-    # -------------------------
-    # OTP VERIFICATION CHECK
-    # -------------------------
     if not request.session.get('parent_verified'):
         return redirect('parent_send_otp')
 
-    # -------------------------
-    # GET STUDENT FROM SESSION
-    # -------------------------
     student_id = request.session.get('parent_student_id')
     student = get_object_or_404(Student, id=student_id)
 
     parent_user = student.parent
     today = date.today()
 
+    # 🔔 ADD THIS (COUNT UNREAD NOTIFICATIONS)
+    unread_notification_count = ParentNotification.objects.filter(
+        student=student,
+        is_read=False
+    ).count()
+
     # -------------------------
-    # ATTENDANCE (TODAY + %)
+    # ATTENDANCE
     # -------------------------
     today_attendance = Attendance.objects.filter(
         student=student,
         date=today
     ).order_by('period')
 
-    total_classes = Attendance.objects.filter(
-        student=student
-    ).count()
-
-    present_classes = Attendance.objects.filter(
-        student=student,
-        status='P'
-    ).count()
+    total_classes = Attendance.objects.filter(student=student).count()
+    present_classes = Attendance.objects.filter(student=student, status='P').count()
 
     attendance_percentage = (
         (present_classes / total_classes) * 100
         if total_classes > 0 else 0
     )
 
-    # -------------------------
-    # FEES
-    # -------------------------
-    pending_fees = Fee.objects.filter(
-        student=student,
-        is_paid=False
-    )
+    pending_fees = Fee.objects.filter(student=student, is_paid=False)
+    paid_fees = Fee.objects.filter(student=student, is_paid=True).order_by('-paid_on')
 
-    paid_fees = Fee.objects.filter(
-        student=student,
-        is_paid=True
-    ).order_by('-paid_on')
-
-    # -------------------------
-    # INTERNAL MARKS (APPROVED ONLY)
-    # -------------------------
     internal_marks = (
         InternalMark.objects
-        .filter(
-            student=student,
-            status='Approved'
-        )
+        .filter(student=student, status='Approved')
         .select_related('subject')
         .order_by('subject__name')
     )
 
-    # -------------------------
-    # RENDER
-    # -------------------------
     context = {
         'student': student,
         'parent_user': parent_user,
-
-        # Attendance
         'today_attendance': today_attendance,
         'attendance_percentage': attendance_percentage,
         'today': today,
-
-        # Fees
         'student_fees': pending_fees,
         'paid_fees': paid_fees,
-
-        # Internal Marks
         'internal_marks': internal_marks,
+
+        # 🔔 ADD THIS
+        'unread_notification_count': unread_notification_count,
     }
 
-    return render(
-        request,
-        'parents/parent_dashboard.html',
-        context
-    )
+    return render(request, 'parents/parent_dashboard.html', context)
+
     
 def parent_logout(request):
     request.session.flush()
@@ -268,3 +238,24 @@ def parent_internal_marks(request):
         'internal_marks': internal_marks
     })
     
+    
+# parents/views.py
+from parents.models import ParentNotification
+
+def parent_notification_list(request):
+    if not request.session.get('parent_verified'):
+        return redirect('parent_send_otp')
+
+    student_id = request.session.get('parent_student_id')
+
+    notifications = ParentNotification.objects.filter(
+        student_id=student_id
+    ).order_by('-created_at')
+
+    notifications.filter(is_read=False).update(is_read=True)
+
+    return render(
+        request,
+        'parents/parent_notification_list.html',
+        {'notifications': notifications}
+    )

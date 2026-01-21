@@ -50,3 +50,24 @@ def attendance_post_save(sender, instance, created, **kwargs):
             notification_type="ATTENDANCE",
             reference_id=instance.id
         )
+
+# attendance/signals.py
+from parents.models import ParentNotification
+
+@receiver(post_save, sender=Attendance)
+def attendance_parent_notification(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    if instance.status == 'A':  # ABSENT ONLY
+        ParentNotification.objects.create(
+            student=instance.student,
+            title="Student Absent",
+            message=(
+                f"Your child was absent\n"
+                f"Course: {instance.student.course}\n"
+                f"Semester: {instance.student.semester}\n"
+                f"Period: {instance.period}\n"
+                f"Date: {instance.date}"
+            )
+        )

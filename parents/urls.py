@@ -11,6 +11,11 @@ urlpatterns = [
     path("parent/attendance/", views.parent_attendance_report, name="parent_attendance_report"),
     
     path('internal-marks/', views.parent_internal_marks, name='parent_internal_marks'),
+    path(
+        'notifications/',
+        views.parent_notification_list,
+        name='parent_notification_list'
+    ),
     
 
 
