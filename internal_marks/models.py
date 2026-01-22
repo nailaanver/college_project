@@ -67,19 +67,19 @@ class InternalMark(models.Model):
 
 
 
-def save(self, *args, **kwargs):
-    self.test1 = int(self.test1 or 0)
-    self.test2 = int(self.test2 or 0)
-    self.assignment = int(self.assignment or 0)
+    def save(self, *args, **kwargs):
+        self.test1 = int(self.test1 or 0)
+        self.test2 = int(self.test2 or 0)
+        self.assignment = int(self.assignment or 0)
 
-    # ✅ SUBJECT-WISE attendance mark
-    self.attendance_mark = self.calculate_attendance_mark()
+        # ✅ SUBJECT-WISE attendance mark
+        self.attendance_mark = self.calculate_attendance_mark()
 
-    self.total_internal = (
-        self.test1 +
-        self.test2 +
-        self.assignment +
-        self.attendance_mark
-    )
+        self.total_internal = (
+            self.test1 +
+            self.test2 +
+            self.assignment +
+            self.attendance_mark
+        )
 
-    super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
