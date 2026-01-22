@@ -4,6 +4,9 @@ from .models import Book, Issue
 from .forms import IssueBookForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 
+from notifications.utils import create_notification
+
+
 # Only staff/admin can issue books
 def is_staff(user):
     return user.is_staff
@@ -26,6 +29,16 @@ def issue_book(request):
 
                 issue.status = 'ISSUED'
                 issue.save()
+                
+                # 🔔 Library Notification (ISSUED)
+                create_notification(
+                    recipient=issue.user,
+                    title="📚 Book Issued",
+                    message=f"You have borrowed '{book.title}'. Due date: {issue.due_date}.",
+                    notification_type="LIBRARY",
+                    reference_id=issue.id
+)
+
 
                 messages.success(request, f"{book.title} issued to {issue.user.username}.")
                 return redirect('issue-book')
@@ -71,6 +84,15 @@ def return_book(request, issue_id):
 
             issue.save()
             messages.success(request, f"{book.title} returned successfully.")
+            # 🔔 Library Notification (RETURNED)
+            create_notification(
+                recipient=issue.user,
+                title="📗 Book Returned",
+                message=f"You have successfully returned '{book.title}'.",
+                notification_type="LIBRARY",
+                reference_id=issue.id
+            )
+
             return redirect('return-book-list')
     else:
         form = ReturnBookForm(instance=issue)
@@ -105,6 +127,21 @@ def library_reports(request):
     all_issues = Issue.objects.all().order_by('-issue_date')
     issued_books = Issue.objects.filter(status='ISSUED')
     overdue_books = issued_books.filter(due_date__lt=today)
+    
+    
+    for issue in overdue_books:
+        create_notification(
+            recipient=issue.user,
+            title="⚠️ Library Book Overdue",
+            message=(
+                f"'{issue.book.title}' is overdue. "
+                f"Due date was {issue.due_date}. "
+                f"Fine: ₹{(today - issue.due_date).days * 5}"
+            ),
+            notification_type="LIBRARY",
+            reference_id=issue.id
+        )
+
     total_fines = Issue.objects.aggregate(Sum('fine'))['fine__sum'] or 0
 
     context = {

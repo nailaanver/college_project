@@ -293,11 +293,18 @@ body {
 
 <div class="header-actions">
     <div class="notification-wrapper">
-        <a href="{% url 'notifications:notification_list' %}"
-   class="notification-btn">
+        <div class="notification-wrapper">
+    <a href="{% url 'notifications:notification_list' %}" class="notification-btn">
+        <i class="fas fa-bell"></i>
 
-            <i class="fas fa-bell"></i>
-             </a>
+        {% if unread_notification_count > 0 %}
+            <span class="badge">
+                {{ unread_notification_count }}
+            </span>
+        {% endif %}
+    </a>
+</div>
+
         
     </div>
 
