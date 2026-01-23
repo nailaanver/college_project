@@ -48,6 +48,8 @@ class Issue(models.Model):
         choices=STATUS_CHOICES,
         default='ISSUED',null=True
     )
+    reminder_sent = models.BooleanField(default=False)
+    overdue_notified = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.book.title} → {self.user}"
