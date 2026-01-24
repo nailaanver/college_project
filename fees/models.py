@@ -33,14 +33,29 @@ from django.db import models
 from students.models import Student
 
 class Fee(models.Model):
+    PAID_BY_CHOICES = [
+        ('student', 'Student'),
+        ('parent', 'Parent'),
+    ]
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     fee_type = models.CharField(max_length=50)
     semester = models.PositiveIntegerField(null=True, blank=True)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     due_date = models.DateField()
+
     is_paid = models.BooleanField(default=False)
+
+    # ✅ ADD THESE
+    paid_by = models.CharField(
+        max_length=10,
+        choices=PAID_BY_CHOICES,
+        null=True,
+        blank=True
+    )
+
     paypal_order_id = models.CharField(max_length=255, blank=True, null=True)
-    paid_on = models.DateTimeField(null=True, blank=True)  # ✅ ADD THIS
+    paid_on = models.DateTimeField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

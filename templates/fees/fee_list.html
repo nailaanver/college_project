@@ -217,6 +217,7 @@
                             <th>Amount</th>
                             <th>Due Date</th>
                             <th>Status</th>
+                            <th>Payment_By</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -244,6 +245,13 @@
                                     </span>
                                 {% endif %}
                             </td>
+                            <td>
+    {% if fee.paid_by == 'parent' %}
+        Parent
+    {% elif fee.paid_by == 'student' %}
+        Student
+    {% endif %}
+</td>
                         </tr>
                         {% empty %}
                         <tr>

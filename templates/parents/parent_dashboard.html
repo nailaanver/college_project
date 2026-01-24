@@ -330,6 +330,7 @@ tr:hover td {
                         <th>Date Paid</th>
                         <th>Order ID</th>
                         <th>Status</th>
+                        <th>Payment_By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -340,6 +341,14 @@ tr:hover td {
                         <td>{{ fee.paid_on|date:"d M Y" }}</td>
                         <td><code style="font-size: 10px; color: var(--gold);">{{ fee.paypal_order_id }}</code></td>
                         <td><span style="color: #4ade80; font-weight: bold;">PAID</span></td>
+                        <td>
+    {% if fee.paid_by == 'parent' %}
+        Parent
+    {% elif fee.paid_by == 'student' %}
+        Student
+    {% endif %}
+</td>
+
                     </tr>
                     {% empty %}
                     <tr>

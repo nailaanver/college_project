@@ -181,7 +181,7 @@ h4 i { color: var(--gold); margin-right: 8px; }
             <a href="{% url 'student-logout' %}" style="background: rgba(255,0,0,0.2);"><i class="fas fa-power-off"></i> Logout</a>
         </div>
     </div>
-
+ 
     <div class="main">
         <div class="topbar">
             <div>
@@ -261,7 +261,79 @@ h4 i { color: var(--gold); margin-right: 8px; }
                 <a href="{% url 'user-book-search' %}" class="action-btn">Search Books</a>
             </div>
         </div>
-    </div>
+        <div class="box" style="margin-top:25px;">
+    <h4><i class="fas fa-wallet"></i> Fee Payments</h4>
+
+    {% if pending_fees %}
+        <table style="width:100%; margin-top:15px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding:10px;">Fee Type</th>
+                    <th style="text-align:left; padding:10px;">Amount</th>
+                    <th style="text-align:left; padding:10px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in pending_fees %}
+                <tr>
+                    <td style="padding:10px;">{{ fee.fee_type }}</td>
+                    <td style="padding:10px;">₹ {{ fee.amount }}</td>
+                    <td style="padding:10px;">
+                        <button
+                            class="action-btn pay-btn"
+                            data-fee-url="{% url 'api_create_payment' fee.id %}">
+                            Pay Now
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color:green; font-weight:600; margin-top:10px;">
+            ✅ No pending fees
+        </p>
+    {% endif %}
 </div>
+    </div>
+    <!-- ================= FEES SECTION ================= -->
+</div>
+<meta name="csrf-token" content="{{ csrf_token }}">
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    document.querySelectorAll(".pay-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const apiUrl = this.dataset.feeUrl;
+            this.innerHTML = "Processing...";
+
+            fetch(apiUrl, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Accept": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.approval_url) {
+                    window.location.href = data.approval_url;
+                } else {
+                    alert(data.error || "Payment failed");
+                    this.innerHTML = "Pay Now";
+                }
+            })
+            .catch(() => {
+                alert("Payment service unavailable");
+                this.innerHTML = "Pay Now";
+            });
+        });
+    });
+});
+</script>
+
 
 {% endblock %}

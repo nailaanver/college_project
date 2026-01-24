@@ -15,6 +15,7 @@ from library.models import Issue
 
 from django.db.models import Avg
 from students.utils.performance_ai import generate_academic_summary
+from fees.models import Fee
 
 
 @login_required(login_url='student-login')
@@ -26,6 +27,7 @@ def student_dashboard(request):
     except Student.DoesNotExist:
         return redirect('student-login')
 
+    # ---------------- Attendance ----------------
     total_classes = Attendance.objects.filter(student=student).count()
     present_classes = Attendance.objects.filter(
         student=student,
@@ -37,7 +39,7 @@ def student_dashboard(request):
         if total_classes > 0 else 0
     )
 
-    # ✅ NEW: Average internal marks
+    # ---------------- Internals ----------------
     internal_avg = InternalMark.objects.filter(
         student=student,
         status='Approved'
@@ -45,7 +47,6 @@ def student_dashboard(request):
 
     internal_avg = round(internal_avg, 2)
 
-    # ✅ NEW: Rule-based AI summary
     academic_summary = generate_academic_summary(
         attendance_percentage,
         internal_avg
@@ -54,12 +55,28 @@ def student_dashboard(request):
     internals_count = InternalMark.objects.filter(student=student).count()
     issued_books = Issue.objects.filter(user=user, status='ISSUED').count()
 
+    # ---------------- ✅ FEES (NEW) ----------------
+    pending_fees = Fee.objects.filter(
+        student=student,
+        is_paid=False
+    )
+
+    paid_fees = Fee.objects.filter(
+        student=student,
+        is_paid=True
+    ).order_by('-paid_on')
+
+    # ---------------- Context ----------------
     context = {
         'student': student,
         'attendance_percentage': attendance_percentage,
         'internals_count': internals_count,
         'issued_books': issued_books,
-        'academic_summary': academic_summary,   # ✅ SEND TO TEMPLATE
+        'academic_summary': academic_summary,
+
+        # ✅ NEW FOR PAYMENT UI
+        'pending_fees': pending_fees,
+        'paid_fees': paid_fees,
     }
 
     return render(request, 'student/dashboard.html', context)
