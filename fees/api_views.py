@@ -108,6 +108,9 @@ def execute_paypal_payment(request, fee_id):
         fee.save()
 
         send_payment_receipt(fee)
+        
+        
+        
 
         return redirect(
             "/parent/dashboard/?payment=success"

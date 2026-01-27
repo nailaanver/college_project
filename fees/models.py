@@ -1,7 +1,10 @@
 from django.db import models
 from students.models import Student
 
+from students.models import Student
+
 class FeeStructure(models.Model):
+
     FEE_TYPE_CHOICES = [
         ('TUITION', 'Tuition Fee'),
         ('EXAM', 'Exam Fee'),
@@ -10,8 +13,8 @@ class FeeStructure(models.Model):
         ('ADMISSION', 'Admission Fee'),
     ]
 
-    # Use the same course choices as Student
     COURSE_CHOICES = Student.COURSE_CHOICES
+    SEMESTER_CHOICES = Student.SEMESTER_CHOICES  # 👈 reuse
 
     course = models.CharField(
         max_length=20,
@@ -20,33 +23,40 @@ class FeeStructure(models.Model):
         blank=True,
         help_text="Leave blank to apply fee to all students"
     )
+
     fee_type = models.CharField(max_length=50, choices=FEE_TYPE_CHOICES)
-    semester = models.PositiveIntegerField(null=True, blank=True)
+
+    semester = models.PositiveIntegerField(
+        choices=SEMESTER_CHOICES,   # ✅ DROPDOWN
+        null=True,
+        blank=True,
+        help_text="Leave blank to apply to all semesters"
+    )
+
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-
-    def __str__(self):
-        if self.course:
-            return f"{self.course} - {self.fee_type}"
-        return f"All Students - {self.fee_type}"
-
-from django.db import models
-from students.models import Student
-
+    
 class Fee(models.Model):
+
     PAID_BY_CHOICES = [
         ('student', 'Student'),
         ('parent', 'Parent'),
     ]
 
+    SEMESTER_CHOICES = Student.SEMESTER_CHOICES  # 👈 reuse
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     fee_type = models.CharField(max_length=50)
-    semester = models.PositiveIntegerField(null=True, blank=True)
+
+    semester = models.PositiveIntegerField(
+        choices=SEMESTER_CHOICES,   # ✅ DROPDOWN
+        null=True,
+        blank=True
+    )
+
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     due_date = models.DateField()
-
     is_paid = models.BooleanField(default=False)
 
-    # ✅ ADD THESE
     paid_by = models.CharField(
         max_length=10,
         choices=PAID_BY_CHOICES,
@@ -56,8 +66,5 @@ class Fee(models.Model):
 
     paypal_order_id = models.CharField(max_length=255, blank=True, null=True)
     paid_on = models.DateTimeField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.student.register_number} - {self.fee_type}"

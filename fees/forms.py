@@ -7,6 +7,5 @@ class FeeStructureForm(forms.ModelForm):
         model = FeeStructure
         fields = ['fee_type', 'course', 'semester', 'amount']
         widgets = {
-            'semester': forms.NumberInput(attrs={'min': 1}),
             'amount': forms.NumberInput(attrs={'step': '0.01'}),
         }
