@@ -81,6 +81,12 @@ def create_paypal_payment(request, fee_id):
 # -------------------------------
 # EXECUTE PAYPAL PAYMENT
 # -------------------------------
+from notifications.models import Notification
+from parents.models import ParentNotification
+
+# -------------------------------
+# EXECUTE PAYPAL PAYMENT
+# -------------------------------
 @fee_payer_required
 def execute_paypal_payment(request, fee_id):
 
@@ -102,15 +108,42 @@ def execute_paypal_payment(request, fee_id):
     payment = paypalrestsdk.Payment.find(payment_id)
 
     if payment.execute({"payer_id": payer_id}):
+
+        # ✅ Update fee status
         fee.is_paid = True
-        fee.paid_by = paid_by      # ✅ THIS IS THE KEY LINE
+        fee.paid_by = paid_by
         fee.paid_on = timezone.now()
         fee.save()
 
         send_payment_receipt(fee)
-        
-        
-        
+
+        # ===============================
+        # 🔔 STUDENT NOTIFICATION
+        # ===============================
+        if student.user:
+            Notification.objects.create(
+                recipient=student.user,
+                title="✅ Fee Payment Successful",
+                message=(
+                    f"Your {fee.fee_type} fee of ₹{fee.amount} "
+                    f"has been successfully paid."
+                ),
+                notification_type="FEES",
+                reference_id=fee.id
+            )
+
+        # ===============================
+        # 🔔 PARENT NOTIFICATION
+        # ===============================
+        if student.parent:
+            ParentNotification.objects.create(
+                student=student,
+                title="✅ Fee Payment Successful",
+                message=(
+                    f"{student.first_name}'s {fee.fee_type} fee of "
+                    f"₹{fee.amount} has been successfully paid."
+                )
+            )
 
         return redirect(
             "/parent/dashboard/?payment=success"
