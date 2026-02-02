@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="manage-wrapper">
+    <h2>Promote Students</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <select name="course" required>
+            <option value="">Select Course</option>
+            {% for value, label in course_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="semester" required>
+            <option value="">Select Semester</option>
+            {% for value, label in semester_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit"
+            onclick="return confirm('Promote all students to next semester?')"
+            class="action-btn btn-add">
+            Promote Students
+        </button>
+    </form>
+</div>
+
+{% endblock %}

@@ -45,9 +45,29 @@ def admin_dashboard(request):
 def student_list(request):
     if not request.user.is_superuser:
         return redirect('home')
-    
+
+    # get filter values from URL
+    course = request.GET.get('course')
+    semester = request.GET.get('semester')
+
     students = Student.objects.all()
-    return render (request,'adminpanel/student_list.html',{'students':students})
+
+    # apply filters
+    if course:
+        students = students.filter(course=course)
+
+    if semester:
+        students = students.filter(semester=semester)
+
+    context = {
+        'students': students,
+        'selected_course': course,
+        'selected_semester': semester,
+        'course_choices': Student.COURSE_CHOICES,
+        'semester_choices': Student.SEMESTER_CHOICES,
+    }
+
+    return render(request, 'adminpanel/student_list.html', context)
                   
 # adminpanel/views.py
 
@@ -330,5 +350,34 @@ def course_detail(request, course):
         'course_code': course,
         'course_name': dict(Student.COURSE_CHOICES).get(course)
     })
+
+
+@login_required
+def promote_students(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    if request.method == 'POST':
+        course = request.POST.get('course')
+        semester = int(request.POST.get('semester'))
+
+        students = Student.objects.filter(course=course, semester=semester)
+
+        # Prevent promotion beyond final semester
+        final_semester = max(dict(Student.SEMESTER_CHOICES).keys())
+        if semester >= final_semester:
+            return redirect('student-list')
+
+        for student in students:
+            student.semester += 1
+            student.save()
+
+        return redirect('student-list')
+
+    context = {
+        'course_choices': Student.COURSE_CHOICES,
+        'semester_choices': Student.SEMESTER_CHOICES,
+    }
+    return render(request, 'adminpanel/promote_students.html', context)
 
 

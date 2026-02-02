@@ -78,3 +78,12 @@ class StudentFace(models.Model):
 
     def __str__(self):
         return f"Face data for {self.student.register_number}"
+
+
+class Semester(models.Model):
+    semester_number = models.PositiveIntegerField(unique=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f"Semester {self.semester_number}"

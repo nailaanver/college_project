@@ -22,6 +22,8 @@ urlpatterns = [
     
     path('courses/', views.course_list, name='course-list'),
     path('courses/<str:course>/', views.course_detail, name='course-detail'),
+    
+    path('students/promote/', views.promote_students, name='promote-students'),
 
 
 

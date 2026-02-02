@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'ai_services',
     'fees.apps.FeesConfig',
     'notifications',
+    'academics',
     # Third party
     'rest_framework',
 ]
