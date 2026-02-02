@@ -352,6 +352,13 @@ def course_detail(request, course):
     })
 
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from students.models import Student
+from notifications.models import Notification
+from parents.models import ParentNotification
+
 @login_required
 def promote_students(request):
     if not request.user.is_superuser:
@@ -359,25 +366,53 @@ def promote_students(request):
 
     if request.method == 'POST':
         course = request.POST.get('course')
-        semester = int(request.POST.get('semester'))
+        semester = request.POST.get('semester')
 
-        students = Student.objects.filter(course=course, semester=semester)
+        if not course or not semester:
+            messages.error(request, "Course and Semester are required")
+            return redirect('student-list')
 
-        # Prevent promotion beyond final semester
-        final_semester = max(dict(Student.SEMESTER_CHOICES).keys())
-        if semester >= final_semester:
+        semester = int(semester)
+
+        students = Student.objects.filter(
+            course=course,
+            semester=semester
+        )
+
+        if not students.exists():
+            messages.info(request, "No students found for promotion")
             return redirect('student-list')
 
         for student in students:
+            old_sem = student.semester
             student.semester += 1
             student.save()
 
-        return redirect('student-list')
+            # 🔔 STUDENT NOTIFICATION
+            Notification.objects.create(
+                recipient=student.user,
+                title="Semester Promotion",
+                message=(
+                    f"Congratulations! You have been promoted from "
+                    f"Semester {old_sem} to Semester {student.semester}."
+                ),
+                notification_type="SYSTEM",
+                reference_id=student.id
+            )
 
-    context = {
-        'course_choices': Student.COURSE_CHOICES,
-        'semester_choices': Student.SEMESTER_CHOICES,
-    }
-    return render(request, 'adminpanel/promote_students.html', context)
+            # 🔔 PARENT NOTIFICATION
+            ParentNotification.objects.create(
+                student=student,
+                title="Student Promoted",
+                message=(
+                    f"Your ward {student.first_name} {student.last_name} "
+                    f"has been promoted to Semester {student.semester}."
+                )
+            )
 
+        messages.success(
+            request,
+            f"{students.count()} students promoted successfully."
+        )
 
+    return redirect('student-list')
