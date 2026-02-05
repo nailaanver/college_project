@@ -52,7 +52,8 @@ def mark_attendance(request, timetable_id):
     if Attendance.objects.filter(
         subject=timetable.subject,
         period=timetable.period_number,
-        date=today
+        date=today,
+        semester=timetable.semester  # ✅ ALSO CHECK SEMESTER
     ).exists():
         return redirect('attendance_summary', timetable.id)
 
@@ -60,14 +61,16 @@ def mark_attendance(request, timetable_id):
         for student in students:
             status = request.POST.get(f'status_{student.id}', 'A')
 
-            Attendance.objects.create(
+            Attendance.objects.update_or_create(
                 student=student,
                 subject=timetable.subject,
-                date=date.today(),
+                date=today,
                 period=timetable.period_number,
-                status=status
+                defaults={
+                    'status': status,
+                    'semester': timetable.semester  # 🔥 FIX HERE
+                }
             )
-
 
         return redirect('attendance_summary', timetable.id)
 

@@ -58,7 +58,6 @@ class Student(models.Model):
         blank=True,
         null=True
     )
-    semester = models.PositiveIntegerField()
     parent_email = models.EmailField(blank=True, null=True)
     otp = models.CharField(max_length=6, blank=True, null=True)  # store OTP
     otp_created_at = models.DateTimeField(blank=True, null=True)  # store OTP timestamp

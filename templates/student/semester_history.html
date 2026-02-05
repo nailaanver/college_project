@@ -142,7 +142,16 @@
 
     <div class="main">
         <div class="history-card">
-            <h3><i class="fas fa-graduation-cap"></i> Academic History</h3>
+            <h3>
+    <i class="fas fa-graduation-cap"></i>
+    Academic History
+    {% if is_parent %}
+        <span style="font-size: 0.9rem; color: #64748b;">
+            ({{ student.first_name }} {{ student.last_name }})
+        </span>
+    {% endif %}
+</h3>
+
             <p style="color: var(--navy); opacity: 0.8;">Current Active Semester: <strong>{{ current_semester }}</strong></p>
             
             {% if semester_list %}

@@ -138,13 +138,17 @@ from django.db.models import Count, Q
 @login_required(login_url='student-login')
 def student_attendance(request):
 
-    # Safety check (optional but recommended)
     if request.user.role != 'student':
         return redirect('student-login')
 
     student = get_object_or_404(Student, user=request.user)
 
-    attendance = Attendance.objects.filter(student=student)
+    current_semester = student.semester  # ✅ INTEGER (1–6)
+
+    attendance = Attendance.objects.filter(
+        student=student,
+        semester=current_semester   # ✅ KEY LINE
+    )
 
     subject_wise = attendance.values(
         'subject__name'
@@ -159,8 +163,10 @@ def student_attendance(request):
         ) if s['total'] > 0 else 0
 
     return render(request, 'student/attendance.html', {
-        'subject_wise': subject_wise
+        'subject_wise': subject_wise,
+        'current_semester': current_semester
     })
+
 from django.shortcuts import get_object_or_404
 
 @login_required(login_url='student-login')

@@ -17,6 +17,7 @@ class Attendance(models.Model):
     date = models.DateField(default=timezone.now)
     period = models.PositiveIntegerField()  # 1 to 7
     status = models.CharField(max_length=1, choices=ATTENDANCE_STATUS)
+    semester = models.PositiveIntegerField(blank=True,null=True)
 
     class Meta:
         unique_together = ('student', 'subject', 'date', 'period')
