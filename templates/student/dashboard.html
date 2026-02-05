@@ -201,9 +201,13 @@
         <a href="{% url 'student-attendance' %}"><i class="fas fa-clipboard-user"></i> Attendance</a>
         <a href="{% url 'student-marks' %}"><i class="fas fa-file-invoice"></i> Internal Marks</a>
         <a href="{% url 'student-timetable' %}"><i class="fas fa-clock"></i> Timetable</a>
+        <a href="{% url 'semester-history' %}">
+    <i class="fas fa-history"></i> Semester History
+</a>
+
         <a href="{% url 'upload-face' %}"><i class="fas fa-face-smile"></i> Register Face</a>
         <div style="margin-top: auto;">
-            <a href="{% url 'student-logout' %}" style="background: rgba(255,0,0,0.2);"><i class="fas fa-power-off"></i> Logout</a>
+            <a href="{% url 'student-logout' %}" bbstyle="background: rgba(255,0,0,0.2);"><i class="fas fa-power-off"></i> Logout</a>
         </div>
     </div>
 

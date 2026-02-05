@@ -8,4 +8,7 @@ urlpatterns = [
     path('marks/', views.student_internal_marks, name='student-marks'),
     path('timetable/', views.student_timetable, name='student-timetable'),
     path('logout/', views.student_logout, name='student-logout'),
+    
+    path('history/', views.semester_history, name='semester-history'),
+
 ]

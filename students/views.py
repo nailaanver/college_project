@@ -212,3 +212,56 @@ def student_timetable(request):
     })
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from attendance.models import Attendance
+from internal_marks.models import InternalMark   # adjust if app name differs
+from collections import defaultdict
+
+
+from internal_marks.models import InternalMark
+from collections import defaultdict
+
+@login_required
+def semester_history(request):
+
+    if not hasattr(request.user, 'student_profile'):
+        return redirect('home')
+
+    student = request.user.student_profile
+    current_semester = student.semester
+
+    selected_semester = request.GET.get('semester')
+    selected_semester = int(selected_semester) if selected_semester else current_semester - 1
+
+    if selected_semester < 1:
+        selected_semester = 1
+
+    semester_list = list(range(1, current_semester))
+
+    # ---------- ATTENDANCE ----------
+    attendance_qs = Attendance.objects.filter(
+        student=student,
+        subject__semester=selected_semester
+    ).order_by('date', 'period')
+
+    attendance_matrix = defaultdict(dict)
+    for att in attendance_qs:
+        attendance_matrix[att.date][att.period] = att.status
+
+    # ---------- INTERNAL MARKS ✅ ----------
+    marks = InternalMark.objects.filter(
+        student=student,
+        semester=selected_semester
+    ).select_related('subject')
+
+    context = {
+        'current_semester': current_semester,
+        'semester_list': semester_list,
+        'semester': selected_semester,
+        'attendance_matrix': dict(attendance_matrix),
+        'periods': range(1, 8),
+        'marks': marks,   # ✅ THIS WAS MISSING
+    }
+
+    return render(request, 'student/semester_history.html', context)

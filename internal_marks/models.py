@@ -33,7 +33,7 @@ class InternalMark(models.Model):
         choices=STATUS_CHOICES,
         default='Draft'
     )
-
+    semester = models.PositiveIntegerField(blank=True,null=True)
     class Meta:
         unique_together = ('student', 'subject')
 

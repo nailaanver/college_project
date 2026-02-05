@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load attendance_extras %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    /* Use your exact dashboard variables */
+    :root {
+        --navy-dark: #0b1c39;
+        --navy: #142850;
+        --gold: #f3c623;
+        --white: #ffffff;
+        --glass: rgba(255, 255, 255, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --success: #16a34a;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+    }
+
+    .student-dashboard {
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        background: linear-gradient(rgba(11, 28, 57, 0.7), rgba(11, 28, 57, 0.7)), 
+                    url("{% static 'images/campus.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 25px;
+    }
+
+    /* Main Content Area */
+    .main { flex: 1; display: flex; flex-direction: column; }
+
+    /* Container Box Styling */
+    .history-card {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        margin-bottom: 25px;
+        border: 1px solid var(--white);
+    }
+
+    .history-card h3 {
+        color: var(--navy-dark);
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Form & Select Styling */
+    .filter-section {
+        background: var(--navy);
+        padding: 20px;
+        border-radius: 15px;
+        color: white;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .filter-section select {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-family: 'Poppins';
+        min-width: 200px;
+    }
+
+    /* Table Improvements */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .styled-table thead tr {
+        background-color: #f8fafc;
+        color: var(--navy);
+        text-align: left;
+    }
+
+    .styled-table th, .styled-table td {
+        padding: 15px 20px;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #f1f5f9;
+    }
+
+    /* Attendance Status Badges */
+    .status-badge {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+    .status-P { background: #dcfce7; color: var(--success); }
+    .status-A { background: #fee2e2; color: var(--danger); }
+    .status-L { background: #fef3c7; color: var(--warning); }
+    .status-none { color: #cbd5e1; }
+
+    /* Sidebar - Reusing your existing style */
+    .sidebar { width: 270px; background: rgba(11, 28, 57, 0.85); backdrop-filter: blur(15px); border-radius: 20px; padding: 35px 20px; color: var(--white); margin-right: 25px; display: flex; flex-direction: column; }
+    .sidebar h2 { color: var(--gold); font-weight: 700; text-align: center; margin-bottom: 40px; }
+    .sidebar a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: rgba(255,255,255,0.8); text-decoration: none; border-radius: 10px; margin-bottom: 8px; transition: 0.3s; }
+    .sidebar a:hover, .sidebar a.active { background: var(--gold); color: var(--navy-dark); font-weight: 600; }
+</style>
+
+<div class="student-dashboard">
+    <div class="sidebar">
+        <h2>STUDENT</h2>
+        <a href="{% url 'student-dashboard' %}"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="{% url 'student-profile' %}"><i class="fas fa-user-graduate"></i> Profile</a>
+        <a href="{% url 'student-attendance' %}"><i class="fas fa-clipboard-user"></i> Attendance</a>
+        <a href="{% url 'student-marks' %}"><i class="fas fa-file-invoice"></i> Internal Marks</a>
+        <a href="{% url 'student-timetable' %}"><i class="fas fa-clock"></i> Timetable</a>
+        <a href="{% url 'semester-history' %}" class="active"><i class="fas fa-history"></i> Semester History</a>
+        <a href="{% url 'upload-face' %}"><i class="fas fa-face-smile"></i> Register Face</a>
+        <div style="margin-top: auto;">
+            <a href="{% url 'student-logout' %}"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="history-card">
+            <h3><i class="fas fa-graduation-cap"></i> Academic History</h3>
+            <p style="color: var(--navy); opacity: 0.8;">Current Active Semester: <strong>{{ current_semester }}</strong></p>
+            
+            {% if semester_list %}
+            <div class="filter-section">
+                <span><i class="fas fa-filter"></i> Select Semester to View:</span>
+                <form method="get" id="semesterForm">
+                    <select name="semester" onchange="document.getElementById('semesterForm').submit()">
+                        <option value="">-- Select Semester --</option>
+                        {% for sem in semester_list %}
+                            <option value="{{ sem }}" {% if sem == semester %}selected{% endif %}>
+                                Semester {{ sem }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            {% else %}
+                <div class="box"><p>No previous semester data available.</p></div>
+            {% endif %}
+        </div>
+
+        {% if semester %}
+        <div class="history-card">
+            <h3><i class="fas fa-calendar-check"></i> Attendance (Semester {{ semester }})</h3>
+            <div class="table-responsive">
+                {% if attendance_matrix %}
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            {% for p in periods %}
+                                <th style="text-align: center;">P{{ p }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for date, day_data in attendance_matrix.items %}
+                        <tr>
+                            <td><strong>{{ date|date:"d M Y" }}</strong></td>
+                            {% for p in periods %}
+                                <td align="center">
+                                    {% with status=day_data|get_item:p %}
+                                        {% if status %}
+                                            <span class="status-badge status-{{ status }}">{{ status }}</span>
+                                        {% else %}
+                                            <span class="status-none">—</span>
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p style="color: var(--danger); padding: 20px;">No attendance records for this period.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="history-card">
+            <h3><i class="fas fa-chart-bar"></i> Internal Marks (Semester {{ semester }})</h3>
+            <div class="table-responsive">
+                {% if marks %}
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th style="text-align:center;">Test 1</th>
+                            <th style="text-align:center;">Test 2</th>
+                            <th style="text-align:center;">Assignment</th>
+                            <th style="text-align:center;">Attendance</th>
+                            <th style="text-align:center;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in marks %}
+                        <tr>
+                            <td style="font-weight: 600; color: var(--navy-dark);">{{ m.subject.name }}</td>
+                            <td align="center">{{ m.test1 }}</td>
+                            <td align="center">{{ m.test2 }}</td>
+                            <td align="center">{{ m.assignment }}</td>
+                            <td align="center">{{ m.attendance_mark }}</td>
+                            <td align="center"><strong style="color: var(--navy); font-size: 1.1rem;">{{ m.total_internal }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p style="color: var(--danger); padding: 20px;">No marks records for this period.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
