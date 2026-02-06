@@ -18,6 +18,9 @@ from students.utils.performance_ai import generate_academic_summary
 from fees.models import Fee
 
 
+from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
+
 @login_required(login_url='student-login')
 def student_dashboard(request):
     user = request.user
@@ -27,10 +30,17 @@ def student_dashboard(request):
     except Student.DoesNotExist:
         return redirect('student-login')
 
-    # ---------------- Attendance ----------------
-    total_classes = Attendance.objects.filter(student=student).count()
+    current_semester = student.semester  # ✅ CURRENT SEM
+
+    # ---------------- ✅ Attendance (CURRENT SEM ONLY) ----------------
+    total_classes = Attendance.objects.filter(
+        student=student,
+        semester=current_semester
+    ).count()
+
     present_classes = Attendance.objects.filter(
         student=student,
+        semester=current_semester,
         status='P'
     ).count()
 
@@ -39,9 +49,10 @@ def student_dashboard(request):
         if total_classes > 0 else 0
     )
 
-    # ---------------- Internals ----------------
+    # ---------------- ✅ Internals (CURRENT SEM ONLY) ----------------
     internal_avg = InternalMark.objects.filter(
         student=student,
+        semester=current_semester,
         status='Approved'
     ).aggregate(avg=Avg('total_internal'))['avg'] or 0
 
@@ -52,10 +63,17 @@ def student_dashboard(request):
         internal_avg
     )
 
-    internals_count = InternalMark.objects.filter(student=student).count()
-    issued_books = Issue.objects.filter(user=user, status='ISSUED').count()
+    internals_count = InternalMark.objects.filter(
+        student=student,
+        semester=current_semester
+    ).count()
 
-    # ---------------- ✅ FEES (NEW) ----------------
+    issued_books = Issue.objects.filter(
+        user=user,
+        status='ISSUED'
+    ).count()
+
+    # ---------------- Fees ----------------
     pending_fees = Fee.objects.filter(
         student=student,
         is_paid=False
@@ -66,15 +84,12 @@ def student_dashboard(request):
         is_paid=True
     ).order_by('-paid_on')
 
-    # ---------------- Context ----------------
     context = {
         'student': student,
         'attendance_percentage': attendance_percentage,
         'internals_count': internals_count,
         'issued_books': issued_books,
         'academic_summary': academic_summary,
-
-        # ✅ NEW FOR PAYMENT UI
         'pending_fees': pending_fees,
         'paid_fees': paid_fees,
     }
