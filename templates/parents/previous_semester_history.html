@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load attendance_extras %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy-dark: #0b1c39;
+    --navy-grey: rgba(11, 28, 57, 0.85);
+    --beige-card: rgba(245, 245, 220, 0.95);
+    --beige-dark-text: #2c261e;
+    --gold: #c5a021;
+    --glass-border: rgba(197, 160, 33, 0.3);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(var(--navy-grey), var(--navy-grey)),
+                url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
+    margin: 0;
+    padding-bottom: 50px;
+}
+
+.history-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* --- Beige Glass Card --- */
+.glass-card {
+    background: var(--beige-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: var(--beige-dark-text);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.page-title {
+    color: #ffffff;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.section-title {
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--gold);
+    padding-left: 15px;
+}
+
+/* --- Tables --- */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 15px;
+    color: var(--gold);
+    font-size: 11px;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    font-size: 14px;
+    color: var(--beige-dark-text);
+}
+
+/* --- Attendance Badges --- */
+.badge {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.bg-success { background: #2d6a4f; color: white; } /* Present */
+.bg-danger { background: #ae2012; color: white; }  /* Absent */
+.bg-warning { background: #ee9b00; color: white; } /* Late/Leave */
+
+/* --- Back Button --- */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    margin-top: 10px;
+}
+
+.back-btn:hover {
+    background: #ffffff;
+    transform: translateX(-5px);
+}
+
+</style>
+
+<div class="history-container">
+    
+    <h2 class="page-title">
+        <i class="fas fa-history" style="color: var(--gold);"></i> 
+        Semester {{ semester }} Records
+    </h2>
+
+    <div class="glass-card">
+        <h3 class="section-title">Attendance Log</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        {% for p in periods %}
+                            <th>P{{ p }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date, periods_dict in attendance_matrix.items %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ date|date:"d M Y" }}</td>
+                        {% for p in periods %}
+                            <td>
+                                {% with periods_dict|get_item:p as status %}
+                                    {% if status == 'P' %}
+                                        <span class="badge bg-success">P</span>
+                                    {% elif status == 'A' %}
+                                        <span class="badge bg-danger">A</span>
+                                    {% elif status == 'L' %}
+                                        <span class="badge bg-warning">L</span>
+                                    {% else %}
+                                        <span style="opacity: 0.3;">—</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="100" style="text-align: center; padding: 40px; opacity: 0.6;">
+                            <i class="fas fa-calendar-times" style="font-size: 24px; display: block; margin-bottom: 10px;"></i>
+                            No attendance records found for this semester.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h3 class="section-title">Final Internal Marks</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th style="text-align: right;">Total Internal Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mark in internal_marks %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ mark.subject.name }}</td>
+                        <td style="text-align: right; font-weight: 800; color: var(--gold); font-size: 16px;">
+                            {{ mark.total_internal }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" style="text-align: center; padding: 40px; opacity: 0.6;">
+                            No marks available for this semester.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'parent_dashboard' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+    </a>
+
+</div>
+
+{% endblock %}

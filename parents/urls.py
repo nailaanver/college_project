@@ -16,6 +16,11 @@ urlpatterns = [
         views.parent_notification_list,
         name='parent_notification_list'
     ),
+    path(
+    'previous-semester/<int:semester>/',
+    views.parent_previous_semester,
+    name='parent_previous_semester'),
+
     
 
 

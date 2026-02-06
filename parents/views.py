@@ -29,38 +29,58 @@ def parent_dashboard(request):
 
     parent_user = student.parent
     today = date.today()
+    current_semester = student.semester  # ✅ IMPORTANT
 
-    # 🔔 ADD THIS (COUNT UNREAD NOTIFICATIONS)
+    # 🔔 Unread notifications
     unread_notification_count = ParentNotification.objects.filter(
         student=student,
         is_read=False
     ).count()
 
     # -------------------------
-    # ATTENDANCE
+    # ✅ ATTENDANCE (CURRENT SEM ONLY)
     # -------------------------
     today_attendance = Attendance.objects.filter(
         student=student,
+        semester=current_semester,
         date=today
     ).order_by('period')
 
-    total_classes = Attendance.objects.filter(student=student).count()
-    present_classes = Attendance.objects.filter(student=student, status='P').count()
+    total_classes = Attendance.objects.filter(
+        student=student,
+        semester=current_semester
+    ).count()
+
+    present_classes = Attendance.objects.filter(
+        student=student,
+        semester=current_semester,
+        status='P'
+    ).count()
 
     attendance_percentage = (
-        (present_classes / total_classes) * 100
+        round((present_classes / total_classes) * 100, 2)
         if total_classes > 0 else 0
     )
 
-    pending_fees = Fee.objects.filter(student=student, is_paid=False)
-    paid_fees = Fee.objects.filter(student=student, is_paid=True).order_by('-paid_on')
-
+    # -------------------------
+    # ✅ INTERNAL MARKS (CURRENT SEM ONLY)
+    # -------------------------
     internal_marks = (
         InternalMark.objects
-        .filter(student=student, status='Approved')
+        .filter(
+            student=student,
+            semester=current_semester,
+            status='Approved'
+        )
         .select_related('subject')
         .order_by('subject__name')
     )
+
+    # -------------------------
+    # FEES
+    # -------------------------
+    pending_fees = Fee.objects.filter(student=student, is_paid=False)
+    paid_fees = Fee.objects.filter(student=student, is_paid=True).order_by('-paid_on')
 
     context = {
         'student': student,
@@ -71,12 +91,58 @@ def parent_dashboard(request):
         'student_fees': pending_fees,
         'paid_fees': paid_fees,
         'internal_marks': internal_marks,
-
-        # 🔔 ADD THIS
         'unread_notification_count': unread_notification_count,
     }
 
     return render(request, 'parents/parent_dashboard.html', context)
+
+from django.db.models import Count, Q
+from collections import defaultdict
+
+
+def parent_previous_semester(request, semester):
+    if not request.session.get('parent_verified'):
+        return redirect('parent_send_otp')
+
+    student_id = request.session.get('parent_student_id')
+    student = get_object_or_404(Student, id=student_id)
+
+    current_semester = student.semester
+
+    # ❌ Prevent invalid access
+    if semester >= current_semester or semester < 1:
+        return redirect('parent_dashboard')
+
+    # ---------- ATTENDANCE ✅ (SAME AS STUDENT LOGIC) ----------
+    attendance_qs = Attendance.objects.filter(
+        student=student,
+        subject__semester=semester     # 🔥 THIS IS THE FIX
+    ).order_by('date', 'period')
+
+    attendance_matrix = defaultdict(dict)
+    for att in attendance_qs:
+        attendance_matrix[att.date][att.period] = att.status
+
+    # ---------- INTERNAL MARKS ----------
+    internal_marks = InternalMark.objects.filter(
+        student=student,
+        semester=semester,
+        status='Approved'
+    ).select_related('subject')
+
+    context = {
+        'student': student,
+        'semester': semester,
+        'attendance_matrix': dict(attendance_matrix),
+        'periods': range(1, 8),
+        'internal_marks': internal_marks,
+    }
+
+    return render(
+        request,
+        'parents/previous_semester_history.html',
+        context
+    )
 
     
 def parent_logout(request):

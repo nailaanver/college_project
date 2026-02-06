@@ -3,189 +3,129 @@
 
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
+    /* REVERTED: Original Navy/Grey Palette for Background and Header */
     --navy-dark: #0b1c39;
-    --gold: #f3c623;
-    --white: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.1); /* Translucent White */
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-text: #ffffff;
+    --navy-grey: rgba(11, 28, 57, 0.85);
+    
+    /* NEW: Beige Palette for the Cards only */
+    --beige-card: rgba(245, 245, 220, 0.95); /* Creamy beige */
+    --beige-dark-text: #2c261e;              /* Deep coffee text for readability */
+    --gold: #c5a021;                         /* Professional gold */
+    --glass-border: rgba(197, 160, 33, 0.3);
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    /* Background image with dark overlay to make text pop */
-    background: linear-gradient(rgba(11, 28, 57, 0.8), rgba(11, 28, 57, 0.8)),
+    /* REVERTED: Original Dark Background */
+    background: linear-gradient(var(--navy-grey), var(--navy-grey)),
                 url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
     margin: 0;
     padding-bottom: 50px;
-    color: var(--white);
+    color: #ffffff; /* Default body text remains white for contrast against dark bg */
 }
 
-/* --- Header Section --- */
+/* --- Original Navy Header --- */
 .dashboard-header {
-    background: rgba(11, 28, 57, 0.6);
+    background: var(--navy-dark);
     backdrop-filter: blur(15px);
-    padding: 20px 5%;
+    padding: 15px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.header-left h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
-}
+.header-left h2 { margin: 0; font-size: 20px; font-weight: 700; color: #ffffff; }
+.header-left span { color: var(--gold); font-size: 11px; letter-spacing: 2px; font-weight: 600; }
 
-.header-left span {
-    color: var(--gold);
-    font-size: 12px;
-    letter-spacing: 2px;
-    font-weight: 600;
+.nav-actions { display: flex; align-items: center; gap: 25px; }
+.bell-link { position: relative; color: #ffffff; font-size: 18px; }
+.notification-badge {
+    position: absolute; top: -8px; right: -10px;
+    background: #ff4d4d; color: white; border-radius: 50%;
+    padding: 2px 6px; font-size: 10px; font-weight: bold;
 }
 
 .logout-btn {
-    background: var(--gold);
-    color: var(--navy-dark);
-    padding: 10px 24px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 13px;
-    transition: 0.3s;
+    background: var(--gold); color: var(--navy-dark);
+    padding: 8px 18px; text-decoration: none; border-radius: 8px;
+    font-weight: 700; font-size: 12px; transition: 0.3s;
 }
 
-.logout-btn:hover {
-    background: var(--white);
-    transform: scale(1.05);
-}
-
-/* --- Layout Container --- */
+/* --- Beige Dashboard Cards --- */
 .main-container {
-    max-width: 1100px;
-    margin: 40px auto;
+    max-width: 1200px;
+    margin: 30px auto;
     padding: 0 20px;
-}
-
-/* --- Glass Card Styling --- */
-.glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px); /* Frosted Glass Effect */
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.glass-card h3 {
-    margin-top: 0;
-    color: var(--gold);
-    font-size: 20px;
-    letter-spacing: 1px;
-    margin-bottom: 25px;
     display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* --- Student Info Grid --- */
-.student-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    flex-direction: column;
     gap: 25px;
 }
 
-.info-item label {
-    display: block;
-    font-size: 11px;
-    color: var(--gold);
-    text-transform: uppercase;
-    font-weight: 700;
-    opacity: 0.8;
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
-.info-item p {
-    margin: 5px 0;
-    font-size: 17px;
-    color: var(--white);
-    font-weight: 500;
+.glass-card {
+    background: var(--beige-card); /* Beige background for cards */
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 25px;
+    transition: transform 0.3s ease;
+    color: var(--beige-dark-text); /* Dark text inside beige cards */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
+.glass-card:hover { transform: translateY(-5px); }
+
+.card-title {
+    margin-top: 0; color: var(--gold); font-size: 17px;
+    margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    font-weight: 800; text-transform: uppercase;
+}
+
+/* --- Inside Card Styling --- */
+.student-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; }
+.info-item label { display: block; font-size: 10px; color: var(--gold); font-weight: 700; }
+.info-item p { margin: 5px 0 0; font-size: 15px; font-weight: 600; color: var(--beige-dark-text); }
 
 .attendance-pill {
-    background: rgba(243, 198, 35, 0.2);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-weight: 700;
+    background: rgba(197, 160, 33, 0.15);
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 2px 10px; border-radius: 15px; font-size: 13px; font-weight: 700;
 }
 
-/* --- Glass Tables --- */
-.table-container {
-    overflow-x: auto;
+.history-btn {
+    background: var(--navy-dark); color: #fff;
+    padding: 10px 15px; border-radius: 8px; text-decoration: none;
+    font-size: 12px; font-weight: 600; transition: 0.3s;
 }
+.history-btn:hover { background: var(--gold); color: var(--navy-dark); }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+/* --- Tables (Inside Beige Cards) --- */
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { text-align: left; padding: 12px; color: var(--gold); font-size: 11px; border-bottom: 2px solid rgba(0,0,0,0.05); }
+td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 13px; color: var(--beige-dark-text); }
 
-th {
-    text-align: left;
-    padding: 15px;
-    color: var(--gold);
-    font-size: 12px;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-td {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 14px;
-    color: var(--white);
-}
-
-tr:hover td {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* --- Buttons --- */
 .pay-btn {
-    background: var(--gold);
-    color: var(--navy-dark);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.3s ease;
-    text-transform: uppercase;
-    font-size: 12px;
+    background: var(--gold); color: #fff; border: none;
+    padding: 8px 15px; border-radius: 6px; font-weight: 800;
+    cursor: pointer; transition: 0.3s; font-size: 11px;
 }
+.pay-btn:hover { background: var(--navy-dark); transform: scale(1.05); }
 
-.pay-btn:hover {
-    background: var(--white);
-    box-shadow: 0 0 15px rgba(243, 198, 35, 0.4);
-}
+.status-paid { color: #2d6a4f; font-weight: 700; font-size: 12px; }
 
-/* --- Marks Highlight --- */
-.total-mark {
-    color: var(--gold);
-    font-size: 16px;
-    font-weight: 700;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .dashboard-header { flex-direction: column; text-align: center; gap: 15px; }
-}
+@media (max-width: 992px) { .dashboard-grid { grid-template-columns: 1fr; } }
 </style>
 
 <div class="dashboard-header">
@@ -193,127 +133,61 @@ tr:hover td {
         <h2>{{ parent_user.get_full_name|default:parent_user.username }}</h2>
         <span>PARENT CONTROL DASHBOARD</span>
     </div>
-
-    <div style="display:flex; align-items:center; gap:15px;">
-        
-        <!-- 🔔 Notification Bell -->
-        <a href="{% url 'parent_notification_list' %}" style="position: relative;">
-    <i class="fa-solid fa-bell"></i>
-
-    {% if unread_notification_count > 0 %}
-        <span style="
-            position: absolute;
-            top: -8px;
-            right: -10px;
-            background: red;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 7px;
-            font-size: 12px;
-        ">
-            {{ unread_notification_count }}
-        </span>
-    {% endif %}
-</a>
-
-
-        <!-- Logout -->
-        <a href="{% url 'parent_logout' %}" class="logout-btn">
-            <i class="fas fa-power-off"></i> LOGOUT
+    <div class="nav-actions">
+        <a href="{% url 'parent_notification_list' %}" class="bell-link">
+            <i class="fa-solid fa-bell"></i>
+            {% if unread_notification_count > 0 %}<span class="notification-badge">{{ unread_notification_count }}</span>{% endif %}
         </a>
+        <a href="{% url 'parent_logout' %}" class="logout-btn"><i class="fas fa-power-off"></i> LOGOUT</a>
     </div>
 </div>
 
-
 <div class="main-container">
-    
     <div class="glass-card">
-        <h3><i class="fas fa-id-card"></i> Student Overview</h3>
-        <div class="student-info-grid">
-            <div class="info-item">
-                <label>Full Name</label>
-                <p>{{ student.first_name }} {{ student.last_name }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div class="student-info-grid" style="flex-grow: 1;">
+                <div class="info-item"><label>Student Name</label><p>{{ student.first_name }} {{ student.last_name }}</p></div>
+                <div class="info-item"><label>Reg Number</label><p>#{{ student.register_number }}</p></div>
+                <div class="info-item"><label>Semester</label><p>{{ student.course }} | Sem {{ student.semester }}</p></div>
+                <div class="info-item"><label>Attendance</label><p><span class="attendance-pill">{{ attendance_percentage }}%</span></p></div>
             </div>
-            <div class="info-item">
-                <label>Reg Number</label>
-                <p>#{{ student.register_number }}</p>
-            </div>
-            <div class="info-item">
-                <label>Academic Year</label>
-                <p>{{ student.course }} | Sem {{ student.semester }}</p>
-            </div>
-            <div class="info-item">
-                <label>Attendance</label>
-                <p><span class="attendance-pill">{{ attendance_percentage }}%</span></p>
-            </div>
+            {% if student.semester > 1 %}
+            <a href="{% url 'parent_previous_semester' student.semester|add:'-1' %}" class="history-btn">View Sem {{ student.semester|add:'-1' }}</a>
+            {% endif %}
         </div>
     </div>
 
-
-    <div class="glass-card">
-        <h3><i class="fas fa-wallet"></i> Pending Dues</h3>
-        <div class="table-container">
+    <div class="dashboard-grid">
+        <div class="glass-card">
+            <h3 class="card-title"><i class="fas fa-wallet"></i> Pending Dues</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>Fee Particulars</th>
-                        <th>Amount</th>
-                        <th>Due Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Fee Type</th><th>Amount</th><th>Action</th></tr></thead>
                 <tbody>
                     {% for fee in student_fees %}
                     <tr>
                         <td>{{ fee.fee_type }}</td>
-                        <td>₹ {{ fee.amount }}</td>
-                        <td>{{ fee.due_date }}</td>
-                        <td>
-                            <button type="button" class="pay-btn" data-fee-url="{% url 'api_create_payment' fee.id %}">
-                                Pay via PayPal
-                            </button>
-                        </td>
+                        <td style="font-weight: 700; color: #b00020;">₹ {{ fee.amount }}</td>
+                        <td><button type="button" class="pay-btn" data-fee-url="{% url 'api_create_payment' fee.id %}">PAY NOW</button></td>
                     </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="4" style="text-align: center; opacity: 0.6; padding: 30px;">
-                            No pending payments found.
-                        </td>
-                    </tr>
+                    <tr><td colspan="3" style="text-align: center; opacity: 0.5;">No pending dues.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="glass-card">
-        <h3><i class="fas fa-graduation-cap"></i> Internal Assessment</h3>
-        <div class="table-container">
+        <div class="glass-card">
+            <h3 class="card-title"><i class="fas fa-chart-line"></i> Internal Marks</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>T1</th>
-                        <th>T2</th>
-                        <th>ASM</th>
-                        <th>ATT</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Subject</th><th>T1</th><th>T2</th><th>Total</th></tr></thead>
                 <tbody>
                     {% for mark in internal_marks %}
                     <tr>
-                        <td>{{ mark.subject.name }}</td>
-                        <td>{{ mark.test1 }}</td>
-                        <td>{{ mark.test2 }}</td>
-                        <td>{{ mark.assignment }}</td>
-                        <td>{{ mark.attendance_mark }}</td>
-                        <td class="total-mark">{{ mark.total_internal }}</td>
+                        <td>{{ mark.subject.name }}</td><td>{{ mark.test1 }}</td><td>{{ mark.test2 }}</td>
+                        <td style="color: var(--gold); font-weight: 800;">{{ mark.total_internal }}</td>
                     </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="6" style="text-align: center; opacity: 0.6;">Academic records not yet available.</td>
-                    </tr>
+                    <tr><td colspan="4" style="text-align: center; opacity: 0.5;">No marks recorded.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -321,46 +195,23 @@ tr:hover td {
     </div>
 
     <div class="glass-card">
-        <h3><i class="fas fa-receipt"></i> Payment Receipts</h3>
-        <div class="table-container">
+        <h3 class="card-title"><i class="fas fa-receipt"></i> Transaction History</h3>
+        <div style="overflow-x: auto;">
             <table>
-                <thead>
-                    <tr>
-                        <th>Fee Type</th>
-                        <th>Amount</th>
-                        <th>Date Paid</th>
-                        <th>Order ID</th>
-                        <th>Status</th>
-                        <th>Payment_By</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
                 <tbody>
                     {% for fee in paid_fees %}
                     <tr>
+                        <td>{{ fee.paid_on|date:"d M Y" }}</td>
                         <td>{{ fee.fee_type }}</td>
                         <td>₹ {{ fee.amount }}</td>
-                        <td>{{ fee.paid_on|date:"d M Y" }}</td>
-                        <td><code style="font-size: 10px; color: var(--gold);">{{ fee.paypal_order_id }}</code></td>
-                        <td><span style="color: #4ade80; font-weight: bold;">PAID</span></td>
-                        <td>
-    {% if fee.paid_by == 'parent' %}
-        Parent
-    {% elif fee.paid_by == 'student' %}
-        Student
-    {% endif %}
-</td>
-
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="text-align: center; opacity: 0.6;">No transaction history.</td>
+                        <td><span class="status-paid"><i class="fas fa-check-circle"></i> SUCCESS</span></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
 </div>
 
 <meta name="csrf-token" content="{{ csrf_token }}">
@@ -368,36 +219,23 @@ tr:hover td {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     document.querySelectorAll(".pay-btn").forEach(btn => {
         btn.addEventListener("click", function () {
             const apiUrl = this.dataset.feeUrl;
-            this.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Loading...';
-
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            this.disabled = true;
             fetch(apiUrl, {
                 method: "POST",
                 credentials: "same-origin",
-                headers: {
-                    "X-CSRFToken": csrfToken,
-                    "Accept": "application/json"
-                }
+                headers: { "X-CSRFToken": csrfToken, "Accept": "application/json" }
             })
             .then(res => res.json())
             .then(data => {
-                if (data.approval_url) {
-                    window.location.href = data.approval_url;
-                } else {
-                    alert("Error: " + (data.error || "Unknown error"));
-                    this.innerText = 'Pay via PayPal';
-                }
-            })
-            .catch(err => {
-                alert("Payment system unreachable.");
-                this.innerText = 'Pay via PayPal';
+                if (data.approval_url) window.location.href = data.approval_url;
+                else { alert("Payment Error"); this.innerHTML = "PAY NOW"; this.disabled = false; }
             });
         });
     });
 });
 </script>
-
 {% endblock %}
