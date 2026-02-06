@@ -6,17 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ACADAMIX</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --navy: #142850;
-            --gold: #f3c623;
+            --navy-grey: rgba(11, 28, 57, 0.94);
+            --gold: #c5a021;
+            --gold-bright: #f3c623;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-hover: rgba(255, 255, 255, 0.18);
+            --beige-card: rgba(245, 245, 220, 0.95);
+            --beige-hover: #f5f5dc;
         }
 
         * {
@@ -27,7 +28,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(rgba(11, 28, 57, 0.94), rgba(11, 28, 57, 0.94)),
+            background: linear-gradient(var(--navy-grey), var(--navy-grey)),
                         url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
@@ -37,7 +38,7 @@
 
         .login-wrapper {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
             padding: 40px 20px;
             text-align: center;
             animation: fadeIn 0.8s ease-out;
@@ -51,102 +52,112 @@
         header h2 {
             color: var(--white);
             font-size: clamp(32px, 5vw, 48px);
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 10px;
+            letter-spacing: -1px;
         }
-        header h2 span { color: var(--gold); }
+        header h2 span { color: var(--gold-bright); }
         header p {
             color: #cbd5e1;
             margin-bottom: 60px;
             font-size: 16px;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.9;
         }
 
-        /* Roles Grid */
+        /* --- Roles Grid --- */
         .roles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
             perspective: 1000px;
         }
 
         .role-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px 30px;
-            border-radius: 28px;
+            background: var(--beige-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(197, 160, 33, 0.2);
+            padding: 55px 30px;
+            border-radius: 30px;
             text-decoration: none;
-            color: var(--white);
+            color: var(--navy-dark);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         .role-card i {
-            font-size: 50px;
+            font-size: 55px;
             color: var(--gold);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
         }
 
         .role-card span {
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 700;
+            font-size: 19px;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        /* Hover States */
+        /* --- Hover States --- */
         .role-card:hover {
-            background: var(--glass-hover);
-            border-color: rgba(243, 198, 35, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: var(--beige-hover);
+            border-color: var(--gold-bright);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: translateY(-10px);
         }
 
         .role-card:hover i {
-            transform: translateZ(40px) scale(1.1);
+            transform: translateZ(50px) scale(1.1);
+            color: var(--navy-dark); /* Icon turns navy for a sleek look */
         }
 
-        /* Admin Special Style */
+        /* Administrator Highlight */
         .role-card.admin {
-            border: 1px solid rgba(243, 198, 35, 0.2);
+            border: 2px solid rgba(197, 160, 33, 0.4);
         }
 
-        /* Back Button */
+        /* --- Back Button --- */
         .back-home {
             display: inline-flex;
             align-items: center;
             gap: 12px;
             margin-top: 60px;
             text-decoration: none;
-            color: var(--gold);
-            font-weight: 600;
-            font-size: 14px;
+            color: var(--gold-bright);
+            font-weight: 700;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             transition: 0.3s ease;
-            padding: 10px 20px;
+            padding: 12px 28px;
             border-radius: 50px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(243, 198, 35, 0.2);
         }
 
         .back-home:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--white);
+            background: var(--gold-bright);
+            color: var(--navy-dark);
             transform: translateX(-5px);
+            box-shadow: 0 10px 20px rgba(243, 198, 35, 0.2);
         }
 
+        /* --- Responsive Tweaks --- */
         @media (max-width: 600px) {
             .roles-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 15px;
             }
-            .role-card { padding: 30px 15px; }
-            .role-card i { font-size: 35px; }
-            .role-card span { font-size: 15px; }
+            .role-card { padding: 35px 15px; border-radius: 20px; }
+            .role-card i { font-size: 40px; }
+            .role-card span { font-size: 14px; }
         }
     </style>
 </head>
@@ -176,12 +187,12 @@
 
         <a href="{% url 'admin-login' %}" class="role-card admin">
             <i class="fa-solid fa-shield-halved"></i>
-            <span>Administrator</span>
+            <span>Admin</span>
         </a>
     </div>
 
     <a href="{% url 'home' %}" class="back-home">
-        <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+        <i class="fa-solid fa-arrow-left"></i> BACK TO HOMEPAGE
     </a>
 </section>
 
@@ -200,15 +211,14 @@
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            // Subtle rotation values
-            const rotateX = (y - centerY) / 12; 
-            const rotateY = (centerX - x) / 12;
+            const rotateX = (y - centerY) / 10; 
+            const rotateY = (centerX - x) / 10;
             
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
         });
 
         card.addEventListener('mouseleave', () => {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
         });
     });
 </script>

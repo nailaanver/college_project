@@ -3,209 +3,260 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Login | ACADAMIX</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --navy: #142850;
-            --gold: #f3c623;
-            --gold-soft: #f8d85a;
+            --navy-bright: #142850; 
+            --gold: #c5a021;
             --white: #ffffff;
-            --text-dark: #1c1c1c;
-            --gray: #6b7280;
+            --beige: #f5f5dc;
+            --beige-glass: rgba(245, 245, 220, 0.98);
+            --border-dark: rgba(11, 28, 57, 0.1);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(11, 28, 57, 0.92), rgba(11, 28, 57, 0.92)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
+            background: linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
+                        url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* ===== MAIN CARD ===== */
-        .login-container {
-            background: var(--white);
+        .main-wrapper {
             width: 100%;
-            max-width: 950px;
-            border-radius: 28px;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
             display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.4);
-            animation: fadeUp 0.9s ease;
+            grid-template-columns: 1.1fr 0.9fr;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== LEFT INFO PANEL ===== */
+        /* LEFT SIDE: Parent Visual */
         .login-visual {
-            background:
-                linear-gradient(135deg, rgba(20,40,80,0.96), rgba(11,28,57,0.96)),
-                url("{% static 'images/campus.jpg' %}") center/cover;
-            padding: 50px;
+            background: linear-gradient(135deg, rgba(20, 40, 80, 0.85), rgba(11, 28, 57, 0.95)),
+                        url("{% static 'images/campus.jpg' %}") center/cover;
+            padding: 60px;
             color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .brand span { color: var(--gold); }
+
+        .visual-content h3 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .visual-content h3 span { color: var(--gold); }
+
+        .visual-content p {
+            font-size: 16px;
+            color: #e2e8f0;
+            line-height: 1.8;
+            max-width: 400px;
+        }
+
+        /* RIGHT SIDE: Form (Beige) */
+        .login-form-area {
+            padding: 60px;
+            background: var(--beige-glass);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-visual h3 {
-            font-size: 34px;
-            margin-bottom: 16px;
-            font-weight: 700;
-        }
-
-        .login-visual p {
-            font-size: 15px;
-            line-height: 1.7;
-            color: #d1d5db;
-            max-width: 360px;
-        }
-
-        /* ===== RIGHT FORM PANEL ===== */
-        .login-form {
-            padding: 55px 45px;
-        }
-
-        .login-form h2 {
-            font-size: 28px;
+        .login-form-area h2 {
+            font-size: 32px;
             color: var(--navy-dark);
-            margin-bottom: 6px;
             font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        .login-form p {
-            font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 28px;
+        .login-form-area p.subtitle {
+            color: #64748b;
+            margin-bottom: 35px;
+            font-size: 15px;
         }
 
-        .error {
-            background: #ffe0e0;
-            color: #9b1c1c;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 18px;
+        /* Form Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--navy-bright);
+            font-size: 18px;
         }
 
         input {
-            padding: 15px 18px;
-            border-radius: 30px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(11, 28, 57, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: 18px;
+            color: var(--navy-dark);
+            font-size: 15px;
+            font-weight: 500;
             outline: none;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
 
         input:focus {
-            border-color: var(--navy);
-            box-shadow: 0 0 0 3px rgba(20,40,80,0.12);
+            background: var(--white);
+            border-color: var(--navy-bright);
+            box-shadow: 0 5px 15px rgba(20, 40, 80, 0.1);
         }
 
-        button {
-            background: var(--navy);
+        button.login-btn {
+            background: var(--navy-bright);
             color: var(--white);
             border: none;
-            padding: 15px;
-            border-radius: 30px;
+            padding: 16px;
+            border-radius: 18px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: var(--navy-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-        }
-
-        .cancel-btn {
-            margin-top: 18px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 600;
-            color: var(--navy);
             transition: 0.3s;
+            margin-top: 10px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .cancel-btn:hover {
-            color: var(--navy-dark);
-            transform: translateX(-6px);
+        button.login-btn:hover {
+            background: var(--navy-dark);
+            box-shadow: 0 10px 20px rgba(11, 28, 57, 0.2);
         }
 
-        /* ===== RESPONSIVE ===== */
+        .error-msg {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #fecaca;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link a:hover {
+            color: var(--navy-bright);
+        }
+
+        /* Responsive */
         @media (max-width: 900px) {
-            .login-container {
-                grid-template-columns: 1fr;
-            }
-
-            .login-visual {
-                display: none;
-            }
+            .login-container { grid-template-columns: 1fr; max-width: 500px; }
+            .login-visual { display: none; }
+            .login-form-area { padding: 40px; border-radius: 40px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="main-wrapper">
+    <div class="login-container">
+        
+        <div class="login-visual">
+            <div class="brand">ACADA<span>MIX</span></div>
+            <div class="visual-content">
+                <h3>Parent <br><span>Portal</span></h3>
+                <p>Stay updated on your child’s academic journey, monitor attendance, and communicate with educators in real-time.</p>
+            </div>
+            <div class="visual-footer">
+                <small style="opacity: 0.7;">Secure Family Access</small>
+            </div>
+        </div>
 
-    <!-- LEFT INFO PANEL -->
-    <div class="login-visual">
-        <h3>Parent Portal</h3>
-        <p>
-            Access your child’s academic performance,
-            attendance, and progress reports.
-            Stay connected with teachers through ACADAMIX.
-        </p>
+        <div class="login-form-area">
+            <h2>Parent Login</h2>
+            <p class="subtitle">Enter the student's registration details below.</p>
+
+            {% if error %}
+            <div class="error-msg">
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="input-group">
+                    <i class="fas fa-hashtag"></i>
+                    <input type="text" name="register_number" placeholder="Student Register Number" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user-friends"></i>
+                    <input type="text" name="parent_name" placeholder="Parent Name" required>
+                </div>
+
+                <button type="submit" class="login-btn">Secure Login</button>
+
+                <div class="back-link">
+                    <a href="{% url 'role_login' %}">
+                        <i class="fas fa-chevron-left"></i> Back to Role Selection
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <!-- RIGHT FORM PANEL -->
-    <div class="login-form">
-        <h2>Parent Login</h2>
-        <p>Enter details to continue</p>
-
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-
-            <input type="text" name="register_number" placeholder="Student Register Number" required>
-            <input type="text" name="parent_name" placeholder="Parent Name" required>
-
-            <button type="submit">Login</button>
-            <a href="{% url 'role_login' %}" class="cancel-btn">← Back to Role Selection</a>
-        </form>
-    </div>
-
 </div>
 
 </body>

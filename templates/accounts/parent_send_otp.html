@@ -12,11 +12,13 @@
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --parent-green: #10b981; /* Emerald Green for trust/growth */
-            --gold: #f3c623;
+            --navy-bright: #142850; 
+            --gold: #c5a021;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --beige: #f5f5dc;
+            --beige-glass: rgba(245, 245, 220, 0.98);
+            --border-dark: rgba(11, 28, 57, 0.1);
+            --parent-green: #10b981; /* Keeping your green accent for verification action */
         }
 
         * {
@@ -27,7 +29,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(rgba(11, 28, 57, 0.96), rgba(11, 28, 57, 0.96)),
+            background: linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
                         url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
@@ -35,9 +37,7 @@
             padding: 20px;
         }
 
-        /* Perspective Wrapper */
-        .wrapper {
-            perspective: 1200px;
+        .main-wrapper {
             width: 100%;
             display: flex;
             justify-content: center;
@@ -46,50 +46,52 @@
         .login-container {
             max-width: 1000px;
             width: 100%;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 40px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-            transform-style: preserve-3d;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
         /* LEFT SIDE: Visual Info */
         .visual-side {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.7), rgba(11, 28, 57, 0.9)),
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(11, 28, 57, 0.95)),
                         url("{% static 'images/campus.jpg' %}") center/cover;
             padding: 60px;
             color: var(--white);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            border-right: 1px solid var(--border);
+            justify-content: space-between;
         }
 
-        .visual-side h3 {
-            font-size: 40px;
+        .brand {
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        .brand span { color: var(--gold); }
+
+        .visual-content h3 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
             line-height: 1.2;
         }
+        .visual-content h3 span { color: var(--gold); }
 
-        .visual-side h3 span { color: var(--gold); }
-
-        .visual-side p {
+        .visual-content p {
             font-size: 16px;
             color: #e2e8f0;
             line-height: 1.8;
-            max-width: 380px;
+            max-width: 400px;
         }
 
-        /* RIGHT SIDE: Form */
+        /* RIGHT SIDE: Form (Beige Theme) */
         .form-side {
-            padding: 70px 60px;
-            background: rgba(11, 28, 57, 0.4);
+            padding: 60px;
+            background: var(--beige-glass);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -97,118 +99,134 @@
 
         .form-side h2 {
             font-size: 32px;
-            color: var(--white);
-            margin-bottom: 10px;
+            color: var(--navy-dark);
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        .form-side .subtitle {
-            color: #94a3b8;
-            margin-bottom: 40px;
+        .form-side p.subtitle {
+            color: #64748b;
+            margin-bottom: 35px;
             font-size: 15px;
         }
 
-        .error-alert {
-            background: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            font-size: 14px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         /* Input Styling */
-        .input-wrap {
+        .input-group {
             position: relative;
             margin-bottom: 20px;
         }
 
-        .input-wrap i {
+        .input-group i {
             position: absolute;
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--parent-green);
+            color: var(--navy-bright);
             font-size: 18px;
         }
 
         input {
             width: 100%;
             padding: 16px 20px 16px 55px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
+            background: rgba(11, 28, 57, 0.05);
+            border: 1px solid var(--border-dark);
             border-radius: 18px;
-            color: white;
+            color: var(--navy-dark);
             font-size: 15px;
+            font-weight: 500;
             outline: none;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
 
         input:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--parent-green);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            background: var(--white);
+            border-color: var(--navy-bright);
+            box-shadow: 0 5px 15px rgba(20, 40, 80, 0.1);
         }
 
-        /* Submit Button */
+        /* Verification Button */
         button.otp-btn {
-            background: var(--parent-green);
-            color: white;
+            background: var(--navy-bright);
+            color: var(--white);
             border: none;
-            padding: 18px;
+            padding: 16px;
             border-radius: 18px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.4s;
+            transition: 0.3s;
             margin-top: 10px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         button.otp-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-            background: #059669;
+            background: var(--parent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .error-alert {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #fecaca;
         }
 
         .back-nav {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         .back-nav a {
-            color: #94a3b8;
+            color: #64748b;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
             transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .back-nav a:hover {
-            color: var(--gold);
+            color: var(--navy-bright);
         }
 
+        /* Responsive */
         @media (max-width: 900px) {
             .login-container { grid-template-columns: 1fr; max-width: 500px; }
             .visual-side { display: none; }
-            .form-side { padding: 50px 30px; }
+            .form-side { padding: 40px; border-radius: 40px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="wrapper">
-    <div class="login-container" id="parentTilt">
+<div class="main-wrapper">
+    <div class="login-container">
         
         <div class="visual-side">
-            <h3>Parental <br><span>Connection</span></h3>
-            <p>Verify your identity to access your ward's academic journey, attendance reports, and campus notifications.</p>
+            <div class="brand">ACADA<span>MIX</span></div>
+            <div class="visual-content">
+                <h3>Parental <br><span>Connection</span></h3>
+                <p>Verify your identity to access your ward's academic journey, attendance reports, and campus notifications.</p>
+            </div>
+            <div class="visual-footer">
+                <small style="opacity: 0.7;">Secure Identity Verification</small>
+            </div>
         </div>
 
         <div class="form-side">
@@ -225,12 +243,12 @@
             <form method="post">
                 {% csrf_token %}
 
-                <div class="input-wrap">
+                <div class="input-group">
                     <i class="fas fa-id-card"></i>
                     <input type="text" name="register_number" placeholder="Student Register Number" required>
                 </div>
 
-                <div class="input-wrap">
+                <div class="input-group">
                     <i class="fas fa-envelope-open-text"></i>
                     <input type="email" name="parent_email" placeholder="Registered Parent Email" required>
                 </div>
@@ -241,7 +259,7 @@
 
                 <div class="back-nav">
                     <a href="{% url 'role_login' %}">
-                        <i class="fas fa-arrow-left"></i> Return to Roles
+                        <i class="fas fa-chevron-left"></i> Back to Role Selection
                     </a>
                 </div>
             </form>
@@ -249,31 +267,6 @@
 
     </div>
 </div>
-
-<script>
-    /* ===============================
-        3D TILT EFFECT
-    ================================ */
-    const card = document.getElementById('parentTilt');
-
-    document.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 35;
-        const rotateY = (centerX - x) / 35;
-        
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-</script>
 
 </body>
 </html>

@@ -13,10 +13,12 @@
         :root {
             --navy-dark: #0b1c39;
             --navy: #142850;
-            --gold: #f3c623;
+            --gold: #c5a021;
+            --gold-bright: #f3c623;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --beige: #f5f5dc;
+            --beige-glass: rgba(245, 245, 220, 0.98); /* Solidified for stability */
+            --border-dark: rgba(11, 28, 57, 0.1);
         }
 
         * {
@@ -35,9 +37,7 @@
             padding: 20px;
         }
 
-        /* 3D Container Setup */
         .main-wrapper {
-            perspective: 1500px;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -46,36 +46,31 @@
         .login-container {
             max-width: 1000px;
             width: 100%;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 40px;
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
         /* LEFT SIDE: Visual Info */
         .login-visual {
-            background: linear-gradient(135deg, rgba(20,40,80,0.8), rgba(11,28,57,0.8)),
+            background: linear-gradient(135deg, rgba(20,40,80,0.85), rgba(11,28,57,0.85)),
                         url("{% static 'images/campus.jpg' %}") center/cover;
             padding: 60px;
             color: var(--white);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border-right: 1px solid var(--border);
         }
 
         .brand {
             font-size: 24px;
             font-weight: 700;
             letter-spacing: 2px;
-            color: var(--gold);
+            color: var(--gold-bright);
         }
 
         .visual-content h3 {
@@ -92,10 +87,10 @@
             max-width: 400px;
         }
 
-        /* RIGHT SIDE: Form */
+        /* RIGHT SIDE: Form (Beige) */
         .login-form-area {
             padding: 60px;
-            background: rgba(11, 28, 57, 0.4);
+            background: var(--beige-glass);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -103,27 +98,15 @@
 
         .login-form-area h2 {
             font-size: 32px;
-            color: var(--white);
-            margin-bottom: 10px;
+            color: var(--navy-dark);
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
         .login-form-area p.subtitle {
-            color: #94a3b8;
+            color: #64748b;
             margin-bottom: 35px;
             font-size: 15px;
-        }
-
-        .error-msg {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            font-size: 14px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         /* Form Styling */
@@ -137,31 +120,32 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--gold);
+            color: var(--navy);
             font-size: 18px;
         }
 
         input {
             width: 100%;
             padding: 16px 20px 16px 55px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
+            background: rgba(11, 28, 57, 0.05);
+            border: 1px solid var(--border-dark);
             border-radius: 18px;
-            color: white;
+            color: var(--navy-dark);
             font-size: 15px;
+            font-weight: 500;
             outline: none;
             transition: all 0.3s;
         }
 
         input:focus {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--white);
             border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(243, 198, 35, 0.2);
+            box-shadow: 0 5px 15px rgba(197, 160, 33, 0.1);
         }
 
         button.login-btn {
-            background: var(--gold);
-            color: var(--navy-dark);
+            background: var(--navy-dark);
+            color: var(--beige);
             border: none;
             padding: 16px;
             border-radius: 18px;
@@ -170,12 +154,27 @@
             cursor: pointer;
             transition: 0.3s;
             margin-top: 10px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         button.login-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(243, 198, 35, 0.4);
-            background: #ffdb4d;
+            background: var(--navy);
+            box-shadow: 0 10px 20px rgba(11, 28, 57, 0.2);
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #fecaca;
         }
 
         .back-link {
@@ -184,9 +183,10 @@
         }
 
         .back-link a {
-            color: #94a3b8;
+            color: #64748b;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
             transition: 0.3s;
             display: inline-flex;
             align-items: center;
@@ -201,7 +201,7 @@
         @media (max-width: 900px) {
             .login-container { grid-template-columns: 1fr; max-width: 500px; }
             .login-visual { display: none; }
-            .login-form-area { padding: 40px; }
+            .login-form-area { padding: 40px; border-radius: 40px; }
         }
     </style>
 </head>
@@ -209,7 +209,7 @@
 <body>
 
 <div class="main-wrapper">
-    <div class="login-container" id="tiltCard">
+    <div class="login-container">
         
         <div class="login-visual">
             <div class="brand">ACADA<span>MIX</span></div>
@@ -218,7 +218,7 @@
                 <p>Track your progress, manage your schedule, and stay connected with your campus community.</p>
             </div>
             <div class="visual-footer">
-                <small style="opacity: 0.5;">© 2026 Acadamix System</small>
+                <small style="opacity: 0.6;">© 2026 Acadamix System</small>
             </div>
         </div>
 
@@ -258,32 +258,6 @@
 
     </div>
 </div>
-
-<script>
-    /* ===============================
-        3D TILT EFFECT
-    ================================ */
-    const card = document.getElementById('tiltCard');
-
-    document.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        // Very subtle rotation for a large card
-        const rotateX = (y - centerY) / 30;
-        const rotateY = (centerX - x) / 30;
-        
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-</script>
 
 </body>
 </html>

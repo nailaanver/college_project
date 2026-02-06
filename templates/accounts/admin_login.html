@@ -12,11 +12,13 @@
     <style>
         :root {
             --navy-dark: #0b1c39;
-            --admin-gold: #f3c623;
-            --admin-accent: #eab308; /* Slightly deeper gold */
+            --navy: #142850;
+            --gold: #c5a021;
+            --gold-bright: #f3c623;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.07);
-            --border: rgba(255, 255, 255, 0.12);
+            --beige: #f5f5dc;
+            --beige-glass: rgba(245, 245, 220, 0.98); 
+            --border-dark: rgba(11, 28, 57, 0.1);
         }
 
         * {
@@ -27,224 +29,209 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(rgba(11, 28, 57, 0.96), rgba(11, 28, 57, 0.96)),
+            background: linear-gradient(rgba(11, 28, 57, 0.95), rgba(11, 28, 57, 0.95)),
                         url("{% static 'images/campus.jpg' %}") center/cover no-repeat fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            overflow-x: hidden;
         }
 
-        /* Perspective Wrapper for 3D effect */
-        .page-container {
-            perspective: 1200px;
+        .main-wrapper {
             width: 100%;
             display: flex;
             justify-content: center;
         }
 
-        .login-card {
+        .login-container {
             max-width: 1000px;
             width: 100%;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 40px;
             display: grid;
-            grid-template-columns: 1fr 1.1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
-        /* LEFT VISUAL PANEL */
-        .visual-panel {
-            background: linear-gradient(135deg, rgba(11, 28, 57, 0.9), rgba(20, 40, 80, 0.8)),
+        /* LEFT SIDE: Admin Visual */
+        .login-visual {
+            background: linear-gradient(135deg, rgba(20,40,80,0.85), rgba(11,28,57,0.85)),
                         url("{% static 'images/campus.jpg' %}") center/cover;
             padding: 60px;
             color: var(--white);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            border-right: 1px solid var(--border);
-            position: relative;
+            justify-content: space-between;
         }
 
-        .visual-panel::after {
-            content: 'ADMIN';
-            position: absolute;
-            top: 40px;
-            right: -10px;
-            font-size: 80px;
-            font-weight: 900;
-            opacity: 0.05;
-            letter-spacing: 10px;
-            pointer-events: none;
-        }
-
-        .visual-panel h3 {
-            font-size: 40px;
+        .brand {
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.1;
+            letter-spacing: 2px;
+            color: var(--gold-bright);
         }
 
-        .visual-panel h3 span { color: var(--admin-gold); }
+        .visual-content h3 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
 
-        .visual-panel p {
+        .visual-content h3 span {
+            color: var(--gold-bright);
+        }
+
+        .visual-content p {
             font-size: 16px;
-            color: #d1d5db;
+            color: #cbd5e1;
             line-height: 1.8;
-            max-width: 380px;
+            max-width: 400px;
         }
 
-        /* RIGHT FORM PANEL */
-        .form-panel {
-            padding: 70px 60px;
-            background: rgba(11, 28, 57, 0.4);
+        /* RIGHT SIDE: Admin Form */
+        .login-form-area {
+            padding: 60px;
+            background: var(--beige-glass);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .form-panel h2 {
+        .login-form-area h2 {
             font-size: 32px;
-            color: var(--white);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            color: var(--navy-dark);
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        .form-panel .subtitle {
-            color: #94a3b8;
-            margin-bottom: 40px;
+        .login-form-area p.subtitle {
+            color: #64748b;
+            margin-bottom: 35px;
             font-size: 15px;
         }
 
-        /* Error Box Styling */
-        .alert-error {
-            background: rgba(248, 113, 113, 0.1);
-            border: 1px solid rgba(248, 113, 113, 0.3);
-            color: #fca5a5;
-            padding: 14px;
+        /* Form Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--navy);
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(11, 28, 57, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: 18px;
+            color: var(--navy-dark);
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            background: var(--white);
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(197, 160, 33, 0.1);
+        }
+
+        button.login-btn {
+            background: var(--navy-dark);
+            color: var(--beige);
+            border: none;
+            padding: 16px;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button.login-btn:hover {
+            background: var(--navy);
+            box-shadow: 0 10px 20px rgba(11, 28, 57, 0.2);
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
             border-radius: 15px;
             font-size: 14px;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            animation: shake 0.4s ease-in-out;
+            gap: 10px;
+            border: 1px solid #fecaca;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        /* Input Styling */
-        .input-box {
-            position: relative;
-            margin-bottom: 22px;
-        }
-
-        .input-box i {
-            position: absolute;
-            left: 22px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--admin-gold);
-            font-size: 18px;
-            transition: 0.3s;
-        }
-
-        input {
-            width: 100%;
-            padding: 18px 25px 18px 60px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: white;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--admin-gold);
-            box-shadow: 0 0 20px rgba(243, 198, 35, 0.15);
-        }
-
-        input::placeholder { color: #94a3b8; }
-
-        /* Login Button */
-        .submit-btn {
-            background: var(--admin-gold);
-            color: var(--navy-dark);
-            border: none;
-            padding: 18px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 10px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(243, 198, 35, 0.3);
-            background: var(--admin-accent);
-        }
-
-        /* Navigation Links */
-        .footer-nav {
-            margin-top: 30px;
+        .back-link {
             text-align: center;
+            margin-top: 25px;
         }
 
-        .footer-nav a {
+        .back-link a {
             color: #64748b;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: 0.3s;
         }
 
-        .footer-nav a:hover {
-            color: var(--admin-gold);
+        .back-link a:hover {
+            color: var(--gold);
         }
 
-        /* Responsive Design */
         @media (max-width: 900px) {
-            .login-card { grid-template-columns: 1fr; max-width: 480px; }
-            .visual-panel { display: none; }
-            .form-panel { padding: 50px 30px; }
+            .login-container { grid-template-columns: 1fr; max-width: 500px; }
+            .login-visual { display: none; }
+            .login-form-area { padding: 40px; border-radius: 40px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="page-container">
-    <div class="login-card" id="adminTilt">
+<div class="main-wrapper">
+    <div class="login-container">
         
-        <div class="visual-panel">
-            <h3>Admin <br><span>Control Center</span></h3>
-            <p>Full system management. Access tools for user oversight, database monitoring, and infrastructure configurations.</p>
+        <div class="login-visual">
+            <div class="brand">ACADA<span>MIX</span></div>
+            <div class="visual-content">
+                <i class="fas fa-fingerprint" style="font-size: 40px; color: var(--gold-bright); margin-bottom: 20px;"></i>
+                <h3>Admin <br><span>Control Center</span></h3>
+                <p>Full system management. Access tools for user oversight, database monitoring, and infrastructure configurations.</p>
+            </div>
+            <div class="visual-footer">
+                <small style="opacity: 0.6;">© 2026 Acadamix Admin Console</small>
+            </div>
         </div>
 
-        <div class="form-panel">
+        <div class="login-form-area">
             <h2>System Authentication</h2>
             <p class="subtitle">Secure login for authorized administrators only.</p>
 
             {% if error %}
-            <div class="alert-error">
+            <div class="error-msg">
                 <i class="fas fa-shield-halved"></i>
                 {{ error }}
             </div>
@@ -253,21 +240,21 @@
             <form method="post">
                 {% csrf_token %}
 
-                <div class="input-box">
+                <div class="input-group">
                     <i class="fas fa-user-shield"></i>
                     <input type="text" name="username" placeholder="Admin Username" required>
                 </div>
 
-                <div class="input-box">
+                <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="System Password" required>
                 </div>
 
-                <button type="submit" class="submit-btn">Authorize Access</button>
+                <button type="submit" class="login-btn">Authorize Access</button>
 
-                <div class="footer-nav">
+                <div class="back-link">
                     <a href="{% url 'role_login' %}">
-                        <i class="fas fa-chevron-left"></i> Return to Roles
+                        <i class="fas fa-arrow-left"></i> Return to Roles
                     </a>
                 </div>
             </form>
@@ -275,32 +262,6 @@
 
     </div>
 </div>
-
-<script>
-    /* ===============================
-        3D TILT EFFECT LOGIC
-    ================================ */
-    const card = document.getElementById('adminTilt');
-
-    document.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        // Adjust the divisor (35) to increase or decrease tilt intensity
-        const rotateX = (y - centerY) / 35;
-        const rotateY = (centerX - x) / 35;
-        
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-</script>
 
 </body>
 </html>
