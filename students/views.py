@@ -171,16 +171,22 @@ from django.shortcuts import get_object_or_404
 
 @login_required(login_url='student-login')
 def student_internal_marks(request):
+
     student = get_object_or_404(Student, user=request.user)
+
+    current_semester = student.semester  # 🔥 CURRENT SEM
 
     marks = InternalMark.objects.filter(
         student=student,
+        semester=current_semester,     # ✅ KEY LINE
         status='Approved'
     )
 
     return render(request, 'student/internal_marks.html', {
-        'marks': marks
+        'marks': marks,
+        'current_semester': current_semester
     })
+
 
 
 from dashboard.models import TimeTable
