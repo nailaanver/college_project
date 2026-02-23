@@ -10,6 +10,7 @@ urlpatterns = [
     
     path('logout/', views.user_logout, name='logout'),
    
- 
+    path('redirect/', views.role_redirect, name='role-redirect'),
+
 
 ]

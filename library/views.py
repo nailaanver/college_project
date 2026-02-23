@@ -60,55 +60,116 @@ from datetime import date
 from django.contrib import messages
 from .forms import ReturnBookForm
 from .models import Issue
+from fees.models import TeacherLibraryFine
+
 
 @login_required
 @user_passes_test(is_staff)
 def return_book(request, issue_id):
-    issue = Issue.objects.get(id=issue_id)
+    issue = get_object_or_404(Issue, id=issue_id)
 
     if request.method == 'POST':
         form = ReturnBookForm(request.POST, instance=issue)
         if form.is_valid():
+
             issue = form.save(commit=False)
             issue.status = 'RETURNED'
 
-            # Update available copies
+            # ✅ FORCE set return date automatically
+            from django.utils import timezone
+            issue.return_date = timezone.now().date()
+
+            issue.save()
+
+
+            # Increase available copies
             book = issue.book
             book.available_copies += 1
             book.save()
 
-            # Calculate fine
-            if issue.return_date > issue.due_date:
+            # 🔥 Calculate fine ONLY if overdue
+            if issue.return_date and issue.return_date > issue.due_date:
+
                 overdue_days = (issue.return_date - issue.due_date).days
-                issue.fine = overdue_days * 5  # ₹5/day fine
+                fine_amount = overdue_days * 5
 
-            issue.save()
-            messages.success(request, f"{book.title} returned successfully.")
-            # 🔔 Library Notification (RETURNED)
-            create_notification(
-                recipient=issue.user,
-                title="📗 Book Returned",
-                message=f"You have successfully returned '{book.title}'.",
-                notification_type="LIBRARY",
-                reference_id=issue.id
-            )
+                # Save fine inside Issue model directly
+                issue.fine = fine_amount
+                issue.save()
 
+                # If teacher, create teacher fine record
+# ===============================
+# CREATE STUDENT FINE PAYMENT
+# ===============================
+
+                from students.models import Student
+                from teachers.models import Teacher
+                from fees.models import Fee, TeacherLibraryFine
+                from datetime import date
+
+# If student
+                if Student.objects.filter(user=issue.user).exists():
+
+                    student = Student.objects.get(user=issue.user)
+
+                    Fee.objects.update_or_create(
+                        issue=issue,
+                        student=student,
+                        defaults={
+                            "user": issue.user,
+                            "fee_type": "LIBRARY",
+                            "amount": fine_amount,
+                            "due_date": date.today(),
+                            "is_paid": False
+                        }
+                    )
+
+                # If teacher
+                elif Teacher.objects.filter(user=issue.user).exists():
+                    
+
+                    TeacherLibraryFine.objects.update_or_create(
+                        issue=issue,
+                        defaults={
+                            "teacher": issue.user,
+                            "amount": fine_amount,
+                            "is_paid": False
+                        }
+                    )
+
+
+
+            messages.success(request, "Book returned successfully.")
             return redirect('return-book-list')
+
     else:
         form = ReturnBookForm(instance=issue)
 
-    return render(request, 'library/return_book.html', {'form': form, 'issue': issue})
+    return render(request, 'library/return_book.html', {
+        'form': form,
+        'issue': issue
+    })
 
 
 
 
 from django.contrib.auth.decorators import login_required
 
-@login_required
-def my_library(request):
-    # Fetch all books issued to the logged-in user
-    issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
-    return render(request, 'library/my_library.html', {'issues': issues})
+# @login_required
+# def my_library(request):
+#     issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
+#     today = now().date()
+
+#     for issue in issues:
+#         if issue.status == 'ISSUED' and issue.due_date < today:
+#             issue.overdue_days = (today - issue.due_date).days
+#             issue.live_fine = issue.overdue_days * 5
+#         else:
+#             issue.overdue_days = 0
+#             issue.live_fine = issue.fine or 0
+
+#     return render(request, 'library/my_library.html', {'issues': issues})
+
 
 
 
@@ -116,8 +177,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-def is_staff(user):
-    return user.is_staff
+
 
 @login_required
 @user_passes_test(is_staff)
@@ -205,8 +265,7 @@ def book_delete(request, book_id):
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Book
 
-def is_staff(user):
-    return user.is_staff
+
 
 @login_required
 @user_passes_test(is_staff)
@@ -257,8 +316,6 @@ def user_book_search(request):
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 
-def is_staff(user):
-    return user.is_staff
 
 @login_required
 @user_passes_test(is_staff)
@@ -282,3 +339,208 @@ def library_face_entry(request):
 
     LibraryEntry.objects.create(student=student)
     return HttpResponse("Library entry recorded")
+
+from fees.models import Fee
+from django.shortcuts import get_object_or_404
+
+from django.contrib import messages
+from students.models import Student
+
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
+from library.models import Issue
+
+# @login_required
+# def pay_library_fine(request, issue_id):
+
+#     issue = get_object_or_404(
+#         Issue,
+#         id=issue_id,
+#         user=request.user
+#     )
+
+#     # If no fine or already paid
+#     if issue.fine <= 0:
+#         return redirect("teacher-library")
+
+#     if request.method == "POST":
+#         issue.fine = 0
+#         issue.save()
+#         return redirect("teacher-library")
+
+#     return render(request, "library/pay_fine.html", {
+#         "issue": issue,
+#         "fine_amount": issue.fine
+#     })
+
+from fees.models import TeacherLibraryFine
+
+from django.utils.timezone import now
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
+
+@login_required
+def teacher_pay_fine(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id, user=request.user)
+
+    # mark fine as paid
+    issue.fine_paid = True
+    issue.fine = 0
+    issue.save()
+
+    return redirect('teacher-library')
+
+
+@login_required
+def student_library(request):
+
+    if not Student.objects.filter(user=request.user).exists():
+        return redirect('teacher-dashboard')
+
+    issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
+    today = now().date()
+
+    for issue in issues:
+        if issue.status == 'ISSUED' and issue.due_date < today:
+            overdue_days = (today - issue.due_date).days
+            issue.live_fine = overdue_days * 5
+        else:
+            issue.live_fine = issue.fine or 0
+
+    return render(request, 'library/student_library.html', {
+        'issues': issues
+    })
+    
+    
+from teachers.models import Teacher
+
+@login_required
+def teacher_library(request):
+
+    if not Teacher.objects.filter(user=request.user).exists():
+        return redirect('student-dashboard')
+
+    issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
+
+    today = now().date()
+    payment_status = request.GET.get("payment")   # 👈 ADD THIS
+
+    for issue in issues:
+        if issue.fine_paid:
+            issue.live_fine = 0
+
+        elif issue.status == 'ISSUED' and issue.due_date < today:
+            overdue_days = (today - issue.due_date).days
+            issue.live_fine = overdue_days * 5
+
+        else:
+            issue.live_fine = 0
+
+    return render(request, 'library/teacher_library.html', {
+        'issues': issues,
+        'payment_status': payment_status   # 👈 PASS THIS
+    })
+    
+    
+from django.urls import reverse
+import paypalrestsdk
+from django.conf import settings
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Issue
+
+
+from datetime import date
+
+@login_required
+def pay_fine(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id, user=request.user)
+
+    today = date.today()
+
+    # Calculate live fine again
+    if issue.status == "ISSUED" and issue.due_date and today > issue.due_date:
+        overdue_days = (today - issue.due_date).days
+        fine_amount = overdue_days * 5
+    else:
+        fine_amount = 0
+
+    if fine_amount <= 0 or issue.fine_paid:
+        return redirect('teacher-library')
+
+    # Save correct fine to DB
+    issue.fine = fine_amount
+    issue.save()
+
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {"payment_method": "paypal"},
+        "redirect_urls": {
+            "return_url": request.build_absolute_uri(
+                reverse('execute-teacher-fine', args=[issue.id])
+            ),
+            "cancel_url": request.build_absolute_uri(
+                reverse('teacher-library')
+            ),
+        },
+        "transactions": [{
+            "amount": {
+                "total": str(fine_amount),
+                "currency": "USD"
+            },
+            "description": f"Library Fine - {issue.book.title}"
+        }]
+    })
+
+    if payment.create():
+        for link in payment.links:
+            if link.rel == "approval_url":
+                return redirect(link.href)
+
+    return redirect('teacher-library')
+    
+def payment_success(request):
+    issue_id = request.GET.get("issue_id")
+
+    issue = Issue.objects.get(id=issue_id)
+
+    issue.fine_paid = True
+    issue.fine = 0
+    issue.save()
+
+    return redirect('teacher-library')    
+def payment_cancel(request):
+    return render(request, "library/payment_cancel.html")
+
+from django.urls import reverse
+
+@login_required
+def execute_teacher_fine(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id, user=request.user)
+
+    payment_id = request.GET.get("paymentId")
+    payer_id = request.GET.get("PayerID")
+
+    if not payment_id or not payer_id:
+        return redirect('teacher-library')
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+
+        issue.fine_paid = True
+        issue.paid_amount = issue.fine   # store original fine
+        issue.fine = 0                   # optional
+        issue.save()
+
+        url = reverse('teacher-library')
+        return redirect(f"{url}?payment=success")

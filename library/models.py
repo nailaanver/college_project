@@ -42,11 +42,17 @@ class Issue(models.Model):
         decimal_places=2,
         default=0,null=True
     )
+    fine_paid = models.BooleanField(default=False)
 
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
         default='ISSUED',null=True
+    )
+    paid_amount = models.DecimalField(   # 👈 ADD THIS
+        max_digits=6,
+        decimal_places=2,
+        default=0
     )
     reminder_sent = models.BooleanField(default=False)
     overdue_notified = models.BooleanField(default=False)
@@ -69,3 +75,5 @@ class LibraryEntry(models.Model):
 
     def __str__(self):
         return f"{self.student.register_number} - {self.entry_time}"
+
+

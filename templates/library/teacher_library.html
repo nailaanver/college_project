@@ -1,4 +1,4 @@
-<!-- {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
@@ -159,6 +159,7 @@ tbody tr td:last-child {
 }
 </style>
 
+
 <div class="library-page">
     <div class="library-container">
 
@@ -168,15 +169,17 @@ tbody tr td:last-child {
                 My <span>Library</span>
             </h2>
 
-            {% if user.is_staff %}
-                <a href="{% url 'teacher-dashboard' %}" class="btn-back">
-                    <i class="fas fa-chevron-left"></i> Teacher Dashboard
-                </a>
-            {% else %}
-                <a href="{% url 'student-dashboard' %}" class="btn-back">
-                    <i class="fas fa-chevron-left"></i> Student Dashboard
-                </a>
-            {% endif %}
+                {% if user.teacher %}
+    <a href="{% url 'teacher-dashboard' %}" class="btn-back">
+        <i class="fas fa-chevron-left"></i> Teacher Dashboard
+    </a>
+{% elif user.student %}
+    <a href="{% url 'student-dashboard' %}" class="btn-back">
+        <i class="fas fa-chevron-left"></i> Student Dashboard
+    </a>
+{% endif %}
+
+         
         </div>
 
         <div class="table-responsive">
@@ -209,26 +212,26 @@ tbody tr td:last-child {
                             </span>
                         </td>
 
-                        <td>
-                            <div class="fine-amount {% if issue.live_fine|floatformat > 0 %}has-fine{% endif %}">
-                                ₹{{ issue.live_fine }}
-                            </div>
+<td>
+    {% if issue.fine_paid %}
+        <span class="fine-amount" style="color: var(--success);">
+            ₹{{ issue.paid_amount }}
+        </span><br>
+        <span class="paid-label">Paid</span>
 
-                            {% if user.is_staff and issue.live_fine|default:0|floatformat > 0 %}
+    {% elif issue.live_fine > 0 %}
+        <span class="fine-amount has-fine">
+            ₹{{ issue.live_fine }}
+        </span><br>
 
-                            <p>DEBUG FINE: {{ issue.live_fine }}</p>
+        <a href="{% url 'pay-fine' issue.id %}" class="paypal-btn">
+            <i class="fab fa-paypal"></i> Pay Fine
+        </a>
 
-
-                                <a href="{% url 'teacher_pay_fine' issue.id %}" class="paypal-btn">
-                                    Pay Fine
-                                </a>
-                            {% endif %}
-
-                            {% if issue.fine_paid %}
-                                <div class="paid-label">Paid</div>
-                            {% endif %}
-                        </td>
-                    </tr>
+    {% else %}
+        <span class="fine-amount">₹0</span>
+    {% endif %}
+</td>        </tr>
                 {% empty %}
                     <tr>
                         <td colspan="4" style="text-align:center; padding:40px;">
@@ -244,4 +247,4 @@ tbody tr td:last-child {
     </div>
 </div>
 
-{% endblock %} -->
+{% endblock %}

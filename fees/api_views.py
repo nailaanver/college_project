@@ -5,6 +5,8 @@ import paypalrestsdk
 from .models import Fee
 from students.models import Student
 from .utils import send_payment_receipt
+from django.contrib.auth.decorators import login_required
+from fees.models import TeacherLibraryFine
 
 # Custom decorator for OTP-based parent login
 from functools import wraps
@@ -114,6 +116,17 @@ def execute_paypal_payment(request, fee_id):
         fee.paid_by = paid_by
         fee.paid_on = timezone.now()
         fee.save()
+        
+        # ===============================
+        # 📚 LIBRARY FINE SYNC
+        # ===============================
+        if fee.fee_type == "LIBRARY":
+            from library.models import Issue
+            Issue.objects.filter(
+                user=student.user,
+                fine_paid=False
+            ).update(fine_paid=True)
+
 
         send_payment_receipt(fee)
 
@@ -156,3 +169,5 @@ def execute_paypal_payment(request, fee_id):
         if paid_by == 'parent'
         else "/student/dashboard/?payment=failed"
     )
+
+

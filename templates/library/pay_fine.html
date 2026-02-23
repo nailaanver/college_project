@@ -1,0 +1,16 @@
+<div class="pay-container">
+    <h2>📚 Teacher Library Fine</h2>
+
+    <p>Fine Amount</p>
+
+    <div class="fine-amount">
+        ₹{{ issue.fine }}
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="paypal-btn">
+            Pay Fine
+        </button>
+    </form>
+</div>

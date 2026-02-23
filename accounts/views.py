@@ -141,3 +141,14 @@ def user_logout(request):
     logout(request)
     return redirect('home')   # or home / admin-login
 
+from django.shortcuts import redirect
+
+def role_redirect(request):
+    if hasattr(request.user, 'student'):
+        return redirect('student-dashboard')
+    elif hasattr(request.user, 'teacher'):
+        return redirect('teacher-dashboard')
+    elif hasattr(request.user, 'parent'):
+        return redirect('parent-dashboard')
+    else:
+        return redirect('role-login')

@@ -1,11 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
-from dashboard.models import TimeTable
-from students.models import Student
-from attendance.models import Attendance
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
+from .models import Teacher
+from .forms import UserForm, TeacherForm
+from dashboard.models import TimeTable
+
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# def is_teacher(user):
+#     return user.is_authenticated and hasattr(user, 'teacher')
+
+@login_required
 def teacher_dashboard(request):
-    teacher = request.user.teacher
+
+    try:
+        teacher = request.user.teacher
+    except Teacher.DoesNotExist:
+        return redirect('role-login')   # or home
+
     today_name = timezone.now().strftime('%A')
 
     todays_timetable = TimeTable.objects.filter(
@@ -16,6 +31,8 @@ def teacher_dashboard(request):
     return render(request, 'teachers/dashboard.html', {
         'todays_timetable': todays_timetable
     })
+
+
 
 # teachers/views.py
 from .models import Teacher
