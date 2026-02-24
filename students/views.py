@@ -292,3 +292,28 @@ def semester_history(request):
     }
 
     return render(request, 'student/semester_history.html', context)
+
+
+from django.contrib.auth.decorators import login_required
+from fees.models import Fee   # change if your model name is different
+from django.db.models import Sum
+
+@login_required
+def student_payment_history(request):
+
+    student = request.user.student_profile
+
+    paid_fees = Fee.objects.filter(
+        student=student,
+        is_paid=True   # ✅ CORRECT FIELD
+    ).order_by('-paid_on')
+    
+    
+
+    total_paid = paid_fees.aggregate(total=Sum('amount'))['total'] or 0
+
+    return render(request, 'student/payment_history.html', {
+        'student': student,
+        'paid_fees': paid_fees,
+        'total_paid':total_paid
+    })

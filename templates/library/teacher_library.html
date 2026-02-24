@@ -214,24 +214,26 @@ tbody tr td:last-child {
 
 <td>
     {% if issue.fine_paid %}
-        <span class="fine-amount" style="color: var(--success);">
+        <span style="color: green;">
             ₹{{ issue.paid_amount }}
         </span><br>
-        <span class="paid-label">Paid</span>
+        <small>Paid</small>
 
-    {% elif issue.fine > 0 and issue.status == 'RETURNED' %}
-        <span class="fine-amount has-fine">
-            ₹{{ issue.fine }}
+    {% elif issue.display_fine > 0 %}
+        <span style="color: red;">
+            ₹{{ issue.display_fine }}
         </span><br>
 
-        <a href="{% url 'pay-fine' issue.id %}" class="paypal-btn">
-            <i class="fab fa-paypal"></i> Pay Fine
-        </a>
+        {% if issue.status == "RETURNED" %}
+            <a href="{% url 'pay-fine' issue.id %}" class="paypal-btn">
+                Pay Fine
+            </a>
+        {% endif %}
 
     {% else %}
-        <span class="fine-amount">₹0</span>
+        ₹0
     {% endif %}
-</td>      </tr>
+</td>    </tr>
                 {% empty %}
                     <tr>
                         <td colspan="4" style="text-align:center; padding:40px;">

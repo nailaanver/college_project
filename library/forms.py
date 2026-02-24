@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from .models import Issue
 from library.models import Book
 
+from django.utils.timezone import now
+
 # ✅ Always use the swapped user model
 User = get_user_model()
 
@@ -36,6 +38,15 @@ class IssueBookForm(forms.ModelForm):
         # Optional styling
         self.fields['user'].widget.attrs.update({'class': 'form-control'})
         self.fields['book'].widget.attrs.update({'class': 'form-control'})
+        
+    def clean_due_date(self):
+        due_date = self.cleaned_data.get('due_date')
+        today = now().date()
+
+        if due_date and due_date < today:
+            raise forms.ValidationError("Due date cannot be in the past.")
+
+        return due_date
 
 
 # ==========================

@@ -45,7 +45,10 @@ def issue_book(request):
     else:
         form = IssueBookForm()
 
-    return render(request, 'library/issue_book.html', {'form': form})
+    return render(request, 'library/issue_book.html', {
+    'form': form,
+    'today': now().date()
+})
 
 
 @login_required
@@ -422,6 +425,8 @@ def student_library(request):
     
 from teachers.models import Teacher
 
+from django.utils.timezone import now
+
 @login_required
 def teacher_library(request):
 
@@ -430,9 +435,25 @@ def teacher_library(request):
 
     issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
 
+    today = now().date()
+
+    for issue in issues:
+
+        # If returned → use stored fine
+        if issue.status == "RETURNED":
+            issue.display_fine = issue.fine
+
+        # If issued and overdue → calculate live fine
+        elif issue.status == "ISSUED" and issue.due_date and today > issue.due_date:
+            overdue_days = (today - issue.due_date).days
+            issue.display_fine = overdue_days * 5
+
+        else:
+            issue.display_fine = 0
+
     return render(request, 'library/teacher_library.html', {
         'issues': issues,
-    })    
+    })
     
 from django.urls import reverse
 import paypalrestsdk
@@ -522,3 +543,5 @@ def execute_teacher_fine(request, issue_id):
 
         url = reverse('teacher-library')
         return redirect(f"{url}?payment=success")
+    
+    
