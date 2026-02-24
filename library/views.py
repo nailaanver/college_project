@@ -88,54 +88,40 @@ def return_book(request, issue_id):
             book.save()
 
             # 🔥 Calculate fine ONLY if overdue
-            if issue.return_date and issue.return_date > issue.due_date:
+            if issue.return_date and issue.due_date and issue.return_date > issue.due_date:
 
                 overdue_days = (issue.return_date - issue.due_date).days
                 fine_amount = overdue_days * 5
 
-                # Save fine inside Issue model directly
                 issue.fine = fine_amount
-                issue.save()
+                issue.fine_paid = False
 
-                # If teacher, create teacher fine record
-# ===============================
-# CREATE STUDENT FINE PAYMENT
-# ===============================
+            else:
+                issue.fine = 0
+                issue.fine_paid = True
 
-                from students.models import Student
-                from teachers.models import Teacher
-                from fees.models import Fee, TeacherLibraryFine
-                from datetime import date
+            issue.save()
 
-# If student
-                if Student.objects.filter(user=issue.user).exists():
+ 
+            if Student.objects.filter(user=issue.user).exists():
 
-                    student = Student.objects.get(user=issue.user)
+                student = Student.objects.get(user=issue.user)
 
-                    Fee.objects.update_or_create(
-                        issue=issue,
-                        student=student,
-                        defaults={
-                            "user": issue.user,
-                            "fee_type": "LIBRARY",
-                            "amount": fine_amount,
-                            "due_date": date.today(),
-                            "is_paid": False
-                        }
-                    )
+                Fee.objects.update_or_create(
+                    issue=issue,
+                    student=student,
+                    defaults={
+                        "user": issue.user,
+                        "fee_type": "LIBRARY",
+                        "amount": fine_amount,
+                        "due_date": date.today(),
+                        "is_paid": False
+                    }
+                )
 
                 # If teacher
-                elif Teacher.objects.filter(user=issue.user).exists():
-                    
-
-                    TeacherLibraryFine.objects.update_or_create(
-                        issue=issue,
-                        defaults={
-                            "teacher": issue.user,
-                            "amount": fine_amount,
-                            "is_paid": False
-                        }
-                    )
+                # elif Teacher.objects.filter(user=issue.user).exists():
+                
 
 
 
@@ -409,12 +395,25 @@ def student_library(request):
     issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
     today = now().date()
 
+    from fees.models import Fee
+
     for issue in issues:
-        if issue.status == 'ISSUED' and issue.due_date < today:
-            overdue_days = (today - issue.due_date).days
-            issue.live_fine = overdue_days * 5
+
+        # Check if fee record exists
+        fee = Fee.objects.filter(issue=issue, fee_type="LIBRARY").first()
+
+        if fee:
+            issue.live_fine = fee.amount
+            issue.fine_paid = fee.is_paid
         else:
-            issue.live_fine = issue.fine or 0
+            # If still issued and overdue (not returned yet)
+            if issue.status == 'ISSUED' and issue.due_date < today:
+                overdue_days = (today - issue.due_date).days
+                issue.live_fine = overdue_days * 5
+                issue.fine_paid = False
+            else:
+                issue.live_fine = 0
+                issue.fine_paid = False
 
     return render(request, 'library/student_library.html', {
         'issues': issues
@@ -431,25 +430,9 @@ def teacher_library(request):
 
     issues = Issue.objects.filter(user=request.user).order_by('-issue_date')
 
-    today = now().date()
-    payment_status = request.GET.get("payment")   # 👈 ADD THIS
-
-    for issue in issues:
-        if issue.fine_paid:
-            issue.live_fine = 0
-
-        elif issue.status == 'ISSUED' and issue.due_date < today:
-            overdue_days = (today - issue.due_date).days
-            issue.live_fine = overdue_days * 5
-
-        else:
-            issue.live_fine = 0
-
     return render(request, 'library/teacher_library.html', {
         'issues': issues,
-        'payment_status': payment_status   # 👈 PASS THIS
-    })
-    
+    })    
     
 from django.urls import reverse
 import paypalrestsdk
@@ -465,14 +448,9 @@ from datetime import date
 def pay_fine(request, issue_id):
     issue = get_object_or_404(Issue, id=issue_id, user=request.user)
 
-    today = date.today()
+    fine_amount = issue.fine
 
-    # Calculate live fine again
-    if issue.status == "ISSUED" and issue.due_date and today > issue.due_date:
-        overdue_days = (today - issue.due_date).days
-        fine_amount = overdue_days * 5
-    else:
-        fine_amount = 0
+
 
     if fine_amount <= 0 or issue.fine_paid:
         return redirect('teacher-library')
