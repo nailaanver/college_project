@@ -78,6 +78,10 @@ def mark_attendance(request, timetable_id):
         'timetable': timetable,
         'students': students
     })
+    
+
+
+
 from django.db.models import Count
 
 @login_required

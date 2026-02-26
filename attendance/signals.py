@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 
 from .models import Attendance
 from notifications.utils import create_notification
@@ -13,11 +14,10 @@ def attendance_post_save(sender, instance, created, **kwargs):
     if not created:
         return
 
-    student = instance.student  # may be User or Student
-
-    # 1️⃣ STUDENT notification
+    student = instance.student
     student_user = getattr(student, 'user', student)
 
+    # 1️⃣ STUDENT notification (keep same)
     if student_user:
         create_notification(
             recipient=student_user,
@@ -27,10 +27,10 @@ def attendance_post_save(sender, instance, created, **kwargs):
             reference_id=instance.id
         )
 
-    # 2️⃣ PARENT notification
+    # 2️⃣ PARENT notification (keep same)
     parent = getattr(student, 'parent', None)
-
     parent_user = getattr(parent, 'user', None)
+
     if parent_user:
         create_notification(
             recipient=parent_user,
@@ -40,34 +40,27 @@ def attendance_post_save(sender, instance, created, **kwargs):
             reference_id=instance.id
         )
 
-    # 3️⃣ ADMIN notification
-    admins = User.objects.filter(is_superuser=True)
-    for admin in admins:
-        create_notification(
-            recipient=admin,
-            title="Attendance Marked",
-            message=f"Course: {instance.student.course}\nSemester: {instance.student.semester}\nPeriod: {instance.period}\nDate: {instance.date}",
-            notification_type="ATTENDANCE",
-            reference_id=instance.id
-        )
+    # 3️⃣ ✅ ADMIN notification — ONLY ON FIRST RECORD
+    existing_count = Attendance.objects.filter(
+        subject=instance.subject,
+        date=instance.date,
+        period=instance.period,
+        semester=instance.semester
+    ).count()
 
-# attendance/signals.py
-from parents.models import ParentNotification
-
-@receiver(post_save, sender=Attendance)
-def attendance_parent_notification(sender, instance, created, **kwargs):
-    if not created:
-        return
-
-    if instance.status == 'A':  # ABSENT ONLY
-        ParentNotification.objects.create(
-            student=instance.student,
-            title="Student Absent",
-            message=(
-                f"Your child was absent\n"
-                f"Course: {instance.student.course}\n"
-                f"Semester: {instance.student.semester}\n"
-                f"Period: {instance.period}\n"
-                f"Date: {instance.date}"
+    # If this is the first student attendance for that session
+    if existing_count == 1:
+        admins = User.objects.filter(is_superuser=True)
+        for admin in admins:
+            create_notification(
+                recipient=admin,
+                title="Attendance Marked",
+                message=(
+                    f"Course: {instance.student.course}\n"
+                    f"Semester: {instance.student.semester}\n"
+                    f"Period: {instance.period}\n"
+                    f"Date: {instance.date}"
+                ),
+                notification_type="ATTENDANCE",
+                reference_id=instance.id
             )
-        )
