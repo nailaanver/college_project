@@ -5,17 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACADAMIX | College Management System</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
 
 <div class="cursor"></div>
 <div class="cursor-follower"></div>
-
 <div class="scroll-progress"></div>
 
 <header class="navbar">
@@ -42,215 +39,209 @@
 </section>
 
 <section class="about-section" id="about">
-    <div class="about-container">
-        <div class="about-left fade-in">
-            <span class="about-badge">ACADAMIX 2026</span>
-            <h2>Redefining <span>Education</span> Management</h2>
-            <div class="about-image-mobile slide-up">
-                 <img src="{% static 'images/about.jpg' %}" alt="Campus">
+    <div class="container">
+        <div class="about-container">
+            <div class="about-left fade-in">
+                <span class="about-badge">ACADAMIX 2026</span>
+                <h2>Redefining <span>Education</span> Management</h2>
+                <div class="about-image-mobile slide-up">
+                     <img src="{% static 'images/about.jpg' %}" alt="Campus">
+                </div>
             </div>
-        </div>
-        <div class="about-right slide-up">
-            <p class="highlight-text">
-                We are building a smart, digital-first college management system
-                that connects Admins, Teachers, Students, and Parents.
-            </p>
-            <p class="about-text">
-                ACADAMIX simplifies academic operations and improves communication
-                with real-time academic insights, automated attendance, and smart grading.
-            </p>
-            <a href="#" class="about-link">Read More →</a>
+            <div class="about-right slide-up">
+                <p class="highlight-text">
+                    We are building a smart, digital-first college management system
+                    that connects Admins, Teachers, Students, and Parents.
+                </p>
+                <p class="about-text">
+                    ACADAMIX simplifies academic operations and improves communication
+                    with real-time academic insights, automated attendance, and smart grading.
+                </p>
+                <a href="#" class="about-link">Read More →</a>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="opportunity-wrapper">
-    <div class="opportunity-card slide-up">
-        <div class="opportunity-image">
-            <img src="{% static 'images/opertunity.jpg' %}" alt="Opportunity">
-        </div>
-
-        <div class="opportunity-content">
-            <div class="tag">Empowerment</div>
-            <h3>Future-Ready Opportunity</h3>
-            <p class="opportunity-text">
-                Providing modern tools for your institution to pursue excellence.
-            </p>
-
-            <ul class="opportunity-menu">
-                <li class="open">
-                    <div class="menu-title"><span>01. Enrolling with us</span><i class="fas fa-plus"></i></div>
-                    <div class="menu-content">Quick and seamless digital admission process for all departments.</div>
-                </li>
-                <li>
-                    <div class="menu-title"><span>02. Student Wellbeing</span><i class="fas fa-plus"></i></div>
-                    <div class="menu-content">Track student progress and mental health with dedicated support modules.</div>
-                </li>
-                <li>
-                    <div class="menu-title"><span>03. Smart Analytics</span><i class="fas fa-plus"></i></div>
-                    <div class="menu-content">Get deep insights into academic performance and faculty efficiency.</div>
-                </li>
-            </ul>
+    <div class="container">
+        <div class="opportunity-card slide-up">
+            <div class="opportunity-image">
+                <img src="{% static 'images/opertunity.jpg' %}" alt="Opportunity">
+            </div>
+            <div class="opportunity-content">
+                <div class="tag">Empowerment</div>
+                <h3>Future-Ready Opportunity</h3>
+                <ul class="opportunity-menu">
+                    <li class="open">
+                        <div class="menu-title"><span>01. Enrolling with us</span><i class="fas fa-plus"></i></div>
+                        <div class="menu-content">Quick and seamless digital admission process for all departments.</div>
+                    </li>
+                    <li>
+                        <div class="menu-title"><span>02. Student Wellbeing</span><i class="fas fa-plus"></i></div>
+                        <div class="menu-content">Track student progress and mental health with dedicated support modules.</div>
+                    </li>
+                    <li>
+                        <div class="menu-title"><span>03. Smart Analytics</span><i class="fas fa-plus"></i></div>
+                        <div class="menu-content">Get deep insights into academic performance and faculty efficiency.</div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="courses-section" id="features">
-    <div class="courses-header fade-in">
-        <span class="sub-title">Modules</span>
-        <h2>Powerful Platform Features</h2>
-        <p>Explore tools designed to simplify college management with real-world efficiency.</p>
-    </div>
-
-    <div class="courses-grid">
-        <div class="course-card">
-            <div class="course-image">
-                <img src="{% static 'images/course1.png' %}" alt="Admin Control">
-                <span class="course-tag">Management</span>
-            </div>
-            <div class="course-content">
-                <h3>Admin Control Dashboard</h3>
-                <div class="course-meta">
-                    <span><i class="fas fa-chart-pie"></i> Full Access</span>
-                    <span><i class="fas fa-users"></i> Multi-User</span>
-                </div>
-                <div class="course-footer">
-                    <span class="price">Core Module</span>
-                    <span class="badge-pro">⚡ Pro</span>
-                </div>
-            </div>
+    <div class="container">
+        <div class="courses-header fade-in">
+            <span class="sub-title">Modules</span>
+            <h2>Powerful Platform Features</h2>
+            <p>Explore tools designed to simplify college management with real-world efficiency.</p>
         </div>
-
-        <div class="course-card">
-            <div class="course-image">
-                <img src="{% static 'images/course2.jpg' %}" alt="Student Portal">
-                <span class="course-tag">Students</span>
-            </div>
-            <div class="course-content">
-                <h3>Student Portal</h3>
-                <div class="course-meta">
-                    <span><i class="fas fa-calendar-check"></i> Attendance</span>
-                    <span><i class="fas fa-graduation-cap"></i> Results</span>
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'images/course1.png' %}" alt="Admin Control">
+                    <span class="course-tag">Management</span>
                 </div>
-                <div class="course-footer">
-                    <span class="price">Included</span>
-                    <span class="badge-pop">⭐ Popular</span>
+                <div class="course-content">
+                    <h3>Admin Control Dashboard</h3>
+                    <div class="course-meta">
+                        <span><i class="fas fa-chart-pie"></i> Full Access</span>
+                        <span><i class="fas fa-users"></i> Multi-User</span>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">Core Module</span>
+                        <span class="badge-pro">⚡ Pro</span>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-image">
-                <img src="{% static 'images/course3.jpg' %}" alt="Teacher Panel">
-                <span class="course-tag">Faculty</span>
-            </div>
-            <div class="course-content">
-                <h3>Teacher Management</h3>
-                <div class="course-meta">
-                    <span><i class="fas fa-book"></i> Classes</span>
-                    <span><i class="fas fa-file-alt"></i> Reports</span>
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'images/course2.jpg' %}" alt="Student Portal">
+                    <span class="course-tag">Students</span>
                 </div>
-                <div class="course-footer">
-                    <span class="price">Advanced</span>
-                    <span class="badge-new">🔥 New</span>
+                <div class="course-content">
+                    <h3>Student Portal</h3>
+                    <div class="course-meta">
+                        <span><i class="fas fa-calendar-check"></i> Attendance</span>
+                        <span><i class="fas fa-graduation-cap"></i> Results</span>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">Included</span>
+                        <span class="badge-pop">⭐ Popular</span>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'images/course3.jpg' %}" alt="Teacher Panel">
+                    <span class="course-tag">Faculty</span>
+                </div>
+                <div class="course-content">
+                    <h3>Teacher Management</h3>
+                    <div class="course-meta">
+                        <span><i class="fas fa-book"></i> Classes</span>
+                        <span><i class="fas fa-file-alt"></i> Reports</span>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">Advanced</span>
+                        <span class="badge-new">🔥 New</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<footer>
+<footer class="premium-footer">
     <div class="container">
-        <p>© 2026 ACADAMIX | Designed for the Future of Education</p>
+        <div class="footer-main">
+            <div class="footer-col brand-col">
+                <div class="logo">ACADA<span>MIX</span></div>
+                <p class="tagline">Smart Education. Smart Management.</p>
+                <p class="description">Building a digital bridge between institutions and students through automated workflows.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col links-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About ACADAMIX</a></li>
+                    <li><a href="#features">System Features</a></li>
+                    <li><a href="#">Student Helpdesk</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contact-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-phone-alt"></i> +91 98765 43210</p>
+                <p><i class="fas fa-envelope"></i> help@acadamix.edu</p>
+            </div>
+            <!-- <div class="footer-col newsletter-col">
+                <h3>Stay Updated</h3>
+                <form class="subscribe-box">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Join</button>
+                </form>
+            </div> -->
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container bottom-flex">
+            <p>© 2026 ACADAMIX. All rights reserved.</p>
+            <div class="bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
     </div>
 </footer>
 
 <script>
-/* ===============================
-    CURSOR STALKER
-================================ */
-const cursor = document.querySelector('.cursor');
-const follower = document.querySelector('.cursor-follower');
-
-document.addEventListener('mousemove', (e) => {
-    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-    follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
-});
-
-document.querySelectorAll('a, button, .course-card, li').forEach(el => {
-    el.addEventListener('mouseenter', () => follower.classList.add('active'));
-    el.addEventListener('mouseleave', () => follower.classList.remove('active'));
-});
-
-/* ===============================
-    3D TILT EFFECT
-================================ */
-document.querySelectorAll('.course-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 15;
-        const rotateY = (centerX - x) / 15;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+    // Cursor Logic
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
     });
 
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+    // Intersection Observer for animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("active");
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".fade-in, .slide-up").forEach(el => observer.observe(el));
+
+    // Navbar Scroll
+    window.addEventListener('scroll', () => {
+        document.querySelector(".navbar").classList.toggle("scrolled", window.scrollY > 50);
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.querySelector(".scroll-progress").style.width = scrolled + "%";
     });
-});
 
-/* ===============================
-    SCROLL PROGRESS & NAVBAR
-================================ */
-window.addEventListener('scroll', () => {
-    const winScroll = document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    document.querySelector(".scroll-progress").style.width = scrolled + "%";
-    
-    document.querySelector(".navbar").classList.toggle("scrolled", winScroll > 50);
-});
-
-/* ===============================
-    TYPING EFFECT
-================================ */
-const text = "Smart Education For Your Future";
-let i = 0;
-function typeEffect() {
-    if (i < text.length) {
-        document.getElementById("typing-text").innerHTML += text.charAt(i++);
-        setTimeout(typeEffect, 80);
-    }
-}
-window.addEventListener("load", typeEffect);
-
-/* ===============================
-    SCROLL REVEAL
-================================ */
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("active");
+    // Typing effect
+    const text = "Smart Education For Your Future";
+    let i = 0;
+    function typeEffect() {
+        if (i < text.length) {
+            document.getElementById("typing-text").innerHTML += text.charAt(i++);
+            setTimeout(typeEffect, 80);
         }
-    });
-}, { threshold: 0.1 });
+    }
+    window.onload = typeEffect;
 
-document.querySelectorAll(".fade-in, .slide-up, .course-card").forEach(el => observer.observe(el));
-
-/* ===============================
-    ACCORDION
-================================ */
-document.querySelectorAll(".opportunity-menu li").forEach(item => {
-    item.addEventListener("click", () => {
-        document.querySelectorAll(".opportunity-menu li").forEach(li => li.classList.remove("open"));
-        item.classList.add("open");
+    // Accordion
+    document.querySelectorAll(".opportunity-menu li").forEach(item => {
+        item.addEventListener("click", () => {
+            document.querySelectorAll(".opportunity-menu li").forEach(li => li.classList.remove("open"));
+            item.classList.add("open");
+        });
     });
-});
 </script>
-
 </body>
 </html>
