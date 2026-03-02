@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACADAMIX | Loading...</title>
+    <style>
+        :root {
+            --navy-dark: #0b1c39;
+            --navy-light: #1e2d4f;
+            --gold: #f3c623;
+            --white: #ffffff;
+            --text-muted: #cbd5e1;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Gradient background using your navy tones */
+            background: radial-gradient(circle at center, var(--navy-light), var(--navy-dark));
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            text-align: center;
+            padding: 3rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 300px;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        img {
+            width: 150px;
+            filter: drop-shadow(0 0 10px rgba(243, 198, 35, 0.3));
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Loading Bar */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+            animation: load 2s forwards ease-in-out;
+        }
+
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 15px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+
+<!-- <script>
+    setTimeout(function(){
+        window.location.href = "/home/main/";
+    }, 3000);
+</script> -->
+</head>
+<body>
+    <div class="loader-container">
+        <div class="logo-wrapper">
+            <img src="{% static 'images/logo.png' %}" alt="ACADAMIX Logo">
+        </div>
+        <div class="loading-text">Initializing System</div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</body>
+</html>

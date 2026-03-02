@@ -3,16 +3,20 @@
 <html>
 <head>
     <title>ACADAMIX</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}?v=2" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 
 </head>
 <body>
+<!-- Splash Screen -->
 
 
-{% block content %}
-{% endblock %}
+<div id="main-content">
+    {% block content %}
+    {% endblock %}
+</div>
 
 </body>
 </html>

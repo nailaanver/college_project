@@ -110,3 +110,19 @@ def timetable_view(request):
         'days': days,
         'periods': periods,
     })
+
+# def splash(request):
+#     if request.session.get('splash_shown'):
+#         return redirect('/home/')   # skip splash if already shown
+
+#     request.session['splash_shown'] = True
+#     return render(request, 'splash.html')
+
+# from django.shortcuts import redirect, render
+
+# def home_entry(request):
+#     if not request.session.get('home_opened'):
+#         request.session['home_opened'] = True
+#         return redirect('/splash/')
+    
+#     return render(request, 'dashboard/home.html')

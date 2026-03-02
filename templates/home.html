@@ -4,13 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACADAMIX | College Management System</title>
+    <title>ACADAMIX</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <style>
+#splash-screen {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(circle at center, #1e2d4f, #0b1c39);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.loader-container {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    width: 300px;
+}
+
+.loader-container img {
+    width: 150px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.progress-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #f3c623;
+    animation: load 3s forwards;
+}
+
+.loading-text {
+    color: #cbd5e1;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+@keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes load {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+</style>
 </head>
 <body>
-
+<!-- Splash Screen -->
+<div id="splash-screen">
+    <div class="loader-container">
+        <div class="logo-wrapper">
+            <img src="{% static 'images/logo.png' %}" alt="ACADAMIX Logo">
+        </div>
+        <div class="loading-text">Initializing System</div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
 <div class="cursor"></div>
 <div class="cursor-follower"></div>
 <div class="scroll-progress"></div>
@@ -242,6 +312,13 @@
             item.classList.add("open");
         });
     });
+
+
+window.addEventListener("load", function () {
+    setTimeout(function () {
+        document.getElementById("splash-screen").style.display = "none";
+    }, 3000);
+});
 </script>
 </body>
 </html>

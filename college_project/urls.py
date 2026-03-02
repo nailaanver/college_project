@@ -18,10 +18,18 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
+
+# from dashboard.views import splash
+
 
 urlpatterns = [
+        path('', RedirectView.as_view(url='/home/', permanent=False)),  # 👈 FIX
+
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),  # home page
+    path('home/', include('dashboard.urls')),  # home page
     path('', include('accounts.urls')),
     path('adminpanel/', include('adminpanel.urls')),
     path('student/', include('students.urls')),
@@ -30,13 +38,17 @@ urlpatterns = [
     path('attendance/',include('attendance.urls')),
     path('library/', include('library.urls')),
     
-    path('', include('internal_marks.urls')),
+    path('internal-marks/', include('internal_marks.urls')),
     path('api/fees/', include('fees.api_urls')),
     path('fees/', include('fees.urls')),
     path('ai/', include('ai_services.urls')),
     path('notifications/', include('notifications.urls')),
+    
 
 ]
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    path("favicon.ico", RedirectView.as_view(url=settings.STATIC_URL + "favicon.ico")),
+]
