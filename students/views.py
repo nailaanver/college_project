@@ -52,7 +52,7 @@ def student_dashboard(request):
     # ---------------- ✅ Internals (CURRENT SEM ONLY) ----------------
     internal_avg = InternalMark.objects.filter(
         student=student,
-        semester=current_semester,
+        timetable__semester=current_semester,
         status='Approved'
     ).aggregate(avg=Avg('total_internal'))['avg'] or 0
 
@@ -65,8 +65,10 @@ def student_dashboard(request):
 
     internals_count = InternalMark.objects.filter(
         student=student,
-        semester=current_semester
+        timetable__semester=current_semester
     ).count()
+    
+    
 
     issued_books = Issue.objects.filter(
         user=user,
@@ -193,7 +195,7 @@ def student_internal_marks(request):
 
     marks = InternalMark.objects.filter(
         student=student,
-        semester=current_semester,     # ✅ KEY LINE
+        timetable__semester=current_semester,     # ✅ KEY LINE
         status='Approved'
     )
 
@@ -279,7 +281,7 @@ def semester_history(request):
     # ---------- INTERNAL MARKS ✅ ----------
     marks = InternalMark.objects.filter(
         student=student,
-        semester=selected_semester
+        timetable__semester=selected_semester
     ).select_related('subject')
 
     context = {

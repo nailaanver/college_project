@@ -69,7 +69,7 @@ def parent_dashboard(request):
         InternalMark.objects
         .filter(
             student=student,
-            semester=current_semester,
+            timetable__semester=current_semester,
             status='Approved'
         )
         .select_related('subject')
@@ -126,7 +126,7 @@ def parent_previous_semester(request, semester):
     # ---------- INTERNAL MARKS ----------
     internal_marks = InternalMark.objects.filter(
         student=student,
-        semester=semester,
+        timetable__semester=semester,
         status='Approved'
     ).select_related('subject')
 

@@ -33,9 +33,9 @@ class InternalMark(models.Model):
         choices=STATUS_CHOICES,
         default='Draft'
     )
-    semester = models.PositiveIntegerField(blank=True,null=True)
+    
     class Meta:
-        unique_together = ('student', 'subject')
+        unique_together = ('student', 'subject', 'timetable')
 
     def calculate_attendance_mark(self):
         total_classes = Attendance.objects.filter(
@@ -68,9 +68,13 @@ class InternalMark(models.Model):
 
 
     def save(self, *args, **kwargs):
+        
+        if self.timetable:
+            self.semester = self.timetable.semester
         self.test1 = int(self.test1 or 0)
         self.test2 = int(self.test2 or 0)
         self.assignment = int(self.assignment or 0)
+        
 
         # ✅ SUBJECT-WISE attendance mark
         self.attendance_mark = self.calculate_attendance_mark()
