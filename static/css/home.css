@@ -130,3 +130,198 @@ li.open .menu-content { max-height: 100px; padding-top: 10px; }
     .hero h1 { font-size: 40px; }
     nav { display: none; }
 }
+
+
+
+/* ===============================
+   GLOBAL FIX
+================================= */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.container {
+    padding: 0 15px;
+}
+
+/* ===============================
+   NAVBAR RESPONSIVE
+================================= */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .navbar nav a {
+        font-size: 14px;
+    }
+}
+
+/* ===============================
+   HERO SECTION
+================================= */
+@media (max-width: 768px) {
+    .hero {
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+        line-height: 1.3;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .hero-btns {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .hero-btn {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+    }
+}
+
+/* ===============================
+   ABOUT SECTION
+================================= */
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .about-left,
+    .about-right {
+        width: 100%;
+    }
+
+    .about-image-mobile img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* ===============================
+   OPPORTUNITY SECTION
+================================= */
+@media (max-width: 768px) {
+    .opportunity-card {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .opportunity-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .opportunity-content {
+        padding: 10px;
+    }
+
+    .menu-title {
+        font-size: 14px;
+    }
+}
+
+/* ===============================
+   COURSES GRID (VERY IMPORTANT)
+================================= */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .course-content h3 {
+        font-size: 16px;
+    }
+
+    .course-meta span {
+        font-size: 12px;
+    }
+}
+
+/* ===============================
+   FOOTER
+================================= */
+@media (max-width: 768px) {
+    .footer-main {
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+    }
+
+    .footer-col {
+        width: 100%;
+    }
+
+    .bottom-flex {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+/* ===============================
+   SPLASH SCREEN (MOBILE FIX)
+================================= */
+@media (max-width: 480px) {
+    .loader-container {
+        width: 90%;
+        padding: 2rem;
+    }
+
+    .loader-container img {
+        width: 100px;
+    }
+
+    .loading-text {
+        font-size: 12px;
+    }
+}
+
+/* ===============================
+   SMALL DEVICES EXTRA FIX
+================================= */
+@media (max-width: 400px) {
+    .hero-content h1 {
+        font-size: 22px;
+    }
+
+    .hero-btn {
+        font-size: 13px;
+        padding: 8px 15px;
+    }
+}
