@@ -192,6 +192,217 @@ body {
     .dashboard-grid { grid-template-columns: 1fr; }
     .quick-actions-grid { grid-template-columns: 1fr; }
 }
+
+
+
+/* =========================
+   GENERAL MOBILE FIX
+========================= */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    .dashboard-wrapper {
+        width: 100%;
+    }
+}
+
+/* =========================
+   HEADER (TOP BAR)
+========================= */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .welcome-text {
+        font-size: 22px;
+    }
+}
+
+/* =========================
+   STATS CARDS
+========================= */
+@media (max-width: 768px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .stat-info .count {
+        font-size: 20px;
+    }
+}
+
+/* =========================
+   MAIN GRID (PANELS)
+========================= */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* =========================
+   WIDGETS
+========================= */
+@media (max-width: 768px) {
+    .widget {
+        padding: 20px;
+    }
+
+    .widget h3 {
+        font-size: 1rem;
+    }
+}
+
+/* =========================
+   QUICK ACTION BUTTONS
+========================= */
+@media (max-width: 768px) {
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .quick-btn {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .quick-btn i {
+        font-size: 1rem;
+    }
+}
+
+/* =========================
+   SMALL MOBILE DEVICES
+========================= */
+@media (max-width: 480px) {
+
+    .welcome-text {
+        font-size: 18px;
+    }
+
+    .welcome-text small {
+        font-size: 12px;
+    }
+
+    .stat-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .stat-info {
+        text-align: left;
+    }
+
+    .quick-btn {
+        font-size: 13px;
+        padding: 12px;
+    }
+}
+
+
+
+/* =========================
+   MOBILE TEXT IMPROVEMENT
+========================= */
+@media (max-width: 768px) {
+
+    body {
+        font-size: 16px; /* base font bigger */
+    }
+
+    /* Header */
+    .welcome-text {
+        font-size: 24px;
+    }
+
+    .welcome-text small {
+        font-size: 14px;
+    }
+
+    /* Stat Cards */
+    .stat-info .count {
+        font-size: 22px;
+    }
+
+    .stat-info .label {
+        font-size: 14px;
+    }
+
+    /* Icons */
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    /* Widget titles */
+    .widget h3 {
+        font-size: 18px;
+    }
+
+    /* Buttons */
+    .quick-btn {
+        font-size: 15px;
+        padding: 16px;
+    }
+
+    .quick-btn i {
+        font-size: 18px;
+    }
+
+    /* Notification & logout icons */
+    .header-actions i {
+        font-size: 20px;
+    }
+}
+
+/* EXTRA SMALL DEVICES */
+@media (max-width: 480px) {
+
+    body {
+        font-size: 15px;
+    }
+
+    .welcome-text {
+        font-size: 20px;
+    }
+
+    .stat-info .count {
+        font-size: 20px;
+    }
+
+    .widget h3 {
+        font-size: 16px;
+    }
+
+    .quick-btn {
+        font-size: 14px;
+    }
+}
 </style>
 
 <div class="dashboard-wrapper">
